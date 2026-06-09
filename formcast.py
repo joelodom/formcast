@@ -173,40 +173,38 @@ class FormcastError(Exception):
 # -----------------------------------------------------------------------------
 # Logging
 # -----------------------------------------------------------------------------
-# Idiomatic stdlib logging. Everything goes to stdout AND is tee'd to a logfile.
-# The console shows INFO by default (-v/--verbose drops it to DEBUG); the logfile
-# ALWAYS captures DEBUG -- timings, the exact CLI calls, model usage/cost -- so any
-# run can be diagnosed after the fact, even one you ran at the default level.
+# Idiomatic stdlib logging. Both stdout and the logfile use the SAME timestamped,
+# level-tagged format; they differ only in threshold. Stdout shows INFO+ by default
+# (-v/--verbose drops it to DEBUG+); the logfile ALWAYS captures DEBUG+ -- timings,
+# the exact CLI calls, model usage/cost -- so any run can be diagnosed after the
+# fact, even one you ran at the default level.
 
 log = logging.getLogger("formcast")
 
 DEFAULT_LOG_FILE = "formcast.log"
 
 
-class _ConsoleFormatter(logging.Formatter):
-    """Bare message for INFO/DEBUG; level-prefixed for WARNING and above, since
-    the console -- unlike the logfile -- does not otherwise surface the level."""
-
-    def format(self, record: logging.LogRecord) -> str:
-        text = super().format(record)
-        if record.levelno >= logging.WARNING:
-            return f"{record.levelname}: {text}"
-        return text
-
-
 def setup_logging(verbose: bool, log_file: str | os.PathLike) -> None:
-    """Configure stdout + logfile handlers. Safe to call once per process."""
+    """Configure stdout + logfile handlers. Safe to call once per process.
+
+    Both handlers share one timestamped, level-tagged format and differ only in
+    threshold: stdout shows INFO and above (DEBUG with --verbose); the logfile
+    keeps DEBUG and above, always.
+    """
     log.setLevel(logging.DEBUG)            # handlers below do the level filtering
     log.handlers.clear()                   # idempotent across repeated calls
     log.propagate = False
 
-    # Console: clean message (INFO+) on stdout; DEBUG too when --verbose.
+    formatter = logging.Formatter(
+        "%(asctime)s %(levelname)-7s %(message)s", datefmt="%Y-%m-%d %H:%M:%S")
+
+    # Console (stdout): INFO+ by default, DEBUG+ with --verbose.
     console = logging.StreamHandler(sys.stdout)
     console.setLevel(logging.DEBUG if verbose else logging.INFO)
-    console.setFormatter(_ConsoleFormatter())
+    console.setFormatter(formatter)
     log.addHandler(console)
 
-    # Logfile: always DEBUG, timestamped, appended so history accrues across runs.
+    # Logfile: always DEBUG+, appended so history accrues across runs.
     try:
         file_handler = logging.FileHandler(log_file, mode="a", encoding="utf-8")
     except OSError as e:  # e.g. an unwritable path -- degrade to stdout-only
@@ -214,8 +212,7 @@ def setup_logging(verbose: bool, log_file: str | os.PathLike) -> None:
                     log_file, e)
         return
     file_handler.setLevel(logging.DEBUG)
-    file_handler.setFormatter(logging.Formatter(
-        "%(asctime)s %(levelname)-7s %(message)s", datefmt="%Y-%m-%d %H:%M:%S"))
+    file_handler.setFormatter(formatter)
     log.addHandler(file_handler)
 
     log.debug("=== formcast start: %s ===", " ".join(sys.argv[1:]) or "(no args)")
@@ -598,8 +595,11 @@ class ClaudeCLI:
         if data.get("is_error"):
             raise FormcastError("Claude CLI reported an error result:\n" + result[:2000])
 
-        log.debug("claude result: %d chars; preview: %s",
-                  len(result), result[:200].replace("\n", " "))
+        # Surface a hint of what the model produced, at INFO, so a normal run shows
+        # what's being thought about (full text goes to artifacts / the logfile).
+        collapsed = " ".join(result.split())
+        log.info("model reply (%d chars): %s%s", len(result),
+                 collapsed[:200], "..." if len(collapsed) > 200 else "")
         return result
 
 
@@ -691,6 +691,7 @@ def pass1_classify(llm: ClaudeCLI) -> dict:
             raise ValueError(f"Pass 1 spec missing '{key}'. Got keys: {list(spec)}")
     spec["archetype_id"] = _sanitize_id(spec["archetype_id"])
     log.info(f"        -> archetype_id='{spec['archetype_id']}' class='{spec['class']}'")
+    log.info("        -> description: %s", " ".join(spec["description"].split()))
     return spec
 
 

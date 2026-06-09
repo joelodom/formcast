@@ -123,11 +123,13 @@ shrubs, plants, boulders, rock formations, logs — the kinds of things that rea
 
 ## Logs
 
-formcast tells you what it's doing as it runs. By default you get clean, readable
-progress on screen (INFO level), and a complete, timestamped DEBUG trace — per-pass
-and per-variant timings, plus each Claude call's duration and token/cost usage — is
-always written to **`formcast.log`** (gitignored). Add `-v`/`--verbose` to see that
-DEBUG detail on screen too:
+formcast logs what it's doing as it runs, in a standard timestamped, level-tagged
+format. Stdout shows **INFO and above** by default — including running hints of what
+the model is producing (its read on your photo, the surfaces it's building, and a
+preview of each reply), so you can watch what's being thought about. The **same
+format at full DEBUG** — per-pass and per-variant timings, plus each Claude call's
+duration and token/cost usage — is always written to **`formcast.log`** (gitignored).
+Add `-v`/`--verbose` to show DEBUG on screen too:
 
 ```bash
 python formcast.py bake inputs/maple-tree.png --verbose
