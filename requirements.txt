@@ -1,0 +1,11 @@
+# formcast Python dependencies.  Install with:  pip install -r requirements.txt
+#
+# The `claude` CLI (Claude Code) is a SEPARATE install and is required by `bake`:
+#   npm install -g @anthropic-ai/claude-code   # then run `claude` once to sign in
+# See the README for details.
+
+trimesh[easy]      # mesh construction, GLB import/export, and the 3D viewer
+pygltflib          # read/write the metadata bundle embedded in each .glb
+Pillow             # image I/O for texture-swatch extraction (used by bake scripts)
+pyglet<2           # OpenGL backend for `view` (trimesh needs pyglet 1.x)
+numpy              # geometry math in the generated build_mesh() code
