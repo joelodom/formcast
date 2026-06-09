@@ -1465,9 +1465,11 @@ def cmd_judge(args: argparse.Namespace) -> int:
             return 2
     out = _judge_pair(photo, a, b, trials=args.trials, model=args.model,
                       claude_bin=args.claude_bin)
+    # Summary to the log first (DEBUG; the JSON carries it), then the JSON as
+    # the LAST stdout output so `formcast judge ... | <parser>` just works.
+    log.debug("judge: candidate (B) preferred %d/%d",
+              out["candidate_wins"], out["valid_trials"])
     print(json.dumps(out, indent=1))
-    log.info("judge: candidate (B) preferred %d/%d",
-             out["candidate_wins"], out["valid_trials"])
     return 0
 
 
