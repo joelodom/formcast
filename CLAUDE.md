@@ -20,7 +20,8 @@ oaks, rocks, and shrubs are fine too.
 
 - **Do not commit or push until explicitly told to.** Standing order for the whole
   session, not just one change. Wait for the user to say "commit".
-- **`formcast.py` started untracked** — `git add` it when first committing.
+- **Do not create new branches unless explicitly asked.** Work directly on `main`
+  by default.
 - **Keep `README.md` up to date.** Any change to behavior, flags, commands, or the
   workflow must be reflected in the README as part of the same change. The README is
   the front door; never let it drift from the code.
