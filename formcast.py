@@ -800,6 +800,294 @@ def _read_metadata(glb_path: Path) -> dict:
 
 
 # -----------------------------------------------------------------------------
+# Headless software renderer (no GL needed) + standard views
+# -----------------------------------------------------------------------------
+# Pure numpy+PIL rasterizer: baseColorTexture, alphaMode MASK + cutoff,
+# doubleSided lighting, COLOR_0 vertex-color multiply, perspective-correct UVs.
+# It applies scene-graph node transforms (via scene.dump()) -- geometry-local
+# vertices alone render transform-bearing GLBs wrongly. Up-axis: formcast bakes
+# from prompt_version 1.2+ are +Y-up (glTF convention); 1.0/1.1 bakes were Z-up.
+
+def _yup_to_zup_matrix():
+    """Y-up world -> the rasterizer's Z-up camera space: (x, y, z) -> (x, -z, y)."""
+    import numpy as np
+    return np.array([[1.0, 0.0, 0.0], [0.0, 0.0, -1.0], [0.0, 1.0, 0.0]])
+
+
+def _guess_up_axis(glb_path: Path) -> str:
+    """'z' for old formcast bakes (prompt_version formcast/1.0-1.1), else 'y'."""
+    try:
+        meta = _read_metadata(glb_path)
+        pv = (meta.get("provenance") or {}).get("prompt_version", "")
+        if pv.startswith("formcast/1.0") or pv.startswith("formcast/1.1"):
+            return "z"
+    except Exception:  # noqa: BLE001 -- unreadable/foreign file: assume spec-compliant
+        pass
+    return "y"
+
+
+def _gather_render_meshes(scene, up: str = "y"):
+    """Render-ready tuples from a Scene, transforms applied, COLOR_0 extracted."""
+    import numpy as np
+    out = []
+    geoms = scene.dump() if hasattr(scene, "dump") else [scene]
+    for geom in geoms:
+        if not hasattr(geom, "faces") or len(geom.faces) == 0:
+            continue
+        v = np.asarray(geom.vertices, dtype=np.float64)
+        if up == "y":
+            v = v @ _yup_to_zup_matrix().T
+        f = np.asarray(geom.faces, dtype=np.int64)
+        uv = tex = vcols = None
+        amask, cutoff, ds = False, 0.5, False
+        vis = geom.visual
+        if hasattr(vis, "uv") and vis.uv is not None and len(vis.uv) == len(v):
+            uv = np.asarray(vis.uv, dtype=np.float64)
+        mat = getattr(vis, "material", None)
+        if mat is not None:
+            img = getattr(mat, "baseColorTexture", None) or getattr(mat, "image", None)
+            if img is not None:
+                tex = np.asarray(img.convert("RGBA"), dtype=np.uint8)
+            amask = getattr(mat, "alphaMode", None) == "MASK"
+            c = getattr(mat, "alphaCutoff", None)
+            if c is not None:
+                cutoff = float(c)
+            ds = bool(getattr(mat, "doubleSided", False))
+        va = getattr(vis, "vertex_attributes", None)
+        if va and "color" in va and len(va["color"]) == len(v):
+            vc = np.asarray(va["color"], dtype=np.float64)
+            if vc.max() > 1.0:
+                vc = vc / 255.0
+            vcols = vc[:, :3]
+        out.append((v, f, uv, tex, vcols, amask, cutoff, ds))
+    return out
+
+
+def _soft_render(meshes, width=800, height=800, az_deg=-90.0, el_deg=8.0,
+                 zoom=1.0, bg=(255, 255, 255)):
+    """Rasterize gathered meshes to a PIL Image. Z-up camera space."""
+    import numpy as np
+    from PIL import Image
+
+    allv = np.vstack([m[0] for m in meshes])
+    lo, hi = allv.min(0), allv.max(0)
+    center = (lo + hi) / 2.0
+    radius = max(float(np.linalg.norm(hi - lo)) / 2.0, 1e-9)
+
+    az, el = np.radians(az_deg), np.radians(el_deg)
+    cam_dir = np.array([np.cos(el) * np.cos(az), np.cos(el) * np.sin(az), np.sin(el)])
+    cam_pos = center + cam_dir * radius * 2.6 / zoom
+    fwd = center - cam_pos
+    fwd /= np.linalg.norm(fwd)
+    right = np.cross(fwd, [0.0, 0.0, 1.0])
+    n = np.linalg.norm(right)
+    right = np.array([1.0, 0.0, 0.0]) if n < 1e-9 else right / n
+    up = np.cross(right, fwd)
+    fpx = (height / 2.0) / np.tan(np.radians(38.0) / 2.0)
+
+    zbuf = np.full((height, width), np.inf)
+    img = np.empty((height, width, 3))
+    img[:] = np.asarray(bg, dtype=np.float64)
+    l1 = np.array([0.5, -0.6, 0.62]); l1 /= np.linalg.norm(l1)
+    l2 = np.array([-0.6, 0.4, 0.3]); l2 /= np.linalg.norm(l2)
+
+    for v, f, uv, tex, vcols, amask, cutoff, ds in meshes:
+        rel = v - cam_pos
+        cx, cy, cz = rel @ right, rel @ up, rel @ fwd
+        ok = cz > radius * 0.05
+        sx = width / 2.0 + fpx * cx / cz
+        sy = height / 2.0 - fpx * cy / cz
+        e1 = v[f[:, 1]] - v[f[:, 0]]
+        e2 = v[f[:, 2]] - v[f[:, 0]]
+        fn = np.cross(e1, e2)
+        nl = np.linalg.norm(fn, axis=1, keepdims=True)
+        nl[nl == 0] = 1
+        fn = fn / nl
+
+        for ti in range(len(f)):
+            i0, i1, i2 = f[ti]
+            if not (ok[i0] and ok[i1] and ok[i2]):
+                continue
+            xs = np.array([sx[i0], sx[i1], sx[i2]])
+            ys = np.array([sy[i0], sy[i1], sy[i2]])
+            zs = np.array([cz[i0], cz[i1], cz[i2]])
+            minx = max(int(np.floor(xs.min())), 0)
+            maxx = min(int(np.ceil(xs.max())), width - 1)
+            miny = max(int(np.floor(ys.min())), 0)
+            maxy = min(int(np.ceil(ys.max())), height - 1)
+            if minx > maxx or miny > maxy:
+                continue
+            d = (xs[1] - xs[0]) * (ys[2] - ys[0]) - (xs[2] - xs[0]) * (ys[1] - ys[0])
+            if abs(d) < 1e-12:
+                continue
+            gx, gy = np.meshgrid(np.arange(minx, maxx + 1) + 0.5,
+                                 np.arange(miny, maxy + 1) + 0.5)
+            w0 = ((xs[1] - gx) * (ys[2] - gy) - (xs[2] - gx) * (ys[1] - gy)) / d
+            w1 = ((xs[2] - gx) * (ys[0] - gy) - (xs[0] - gx) * (ys[2] - gy)) / d
+            w2 = 1.0 - w0 - w1
+            inside = (w0 >= 0) & (w1 >= 0) & (w2 >= 0)
+            if not inside.any():
+                continue
+            iz = w0 / zs[0] + w1 / zs[1] + w2 / zs[2]
+            zpix = 1.0 / np.maximum(iz, 1e-12)
+            sub_z = zbuf[miny:maxy + 1, minx:maxx + 1]
+            closer = inside & (zpix < sub_z)
+            if not closer.any():
+                continue
+
+            if tex is not None and uv is not None:
+                u = (w0 * uv[i0, 0] / zs[0] + w1 * uv[i1, 0] / zs[1]
+                     + w2 * uv[i2, 0] / zs[2]) * zpix
+                vv = (w0 * uv[i0, 1] / zs[0] + w1 * uv[i1, 1] / zs[1]
+                      + w2 * uv[i2, 1] / zs[2]) * zpix
+                th, tw = tex.shape[:2]
+                txi = np.clip((u % 1.0) * (tw - 1), 0, tw - 1).astype(np.int32)
+                tyi = np.clip((1.0 - (vv % 1.0)) * (th - 1), 0, th - 1).astype(np.int32)
+                texel = tex[tyi, txi].astype(np.float64)
+                rgb = texel[..., :3]
+                if amask:
+                    closer = closer & (texel[..., 3] >= cutoff * 255.0)
+                    if not closer.any():
+                        continue
+            else:
+                rgb = np.full(gx.shape + (3,), 185.0)
+
+            if vcols is not None:
+                c = (w0[..., None] * vcols[i0] / zs[0]
+                     + w1[..., None] * vcols[i1] / zs[1]
+                     + w2[..., None] * vcols[i2] / zs[2]) * zpix[..., None]
+                rgb = rgb * np.clip(c, 0.0, 1.5)
+
+            nrm = fn[ti]
+            lam = max(0.0, nrm @ l1) + (max(0.0, -nrm @ l1) if ds else 0.0)
+            lam2 = max(0.0, nrm @ l2) + (max(0.0, -nrm @ l2) if ds else 0.0)
+            shade = min(0.45 + 0.45 * min(lam, 1.0) + 0.25 * min(lam2, 1.0), 1.25)
+
+            colored = np.clip(rgb * shade, 0, 255)
+            sub_img = img[miny:maxy + 1, minx:maxx + 1]
+            sub_img[closer] = colored[closer]
+            sub_z[closer] = zpix[closer]
+
+    return Image.fromarray(img.astype("uint8"), "RGB")
+
+
+STANDARD_VIEWS = [
+    ("front", -90.0, 8.0, 1.0),
+    ("side", 0.0, 8.0, 1.0),
+    ("threequarter", -45.0, 30.0, 1.05),
+    ("closeup", -70.0, 12.0, 2.1),
+]
+
+
+def _render_glb_views(glb_path: Path, out_dir: Path, stem: str, up: str = "auto",
+                      width: int = 700, height: int = 800) -> list[Path]:
+    """Render the four standard views + a contact sheet (returned last)."""
+    from PIL import Image
+    if up == "auto":
+        up = _guess_up_axis(glb_path)
+    scene = trimesh.load(str(glb_path), force="scene")
+    meshes = _gather_render_meshes(scene, up=up)
+    out_dir.mkdir(parents=True, exist_ok=True)
+    paths = []
+    for tag, az, el, zoom in STANDARD_VIEWS:
+        im = _soft_render(meshes, width=width, height=height, az_deg=az,
+                          el_deg=el, zoom=zoom)
+        p = out_dir / f"{stem}-{tag}.png"
+        im.save(p)
+        paths.append(p)
+    sheet = Image.new("RGB", (width * len(paths), height), "white")
+    for i, p in enumerate(paths):
+        sheet.paste(Image.open(p), (i * width, 0))
+    sp = out_dir / f"{stem}-contact.png"
+    sheet.save(sp)
+    paths.append(sp)
+    return paths
+
+
+# -----------------------------------------------------------------------------
+# VLM judge: photo + two render sheets -> preference + rubric (fresh sessions)
+# -----------------------------------------------------------------------------
+
+JUDGE_PROMPT = textwrap.dedent("""\
+    You are an impartial judge of 3D-model quality for a procedural asset
+    pipeline. Use the Read tool to view, in this order:
+      1. photo.png    - the reference photograph
+      2. render_a.png - renders of 3D model A (multiple angles in one sheet)
+      3. render_b.png - renders of 3D model B (multiple angles in one sheet)
+
+    Both models were generated from the photograph and aim to represent the
+    KIND of object in it (shape character, proportions, surfaces, colors) -
+    not a pixel-perfect copy. Judge which model is the better 3D representation.
+
+    Return ONLY a JSON object (no prose, no code fences):
+    {"preferred": "A" or "B",
+     "why": "<one or two sentences>",
+     "rubric": {"A": {"silhouette": 1-5, "proportions": 1-5, "surface_detail": 1-5,
+                       "color_material": 1-5, "artifacts": 1-5},
+                "B": {same keys}}}
+    ("artifacts": 5 = clean, 1 = badly broken geometry/texture.)""")
+
+
+def _judge_pair(photo: Path, a_png: Path, b_png: Path, trials: int = 3,
+                model: str = "sonnet", claude_bin: str = "claude",
+                timeout: int = 240) -> dict:
+    """Fresh-session VLM judge. Alternates which model is labelled A per trial
+    (position-bias control). Returns how often B (the 'candidate') won."""
+    results = []
+    for t in range(trials):
+        swap = (t % 2 == 1)
+        with tempfile.TemporaryDirectory(prefix="formcast_judge_") as td:
+            tdp = Path(td)
+            shutil.copy2(photo, tdp / "photo.png")
+            shutil.copy2(b_png if swap else a_png, tdp / "render_a.png")
+            shutil.copy2(a_png if swap else b_png, tdp / "render_b.png")
+            cmd = [claude_bin, "-p", JUDGE_PROMPT, "--output-format", "json",
+                   "--model", model, "--allowedTools", "Read"]
+            start = time.monotonic()
+            try:
+                proc = subprocess.run(cmd, cwd=td, capture_output=True,
+                                      text=True, timeout=timeout)
+            except subprocess.TimeoutExpired:
+                results.append({"error": f"judge timed out after {timeout}s"})
+                continue
+            wall = time.monotonic() - start
+            if proc.returncode != 0:
+                results.append({"error": proc.stderr.strip()[-400:]})
+                continue
+            try:
+                data = json.loads(proc.stdout)
+                verdict = _extract_json(data.get("result", ""))
+            except Exception as e:  # noqa: BLE001
+                results.append({"error": f"unparseable verdict: {e}"})
+                continue
+            pref_b = (verdict.get("preferred") == "A") == swap
+            results.append({"prefers_candidate": bool(pref_b), "swap": swap,
+                            "why": verdict.get("why", ""),
+                            "rubric": verdict.get("rubric", {}),
+                            "cost_usd": data.get("total_cost_usd"),
+                            "wall_s": round(wall, 1)})
+            log.debug("judge trial %d: prefers_candidate=%s (%.1fs, $%s)",
+                      t, pref_b, wall, data.get("total_cost_usd"))
+    wins = sum(1 for r in results if r.get("prefers_candidate"))
+    valid = sum(1 for r in results if "prefers_candidate" in r)
+    return {"candidate_wins": wins, "valid_trials": valid, "trials": results}
+
+
+def cmd_judge(args: argparse.Namespace) -> int:
+    photo, a, b = Path(args.photo), Path(args.a), Path(args.b)
+    for p in (photo, a, b):
+        if not p.exists():
+            log.error(f"file not found: {p}")
+            return 2
+    out = _judge_pair(photo, a, b, trials=args.trials, model=args.model,
+                      claude_bin=args.claude_bin)
+    print(json.dumps(out, indent=1))
+    log.info("judge: candidate (B) preferred %d/%d",
+             out["candidate_wins"], out["valid_trials"])
+    return 0
+
+
+# -----------------------------------------------------------------------------
 # Subcommand: bake
 # -----------------------------------------------------------------------------
 
@@ -1041,13 +1329,27 @@ def cmd_view(args: argparse.Namespace) -> int:
 
     if args.save:
         out = Path(args.save).expanduser().resolve()
-        try:
-            png = scene.save_image(resolution=(args.width, args.height), visible=True)
-        except Exception as e:  # noqa: BLE001
-            log.error("off-screen render failed -- this needs a working OpenGL "
-                    f"context.\n  ({e})\n"
-                    "Try running `view` without --save on a machine with a display.")
-            return 1
+        png = None
+        if args.renderer in ("auto", "gl"):
+            try:
+                png = scene.save_image(resolution=(args.width, args.height), visible=True)
+            except Exception as e:  # noqa: BLE001
+                if args.renderer == "gl":
+                    log.error("GL off-screen render failed (%s). This machine "
+                              "likely has no display; use --renderer soft.", e)
+                    return 1
+                log.info("GL renderer unavailable (%s); falling back to the "
+                         "built-in software renderer.", type(e).__name__)
+        if png is None:
+            # Software path: works headless. Up-axis from the first file's
+            # provenance (old formcast bakes are Z-up, 1.2+ and foreign are Y-up).
+            up = _guess_up_axis(paths[0])
+            meshes = _gather_render_meshes(scene, up=up)
+            im = _soft_render(meshes, width=args.width, height=args.height,
+                              az_deg=-90.0, el_deg=8.0, zoom=1.0)
+            im.save(out)
+            log.info("Saved render (software, up=%s): %s", up, out)
+            return 0
         out.write_bytes(png)
         log.info("Saved render: %s", out)
         return 0
@@ -1055,9 +1357,10 @@ def cmd_view(args: argparse.Namespace) -> int:
     try:
         scene.show()
     except Exception as e:  # noqa: BLE001
-        log.error("could not open an interactive 3D window -- this needs a "
-                f"display and OpenGL.\n  ({e})\n"
-                "On a headless box, use `--save out.png` to render to an image instead.")
+        log.error("could not open an interactive 3D window -- no display / "
+                f"OpenGL available here.\n  ({e})\n"
+                "Use `--save out.png` instead: it renders headlessly via the "
+                "built-in software renderer.")
         return 1
     return 0
 
@@ -1138,7 +1441,24 @@ def build_parser() -> argparse.ArgumentParser:
                         "(needs OpenGL, works off-screen on most setups)")
     v.add_argument("--width", type=int, default=1600, help="render width for --save")
     v.add_argument("--height", type=int, default=900, help="render height for --save")
+    v.add_argument("--renderer", choices=["auto", "gl", "soft"], default="auto",
+                   help="--save backend: GL when available, else the built-in "
+                        "software rasterizer (default: auto)")
     v.set_defaults(func=cmd_view)
+
+    # judge ------------------------------------------------------------------
+    j = sub.add_parser("judge", parents=[common],
+                       help="VLM-judge two render sheets against a reference photo")
+    j.add_argument("photo", help="reference photograph")
+    j.add_argument("a", help="render sheet of model A (the baseline)")
+    j.add_argument("b", help="render sheet of model B (the candidate)")
+    j.add_argument("--trials", type=int, default=3,
+                   help="judging trials; A/B labels alternate per trial (default: 3)")
+    j.add_argument("--model", default="sonnet",
+                   help="judge model for the CLI (default: sonnet -- cheap)")
+    j.add_argument("--claude-bin", default=DEFAULT_CLAUDE_BIN,
+                   help=f"the Claude Code executable (default: {DEFAULT_CLAUDE_BIN})")
+    j.set_defaults(func=cmd_judge)
 
     return p
 

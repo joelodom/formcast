@@ -23,7 +23,8 @@ formcast has three commands:
 | --------- | ------------ |
 | `bake`    | A photo goes in; a set of seed-varied `.glb` models comes out. This is the main event. |
 | `inspect` | Print (or pull back out) the metadata tucked inside each `.glb` — including the original photo and the exact script that built it. |
-| `view`    | Open a 3D preview of one model, or a whole row of variations side by side. |
+| `view`    | Render a preview of one model, or a whole row of variations side by side. `--save` works even with no display: it falls back to a built-in software renderer. |
+| `judge`   | Show a reference photo plus two render sheets to a fresh Claude session and get a structured preference + rubric back (used to compare model quality A/B; calls the `claude` CLI). |
 
 ---
 
@@ -96,8 +97,14 @@ python formcast.py inspect outputs/maple-tree-03.glb
 # Pull the embedded photo, generator script, and description back out to files
 python formcast.py inspect outputs/maple-tree-03.glb --extract ./extracted/
 
-# Render a single model straight to a PNG (works without a display)
+# Render a single model straight to a PNG (works without a display: if OpenGL
+# isn't available, formcast falls back to its built-in software renderer;
+# force a backend with --renderer gl|soft)
 python formcast.py view outputs/maple-tree-03.glb --save preview.png
+
+# Compare two candidate renders against the reference photo with a fresh
+# Claude session as the judge (3 trials, A/B order alternated):
+python formcast.py judge inputs/maple-tree.png old-contact.png new-contact.png
 ```
 
 formcast works best on natural objects with clear structure and surfaces — trees,
