@@ -231,3 +231,6 @@ formcast.log
 # Claude Code local state + project MCP wiring (personal; not shared)
 .claude/
 .mcp.json
+
+# benchmark photo cache (re-fetchable via benchmarks/manifest.json)
+benchmarks/cache/

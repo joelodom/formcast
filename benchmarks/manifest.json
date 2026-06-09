@@ -1,0 +1,68 @@
+{
+  "version": 1,
+  "created": "2026-06-09",
+  "notes": "v1 benchmark set; cache/ is gitignored \u2014 re-fetch via url (+derivation) if missing.",
+  "items": [
+    {
+      "id": "maple-tree",
+      "class": "tree",
+      "fidelity": "archetype",
+      "difficulty": "easy (white-bg cutout)",
+      "file": "inputs/maple-tree.png",
+      "title": "bundled sample",
+      "license": "repo sample",
+      "source": "inputs/maple-tree.png",
+      "url": "",
+      "provider": "local"
+    },
+    {
+      "id": "tulip",
+      "class": "flower",
+      "fidelity": "archetype",
+      "difficulty": "medium (in-situ bokeh background)",
+      "file": "benchmarks/cache/picked/tulip.jpg",
+      "title": "Single white tulip against colorful background",
+      "license": "cc0",
+      "source": "https://www.flickr.com/photos/65798313@N06/7226299902",
+      "url": "https://live.staticflickr.com/5465/7226299902_c02db06d4f_b.jpg",
+      "provider": "flickr"
+    },
+    {
+      "id": "met-console-table",
+      "class": "furniture",
+      "fidelity": "faithful",
+      "difficulty": "easy bg, ornate object",
+      "file": "benchmarks/cache/picked/table.jpg",
+      "title": "Console late 18th century",
+      "license": "cc0",
+      "source": "https://www.flickr.com/photos/200781279@N05/53879404281",
+      "url": "https://live.staticflickr.com/65535/53879404281_268af63633_b.jpg",
+      "provider": "flickr"
+    },
+    {
+      "id": "windsor-chair",
+      "class": "furniture",
+      "fidelity": "faithful",
+      "difficulty": "easy (studio grey)",
+      "file": "benchmarks/cache/picked/chair.jpg",
+      "title": "Fan-Back Windsor Chair Artist unknown",
+      "license": "cc0",
+      "source": "https://www.rawpixel.com/image/8940003/fan-back-windsor-chair-artist-unknown",
+      "url": "https://images.rawpixel.com/editor_1024/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIyLTEyL2FpYzczNTM4LWltYWdlLmpwZw.jpg",
+      "provider": "rawpixel"
+    },
+    {
+      "id": "moeraki-boulder",
+      "class": "boulder",
+      "fidelity": "archetype",
+      "difficulty": "medium-hard (in-situ beach, derived crop)",
+      "file": "benchmarks/cache/picked/boulder.jpg",
+      "title": "Rock group on the beach.",
+      "license": "cc0",
+      "source": "https://www.flickr.com/photos/88123769@N02/9420750176",
+      "url": "https://live.staticflickr.com/5550/9420750176_c8a2f13dae_b.jpg",
+      "provider": "flickr",
+      "derivation": "crop box (20, 170, 430, 500) of source"
+    }
+  ]
+}
