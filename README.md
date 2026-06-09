@@ -107,9 +107,22 @@ python formcast.py view outputs/maple-tree-03.glb --save preview.png
 python formcast.py judge inputs/maple-tree.png old-contact.png new-contact.png
 ```
 
-formcast works best on natural objects with clear structure and surfaces — trees,
-shrubs, plants, boulders, rock formations, logs — the kinds of things that read as
-"a trunk, some branches, a canopy" or "a rock with this kind of surface."
+formcast handles single objects with clear structure and surfaces — natural
+things (trees, shrubs, flowers, boulders, logs) and man-made ones (chairs,
+tables, vases, lamps). Each class gets tailored modeling guidance under the
+hood (foliage envelopes with leaf-card clumps; lathe-and-instance construction
+for furniture; noise-displaced hulls for rocks). Photos of people are politely
+refused. Two knobs worth knowing:
+
+```bash
+# Let the model SEE and revise its own work N times before baking (pass 3.5;
+# one extra Claude call and a couple of minutes per round; 0 disables):
+python formcast.py bake inputs/maple-tree.png --refine 2
+```
+
+Models bake **+Y-up** (the glTF convention), base on the ground plane, in
+meters, within per-density triangle budgets. (Bakes made before v1.2 were Z-up;
+`view` reads each file's embedded provenance and renders either correctly.)
 
 ---
 

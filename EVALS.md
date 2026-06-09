@@ -64,3 +64,46 @@ Per MASTER_PLAN §9. Entry template:
 - Next: bake v1.1 baselines for the 4 new items; expect furniture to expose the
   "natural object"-only taxonomy in PASS1 (documented failure = evidence for
   MASTER_PLAN §6.2).
+
+## 2026-06-09 P0.1 — Soft renderer + VLM judge validated (standalone fcviz.py)
+- Hypothesis/goal: headless transform-aware renderer (COLOR_0, MASK, up-axis
+  handling) + fresh-session sonnet judge with A/B swap, per MASTER_PLAN P0.
+- What ran: `fcviz.py render/views` on maple-00.glb (Z-up, v1.1 metadata),
+  t2_dog_yup.glb + t3_table_yup.glb (genuine Y-up re-exports); judge self-test
+  maple-render vs dog-render against the maple photo, 2 trials (swap both ways).
+  Cost: $0.14 (judge), renders free.
+- Artifacts: `fcviz.py` (to be merged into formcast.py), /tmp/p0test/*,
+  `outputs/experiments/2026-06-09/{t2_dog_yup,t3_table_yup}.glb`.
+- Findings: (1) up-axis auto-detect via embedded provenance.prompt_version works
+  (1.1→Z-up, else Y-up). (2) **Up-axis bit me a third time**: the original
+  t2_dog.glb/t3_table.glb are Z-up *files* (my earlier harness baked a +90°X
+  rotation in before export) — "known-good test assets" must have their
+  conventions verified, not assumed; regenerated genuine Y-up copies (`*_yup.glb`).
+  (3) Judge self-test: 0/2 candidate wins, correct object-class reasoning in BOTH
+  A/B orders — swap logic confirmed; ~$0.07, ~18 s per sonnet trial.
+- Verdict: KEEP — Phase-0 components validated; merge into formcast.py after
+  baseline bakes finish (not editing formcast.py while bakes re-exec it).
+- Next: v1.1 baselines render + freeze; then v1.2 overhaul.
+
+## 2026-06-09 P-baselines.1 — v1.1 baselines on the new benchmark items
+- Hypothesis/goal: freeze "before" state of current prompts across classes;
+  expected the nature-only PASS1 taxonomy to fail on furniture.
+- What ran: `bake <item> --count 2` for tulip/boulder/chair/table with frozen
+  v1.1 prompts (sequential background loop). Costs in formcast.log (~$1.3-1.6
+  each, 1 repair typical).
+- Artifacts: `outputs/dev/base-*/`, frozen sheets `eval/baselines/v11-*.png`.
+- Findings so far (tulip, boulder, chair pass-1):
+  - **tulip** (`white-tulip`/plant, 7.5k tris): recognizable bloom + stem;
+    defects: faceted petals, stem striped PURPLE (texture crop pulled bokeh
+    background), invented floating leaf scraps, umbrella-like basal leaf.
+    Tier-2 rubric: silhouette 3, proportions 4, surface 2, color 2, artifacts 2.
+  - **boulder** (`spherical-concretion-boulder` — correctly recognized the
+    Moeraki concretion): shape+cracks concept right; texture ruined by blind
+    crop boxes sampling ocean/foam — dark mud with blue/red blotches.
+    Tier-2: silhouette 4, proportions 4, surface 2, color 1, artifacts 2.
+  - **chair**: PASS1 forced `class='log'` for a correctly-identified
+    `windsor-armchair` — the predicted taxonomy failure, verbatim evidence for
+    MASTER_PLAN §6.2 (bake continued; geometry quality TBD).
+- Verdict: baselines confirm the plan's diagnosis: in-situ photos break blind
+  crop-box texture sampling; taxonomy must broaden; palette must be measured.
+- Next: v1.2 wiring (already staged as unused functions), re-bake, A/B judge.

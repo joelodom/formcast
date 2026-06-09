@@ -7,11 +7,12 @@
 # ------------
 # A single command-line tool with three subcommands:
 #
-#   bake     A reference photo of a natural object (a tree, a boulder, a shrub...)
-#            goes IN; a small library of static .glb 3D models comes OUT. The
-#            models are NOT a faithful reconstruction of the photographed object
-#            -- they are convincing, seed-varied instances "of the same kind of
-#            thing", in that style. This is the main event. (See PIPELINE below.)
+#   bake     A reference photo of an object (a tree, a boulder, a chair, a
+#            vase...) goes IN; a small library of static .glb 3D models comes
+#            OUT. The models are NOT a faithful reconstruction of the
+#            photographed object -- they are convincing, seed-varied instances
+#            "of the same kind of thing", in that style. This is the main event.
+#            (Photos of people are politely refused.) (See PIPELINE below.)
 #
 #   inspect  Decode and print the custom metadata bundle we embed inside each
 #            .glb (the prose description, the original source image, the exact
@@ -64,10 +65,25 @@
 #              GATE: we run the whole script end-to-end and confirm the .glb opens
 #              with real geometry. Same repair loop on failure.
 #
+#   Pass 3.5  REFINE (--refine N, default 1)   [reads renders of its own output]
+#           -> formcast bakes a probe, renders it headlessly from four angles
+#              (plus a photo|render comparison), shows those images to the SAME
+#              session, and asks for a critique + revised script (or APPROVED).
+#              Each revision re-runs the validation + audit gates; the best
+#              validated script wins. This closes the loop: the model SEES what
+#              it built instead of coding blind.
+#
 #   Pass 4  BAKE   [deterministic plumbing -- no model]
 #           -> run the frozen script N times with seeds 0..N-1 (optionally across
 #              density/LOD levels), producing `<archetype>-NN.glb` files. Then we
 #              inject the metadata bundle into each .glb.
+#
+#   Models bake +Y-up (glTF convention), base at y=0, in meters, within per-
+#   density triangle budgets; per-class craft guidance (foliage envelopes +
+#   clumped cards, lathe/instancing for furniture, capsule-union creatures,
+#   noise-displaced rocks) is injected into Pass 2, and audit gates (up-axis,
+#   budgets, MASK foliage, texture floors) feed the repair loop. Bakes from
+#   prompt_version 1.0/1.1 were Z-up; `view` detects this from the metadata.
 #
 # After bake, you load these static .glb files in whatever engine or tool you like
 # (Blender, three.js, Godot, Unity, a Rust `gltf` loader, ...) and use them however
@@ -253,7 +269,10 @@ SCHEMA_DOC = (
     "'provenance' ({tool, engine, model, prompt_version, created_utc} -- enough to re-bake)."
 )
 
-PROMPT_VERSION = "formcast/1.1-cli"  # bump when the prompts/engine below change materially
+PROMPT_VERSION = "formcast/1.2-cli"  # bump when the prompts/engine below change materially
+# 1.2: any-object taxonomy (incl. man-made; humans refused), +Y-up/meters/budget
+#      contract, per-class craft packs, anti-contamination texture rules, audit
+#      gates, and the pass-3.5 visual refine loop. 1.0/1.1 bakes were Z-up.
 
 
 # -----------------------------------------------------------------------------
@@ -266,33 +285,46 @@ PROMPT_VERSION = "formcast/1.1-cli"  # bump when the prompts/engine below change
 # layer our task framing on top in the user prompt itself).
 
 PASS1_SYSTEM = (
-    "You are a botanist-geologist with a sculptor's eye, identifying natural "
-    "objects from photographs for a procedural 3D asset pipeline. You are "
-    "describing the KIND of thing in the image and its visual character -- you "
-    "are NOT reconstructing the specific photographed object."
+    "You are a careful object analyst with a sculptor's eye, identifying the "
+    "primary physical object in photographs for a procedural 3D asset pipeline. "
+    "You describe the KIND of thing in the image and its visual character -- "
+    "you are NOT reconstructing the specific photographed object."
 )
 
 PASS1_INSTRUCTION = textwrap.dedent("""\
-    Identify the natural object in the reference image (tree, shrub, plant,
-    boulder, rock formation, etc.).
+    Identify the PRIMARY physical object in the reference image. It may be
+    natural (tree, flower, boulder...) or man-made (chair, table, vase, lamp...).
+    If several objects are present, pick the clear subject. Classify by what the
+    WHOLE OBJECT IS, never by what it is made of (a marble-topped table is
+    "furniture", not rock; a wooden chair is "furniture", not a log).
 
     Return ONLY a JSON object (no prose, no code fences) with exactly these keys:
-      "archetype_id": a short kebab-case identifier, e.g. "sugar-maple" or
-                      "granite-boulder". Lowercase letters, digits, hyphens only.
-      "class":        a single coarse word: one of tree, shrub, plant, grass,
-                      cactus, rock, boulder, cliff, log, stump (or the closest fit).
-      "description":  ONE long, unstructured paragraph (150-350 words) describing,
-                      QUALITATIVELY (not with precise measurements):
-                        - overall silhouette and growth habit / form
-                        - structural breakdown (trunk taper, how branches fork and
-                          spread; or for rock: facets, stratification, roundedness)
-                        - the distinct SURFACE MATERIALS present and where each sits
-                          (e.g. "furrowed grey-brown bark on trunk and major limbs;
+      "archetype_id": a short kebab-case identifier, e.g. "sugar-maple",
+                      "windsor-chair", "granite-boulder". Lowercase letters,
+                      digits, hyphens only.
+      "class":        ONE word, the closest of: tree, shrub, plant, flower,
+                      grass, cactus, rock, boulder, cliff, log, stump,
+                      furniture, vessel, tool, lamp, structure, vehicle,
+                      animal, bird, human, other.
+      "description":  ONE long, unstructured paragraph (150-350 words),
+                      QUALITATIVE (not precise measurements):
+                        - overall silhouette, form, and (for man-made objects)
+                          how it is constructed
+                        - structural breakdown (trunk taper and branching; or
+                          legs/top/stretchers/back; or facets and stratification;
+                          or petals/stem/leaves -- whatever fits the object)
+                        - the distinct SURFACE MATERIALS present and where each
+                          sits (e.g. "furrowed grey-brown bark on the trunk;
                           dense mid-green foliage in rounded clumps")
                         - color and texture character of each material
-                        - the biomes / climates / terrain where this belongs.
+                        - where this kind of object belongs (biome / room /
+                          context).
                       Favor descriptive character over numbers. This text is the
                       sole semantic record stored with the model, so make it rich.
+      "proportions":  a small JSON object of rough ratios you can SEE in the
+                      image, e.g. {"height_over_width": 1.3,
+                      "notable": "seat at ~45% of total height"}. Estimating by
+                      eye to ~10% accuracy is fine.
     """)
 
 PASS2_SYSTEM = (
@@ -323,22 +355,36 @@ PASS2_INSTRUCTION = textwrap.dedent("""\
         octaves, etc.). Read `density` and choose counts from it BEFORE building
         -- generate at the target density, never build dense then decimate.
         "high" should look genuinely good; "low" should be a cheap distant LOD.
+        Triangle budgets (hard caps): "high" <= 80000, "med" <= 25000,
+        "low" <= 8000 total triangles.
+      * +Y is UP (glTF convention). The object STANDS ON the XZ plane: its
+        lowest point at y=0, centered near the origin in X/Z. Units are METERS
+        at a plausible real-world scale; put the chosen overall size in a named
+        constant. Match the photographed proportions (write the ratios you
+        measured off the image as named constants with comments).
       * Return a `trimesh.Scene` whose geometry is keyed by SEMANTIC SURFACE NAME.
         Use scene.add_geometry(mesh, geom_name="<name>"). Names must be the
         surface types the texturing step will paint, for example:
           - trees/shrubs: "trunk", "branches" (may merge with trunk), "canopy"
           - rocks/boulders/cliffs: "rock"
+          - furniture: "top", "legs", "seat", "frame", ...
         Choose names that match the materials called out in the description.
-      * For foliage, DO NOT model individual leaves as solid geometry. Build the
-        canopy as LEAF CARDS: flat quads scattered through the canopy volume,
-        oriented with some variation, to be textured later with an alpha-cutout
-        leaf-cluster texture. A few hundred cards at "high" is plenty.
+      * For dense foliage, DO NOT model individual leaves as solid geometry --
+        use textured LEAF CARDS (flat quads) per the craft notes below.
       * Every returned mesh must have valid vertices and faces (triangles) and
-        sane, finite bounds. Recompute normals where appropriate.
+        sane, finite bounds. Recompute normals where appropriate. No part may
+        float disconnected from the object.
 
-    Think about good structure (organic branching, believable rock silhouettes
-    via noise-displaced hulls, etc.). Return ONLY the Python module inside a
-    single ```python code block. No commentary outside the block.
+    {craft}
+
+    Environment notes (avoid one-line failures): numpy 2.x (`arr.ptp()` was
+    REMOVED -- use `np.ptp(arr)`; no `np.float`/`np.int`), Pillow 12
+    (`Image.ANTIALIAS` removed -- use `Image.LANCZOS`), trimesh 4.x (boolean
+    union WORKS; manifold3d is installed). Do not import scipy or anything else.
+    Before returning, re-check the code would compile.
+
+    Return ONLY the Python module inside a single ```python code block.
+    No commentary outside the block.
     """)
 
 PASS3_SYSTEM = (
@@ -364,18 +410,44 @@ PASS3_INSTRUCTION = textwrap.dedent("""\
 
     The finished script must:
       * Use only `numpy`, `trimesh`, `PIL` (Pillow), and the Python stdlib.
-      * Contain `build_mesh(seed, density)` from above (verbatim or lightly edited).
-      * Read the SOURCE IMAGE from the --image path and derive TILEABLE, roughly
-        DE-LIT material swatches for each semantic surface (e.g. a bark swatch, a
-        foliage / leaf-cluster swatch, a rock swatch). Sample representative
-        regions; make swatches tile without obvious seams; reduce baked-in
-        lighting gradients so the material reads evenly when repeated. For leaf
-        cards, build an alpha-cutout leaf texture (RGBA) so card corners read as
-        leaves, not squares.
+      * Contain `build_mesh(seed, density)` from above (verbatim or lightly edited;
+        keep +Y up, base at y=0, meters).
+      * Read the SOURCE IMAGE from the --image path and derive the materials.
+        TEXTURE QUALITY RULES (these override convenience):
+          - Resolutions: foliage/petal atlases 1024x1024; every other surface
+            >= 512. Never 256.
+          - SAMPLE COLORS FROM THE PHOTO. Choose sampling regions by LOOKING at
+            the image and place them WELL INSIDE the object's silhouette --
+            never include sky/water/ground/background. Prefer the median of
+            several small patches over one big rectangle; if a patch's color is
+            wildly unlike the object's body color, discard it (it hit
+            background). Never invent palette values from memory.
+          - De-light by dividing by a heavily blurred luminance, but CLAMP the
+            gain to [0.6, 1.6] so nothing washes out.
+          - Tileable swatches: mirror-fold (reflect-pad, blend only ~8 px at the
+            fold) or patch quilting. NEVER roll the image and blur a seam cross
+            through the middle -- that destroys the detail that sells realism.
+          - Foliage/petal cards: build a 4x4 ATLAS of distinct cluster tiles
+            (sunlit tiles brighter/warmer, shaded tiles darker/cooler); draw
+            actual leaf/petal silhouettes with PIL polygons (supersample 4x,
+            then LANCZOS downscale); alpha is BINARY with only anti-aliased
+            edges (target <8% of texels semi-transparent). Map each card to a
+            random tile, with random 0/90/180/270 rotations.
+          - Per-vertex COLOR_0 tints multiply the texture in glTF and DO export
+            (set mesh.visual.vertex_attributes["color"] = uint8 (N,4) array).
+            Use them: sun/shade gradients on organics (outer/top brighter,
+            inner/lower darker; slight per-clump variation), subtle wear/AO
+            darkening near the ground and in crevices on man-made objects.
+          - Materials: metallicFactor=0 unless the object is actually metal.
+            Roughness: foliage ~0.8, bark/raw wood ~0.9, stone ~0.95, finished
+            furniture wood 0.5-0.7. Foliage/petal cards: alphaMode="MASK",
+            alphaCutoff 0.4-0.5, doubleSided=True. Optionally derive a
+            normalTexture for bark/stone from the albedo (height = inverse
+            luminance, Sobel -> tangent normal); it exports correctly.
       * Apply UVs appropriate to each surface and assign materials:
-          - trunk / branches: cylindrical UVs along the limb axis
-          - rock: triplanar projection baked into per-vertex UVs (no manual unwrap)
-          - canopy leaf cards: map the leaf texture onto each quad
+          - trunk / branches / turned legs: cylindrical UVs along the part axis
+          - rock / slab surfaces: triplanar projection baked into per-vertex UVs
+          - cards: map each quad onto its atlas tile
         Attach via trimesh.visual.TextureVisuals (uv=..., material=PBRMaterial),
         so textures are embedded when exported to GLB.
       * Be DETERMINISTIC given --seed (geometry and any swatch jitter).
@@ -386,6 +458,11 @@ PASS3_INSTRUCTION = textwrap.dedent("""\
         Use argparse under `if __name__ == "__main__":`. Build the scene, then
         `scene.export(file_obj_or_path)` (or write `scene.export(file_type="glb")`
         bytes) to --output. Exit non-zero on error.
+
+    Environment notes: numpy 2.x (`arr.ptp()` REMOVED -- use `np.ptp(arr)`),
+    Pillow 12 (`Image.ANTIALIAS` removed -- use `Image.LANCZOS`), trimesh 4.x.
+    Only numpy/trimesh/PIL/stdlib imports. Re-check the code compiles before
+    returning.
 
     Return ONLY the complete Python script inside a single ```python code block.
     No commentary outside the block.
@@ -678,6 +755,298 @@ def _validate_full_script(script_code: str, image_path: Path, workdir: Path) -> 
 
 
 # -----------------------------------------------------------------------------
+# Class craft packs (v1.2): per-class geometry guidance injected into Pass 2.
+# Packs teach METHODS (envelope+clumps, lathe+instancing, capsule-union); the
+# photo and description supply every object-specific detail. No species or
+# object constants belong in formcast itself.
+# -----------------------------------------------------------------------------
+
+CLASS_TO_CRAFT = {
+    "tree": "foliage", "shrub": "foliage", "plant": "foliage", "flower": "foliage",
+    "grass": "foliage", "cactus": "foliage",
+    "rock": "rock", "boulder": "rock", "cliff": "rock", "stump": "rock", "log": "rock",
+    "furniture": "manmade", "vessel": "manmade", "tool": "manmade", "lamp": "manmade",
+    "structure": "manmade", "vehicle": "manmade",
+    "animal": "creature", "bird": "creature",
+}
+
+CRAFT_PASS2 = {
+    "foliage": textwrap.dedent("""\
+        CRAFT (canopy-bearing plant):
+          * First define an explicit FOLIAGE ENVELOPE (a lobed ellipsoid: base
+            shape plus 3-6 low-frequency radial bulges) matching the photographed
+            proportions -- write the measured ratios as named constants with
+            comments. Branches/stems grow to FILL the envelope and terminate near
+            its shell; nothing protrudes past it by more than ~3%.
+          * Foliage is CLUMPED leaf cards, not a uniform scatter: choose 10-25
+            clump centers on/just inside the envelope shell (at branch tips where
+            possible) plus a few interior; per clump spawn 40-120 quads inside a
+            small ellipsoid (clump radius ~8-15% of crown width); card half-size
+            ~3-6% of crown width with log-normal jitter; orient cards mostly
+            tangent to the local shell, normals outward with +/-25 degree jitter.
+            At "high" use 1500-3500 cards total; "med" ~40% of that, "low" ~12%.
+          * Wood: trunk 12-16 sides at high with a basal flare (x1.3-1.6 over the
+            bottom 5-8%); child branches start INSIDE the parent (overlap >= the
+            parent radius); child radii follow r_parent^2 ~= sum(r_child^2).
+          * For a single flower/plant: the same envelope idea at organ level --
+            petals as oriented curved cards or lathe surfaces around the
+            receptacle, leaves as curved cards ATTACHED to the stem (every part
+            visibly connected; nothing floats); petal count and droop from the
+            description."""),
+    "rock": textwrap.dedent("""\
+        CRAFT (rock/boulder):
+          * Start from an icosphere (3-4 subdivisions at high); displace vertices
+            with 3-4 octaves of smooth value noise plus 1-2 larger planar facet
+            cuts for character; flatten the underside slightly so it sits
+            naturally on the ground.
+          * Asymmetry is realism: vary noise amplitude by direction. Do not
+            smooth away the facets."""),
+    "manmade": textwrap.dedent("""\
+        CRAFT (manufactured object -- furniture, vessel, lamp, tool):
+          * Read the construction from the image: identify the PARTS (top, legs,
+            stretchers, back, shelf, body, spout, ...) and write each part's
+            dimensions as named module constants (meters, from the photographed
+            proportions).
+          * Build parts from primitives, lathes and extrusions: cylinders/boxes;
+            revolved 2D profiles for anything turned (chair/table legs, pedestals,
+            vase bodies -- define the profile polyline as a constant); simple
+            extrusions for flat parts. Instance repeated parts by rotation/mirror
+            (4 legs = build one, place 4). Boolean union works (manifold3d is
+            installed) where parts must merge; overlapping parts in one mesh are
+            also fine.
+          * CRISP edges: no smoothing filters; >=64 revolve/cylinder segments at
+            "high". Respect the object's symmetry; seed jitter only where real
+            manufacture varies (wood warp), never in part counts.
+          * Keep distinct materials as distinct scene geometries ("top", "legs",
+            "seat", "frame", ...) so texturing can differ."""),
+    "creature": textwrap.dedent("""\
+        CRAFT (animal):
+          * Define a skeleton as named 3D joint positions; connect joints with
+            capsules (trimesh.creation.capsule oriented via align_vectors) and
+            scaled icospheres for skull/chest/hips. EVERY part must interpenetrate
+            its parent by at least half its radius -- no floating parts. Union ALL
+            body parts into ONE watertight mesh (trimesh.boolean.union); subdivide
+            once if below ~20k faces; then trimesh.smoothing.filter_taubin
+            (lamb=0.5, nu=-0.53, ~10 iterations).
+          * Design the SIDE-VIEW silhouette first -- that is where anatomy lives.
+            Sagittal symmetry with tiny jitter; feet reach exactly y=0."""),
+    "generic": textwrap.dedent("""\
+        CRAFT (generic):
+          * Decompose the object into parts; write named constants for measured
+            proportions; build each part from primitives/lathes/noise-displaced
+            hulls as its nature demands; keep distinct materials as distinct
+            scene geometries; every part visibly attached to the whole."""),
+}
+
+
+def _craft_block(spec: dict) -> str:
+    """The class craft-pack text for Pass 2, chosen from the Pass-1 class."""
+    kind = CLASS_TO_CRAFT.get(str(spec.get("class", "")).lower(), "generic")
+    return CRAFT_PASS2[kind]
+
+
+# -----------------------------------------------------------------------------
+# Audit gates (v1.2): cheap objective checks on the probe bake. Failures are
+# strings appended to the repair conversation -- the existing repair loop fixes
+# them like any other error.
+# -----------------------------------------------------------------------------
+
+TRI_BUDGETS = {"high": 80_000, "med": 25_000, "low": 8_000}
+
+
+def _audit_glb(glb_path: Path, spec: dict, density: str = "high") -> list[str]:
+    """Return a list of gate-failure messages (empty = pass)."""
+    import numpy as np
+    problems: list[str] = []
+    try:
+        scene = trimesh.load(str(glb_path), force="scene")
+    except Exception as e:  # noqa: BLE001
+        return [f"audit: produced .glb failed to load: {e}"]
+
+    meshes = [g for g in scene.dump() if hasattr(g, "faces")]
+    if not meshes:
+        return ["audit: no meshes in scene"]
+
+    verts = np.vstack([np.asarray(m.vertices) for m in meshes])
+    lo, hi = verts.min(0), verts.max(0)
+    size = float(max(hi - lo))
+
+    # +Y-up with the base on the ground plane (y=0).
+    if lo[1] < -0.05 * size or lo[1] > 0.08 * size:
+        problems.append(
+            f"audit: the object must STAND ON the XZ plane with +Y up -- its lowest "
+            f"vertex is at y={lo[1]:.3f} for an overall size of {size:.2f} m "
+            f"(expected y~=0). Re-check the up-axis and ground placement.")
+
+    # Triangle budget per density.
+    tris = sum(len(m.faces) for m in meshes)
+    budget = TRI_BUDGETS.get(density, TRI_BUDGETS["high"])
+    if tris > budget * 1.15:
+        problems.append(
+            f"audit: {tris} triangles exceeds the '{density}' budget of {budget}. "
+            f"Reduce element counts/subdivision at this density.")
+
+    # Foliage classes must carry an alpha-cutout (MASK) material for the cards.
+    kind = CLASS_TO_CRAFT.get(str(spec.get("class", "")).lower(), "generic")
+    if kind == "foliage":
+        has_mask = any(
+            getattr(getattr(m.visual, "material", None), "alphaMode", None) == "MASK"
+            for m in meshes)
+        if not has_mask:
+            problems.append(
+                "audit: no alphaMode=MASK material found -- foliage/petal cards "
+                "must use an RGBA alpha-cutout texture (MASK, cutoff 0.4-0.5, "
+                "doubleSided), or the cards will read as opaque rectangles.")
+
+    # Texture floor: at least one embedded texture >= 512 px on organic classes.
+    if kind in ("foliage", "rock"):
+        sizes = []
+        for m in meshes:
+            img = getattr(getattr(m.visual, "material", None), "baseColorTexture", None)
+            if img is not None:
+                sizes.append(min(img.size))
+        if sizes and max(sizes) < 512:
+            problems.append(
+                f"audit: largest texture is {max(sizes)}px -- use >=512px swatches "
+                f"(1024px for foliage atlases); 256px reads as mush.")
+
+    return problems
+
+
+# -----------------------------------------------------------------------------
+# Pass 3.5 (v1.2): closed-loop visual refinement. Render what the script built,
+# show it to the SAME session next to the reference, ask for a revision.
+# -----------------------------------------------------------------------------
+
+REFINE_INSTRUCTION = textwrap.dedent("""\
+    Your script was run and its output was rendered. Use the Read tool to view,
+    in this order:
+    {render_list}
+    compare.png places the reference photo (left) beside your model's front
+    render (right).
+
+    Measured diagnostics of your current output:
+    {metrics}
+
+    Name the 3 biggest visual gaps between your model and the photographed
+    object (be specific: shape, proportion, color, texture, artifact), then
+    return the COMPLETE corrected script in a single ```python block, same
+    contract as before, fixing those gaps. If you are confident no meaningful
+    improvement remains, reply with exactly: APPROVED
+    """)
+
+
+def _refine_metrics(glb_path: Path, image_path: Path) -> str:
+    """Cheap objective numbers for the refine prompt (best-effort)."""
+    import numpy as np
+    lines = []
+    try:
+        scene = trimesh.load(str(glb_path), force="scene")
+        meshes = [g for g in scene.dump() if hasattr(g, "faces")]
+        verts = np.vstack([np.asarray(m.vertices) for m in meshes])
+        lo, hi = verts.min(0), verts.max(0)
+        ext = hi - lo
+        tris = sum(len(m.faces) for m in meshes)
+        lines.append(f"- model: {tris} triangles; extents x={ext[0]:.2f} "
+                     f"y={ext[1]:.2f} z={ext[2]:.2f} m; lowest point y={lo[1]:.3f}")
+        lines.append(f"- model width/height aspect (front view): "
+                     f"{(max(ext[0], ext[2]) / max(ext[1], 1e-9)):.2f}")
+    except Exception as e:  # noqa: BLE001
+        lines.append(f"- model metrics unavailable: {e}")
+    try:
+        from PIL import Image
+        im = np.asarray(Image.open(image_path).convert("RGB"), dtype=np.float32)
+        h, w = im.shape[:2]
+        frame = np.concatenate([im[:12].reshape(-1, 3), im[-12:].reshape(-1, 3),
+                                im[:, :12].reshape(-1, 3), im[:, -12:].reshape(-1, 3)])
+        med = np.median(frame, axis=0)
+        if frame.std(axis=0).mean() < 40:           # near-uniform border: measurable
+            fg = np.abs(im - med).max(axis=2) > 38
+            ys, xs = np.where(fg)
+            if len(xs) > 100:
+                aspect = (xs.max() - xs.min() + 1) / max(ys.max() - ys.min() + 1, 1)
+                lines.append(f"- photo content width/height aspect: {aspect:.2f} "
+                             f"(your front view should be close to this)")
+    except Exception:  # noqa: BLE001
+        pass
+    return "\n".join(lines) if lines else "- (none available)"
+
+
+def _refine_script(llm: ClaudeCLI, spec: dict, generator_code: str,
+                   image_path: Path, workdir: Path, refine_rounds: int,
+                   max_repairs: int) -> str:
+    """Pass 3.5: bake a probe, render it, let the same session critique and
+    revise the script. Keeps the best validated script; never degrades."""
+    from PIL import Image
+    code = generator_code
+    for it in range(refine_rounds):
+        t0 = time.monotonic()
+        probe_script = workdir / "refine_probe.py"
+        probe_script.write_text(code)
+        probe_glb = workdir / "refine_probe.glb"
+        proc = _run_python(probe_script, ["--image", str(image_path), "--seed", "0",
+                                          "--density", "high", "--output",
+                                          str(probe_glb)], cwd=workdir)
+        if proc.returncode != 0 or not probe_glb.exists():
+            log.warning("refine %d: probe bake failed; keeping current script", it + 1)
+            return code
+        # Render standard views (Y-up: v1.2 scripts author Y-up natively).
+        scene = trimesh.load(str(probe_glb), force="scene")
+        meshes = _gather_render_meshes(scene, up="y")
+        names = []
+        for tag, az, el, zoom in STANDARD_VIEWS:
+            im = _soft_render(meshes, width=700, height=800, az_deg=az,
+                              el_deg=el, zoom=zoom)
+            name = f"render-{tag}.png"
+            im.save(workdir / name)
+            names.append(name)
+        # Side-by-side compare: reference | front render.
+        ref = Image.open(image_path).convert("RGB")
+        ref.thumbnail((700, 800))
+        front = Image.open(workdir / "render-front.png")
+        comp = Image.new("RGB", (ref.width + front.width,
+                                 max(ref.height, front.height)), "white")
+        comp.paste(ref, (0, 0))
+        comp.paste(front, (ref.width, 0))
+        comp.save(workdir / "compare.png")
+
+        metrics = _refine_metrics(probe_glb, image_path)
+        render_list = "\n".join(f"      {n}" for n in (names + ["compare.png"]))
+        instruction = REFINE_INSTRUCTION.format(render_list=render_list,
+                                                metrics=metrics)
+        log.info("[pass 3.5] refine round %d/%d: showing renders to the model ...",
+                 it + 1, refine_rounds)
+        reply = llm.ask(PASS3_SYSTEM, instruction, attach_image=False)
+        if reply.strip() == "APPROVED" or reply.strip().endswith("APPROVED"):
+            log.info("        -> model is satisfied (APPROVED) after %d round(s)", it)
+            return code
+        candidate = _extract_code_block(reply)
+        ok, message = _validate_full_script(candidate, image_path, workdir)
+        if not ok:
+            # one repair attempt within the refine round, then keep the old code
+            log.warning("refine %d: revised script failed validation: %s",
+                        it + 1, message.splitlines()[-1] if message else "?")
+            fix = textwrap.dedent(f"""\
+                That revision did not run. Error:
+                ----------------------------------------
+                {message}
+                ----------------------------------------
+                Return the COMPLETE corrected script again (single ```python
+                block, same contract). Do not explain.
+                """)
+            reply = llm.ask(PASS3_SYSTEM, fix, attach_image=False)
+            candidate = _extract_code_block(reply)
+            ok, message = _validate_full_script(candidate, image_path, workdir)
+            if not ok:
+                log.warning("refine %d: still failing; keeping previous script", it + 1)
+                return code
+        code = candidate
+        log.info("        -> refine round %d adopted a revised script (%.1fs)",
+                 it + 1, time.monotonic() - t0)
+    return code
+
+
+# -----------------------------------------------------------------------------
 # Authoring passes (with repair loops)
 # -----------------------------------------------------------------------------
 
@@ -734,12 +1103,26 @@ def _author_with_repair(llm: ClaudeCLI, system: str, initial_instruction: str,
 def pass2_geometry(llm: ClaudeCLI, spec: dict, workdir: Path, max_repairs: int) -> str:
     """Pass 2: author the geometry module, validated by the geometry harness."""
     log.info("[pass 2] authoring procedural geometry ...")
-    instruction = PASS2_INSTRUCTION.format(description=spec["description"])
+    instruction = PASS2_INSTRUCTION.format(description=spec["description"],
+                                           craft=_craft_block(spec))
     return _author_with_repair(
         llm, system=PASS2_SYSTEM, initial_instruction=instruction, attach_image=True,
         validate=lambda code: _validate_geometry(code, workdir),
         max_repairs=max_repairs, label="geometry",
     )
+
+
+def _validate_full_script_audited(script_code: str, image_path: Path,
+                                  workdir: Path, spec: dict) -> tuple[bool, str]:
+    """Full-script validation plus the v1.2 audit gates (Y-up base, budgets,
+    MASK foliage, texture floor). Gate failures repair like any other error."""
+    ok, message = _validate_full_script(script_code, image_path, workdir)
+    if not ok:
+        return ok, message
+    problems = _audit_glb(workdir / "_validate.glb", spec, density="high")
+    if problems:
+        return False, "\n".join(problems)
+    return True, message
 
 
 def pass3_full_script(llm: ClaudeCLI, spec: dict, geometry_code: str,
@@ -750,7 +1133,8 @@ def pass3_full_script(llm: ClaudeCLI, spec: dict, geometry_code: str,
                                            geometry_code=geometry_code)
     return _author_with_repair(
         llm, system=PASS3_SYSTEM, initial_instruction=instruction, attach_image=True,
-        validate=lambda code: _validate_full_script(code, image_path, workdir),
+        validate=lambda code: _validate_full_script_audited(code, image_path,
+                                                            workdir, spec),
         max_repairs=max_repairs, label="full script",
     )
 
@@ -1123,6 +1507,12 @@ def cmd_bake(args: argparse.Namespace) -> int:
         spec = pass1_classify(llm)
         log.debug("pass 1 (classify) finished in %.1fs", time.monotonic() - t0)
 
+        if str(spec.get("class", "")).lower() == "human":
+            raise FormcastError(
+                "The photo's primary subject appears to be a person. formcast "
+                "does not generate human models -- try an object, plant, animal, "
+                "or piece of furniture instead.")
+
         t0 = time.monotonic()
         geometry_code = pass2_geometry(llm, spec, workdir, args.max_repairs)
         log.debug("pass 2 (geometry) finished in %.1fs", time.monotonic() - t0)
@@ -1132,6 +1522,15 @@ def cmd_bake(args: argparse.Namespace) -> int:
             llm, spec, geometry_code, image_path, workdir, args.max_repairs
         )
         log.debug("pass 3 (texturing+export) finished in %.1fs", time.monotonic() - t0)
+
+        # ---- Pass 3.5: closed-loop visual refinement ------------------------
+        if args.refine > 0:
+            t0 = time.monotonic()
+            generator_code = _refine_script(
+                llm, spec, generator_code, image_path, workdir,
+                refine_rounds=args.refine, max_repairs=args.max_repairs)
+            log.debug("pass 3.5 (refine x%d) finished in %.1fs",
+                      args.refine, time.monotonic() - t0)
 
         archetype_id = spec["archetype_id"]
 
@@ -1417,6 +1816,11 @@ def build_parser() -> argparse.ArgumentParser:
     b.add_argument("--max-repairs", type=int, default=DEFAULT_MAX_REPAIRS,
                    help=f"times to ask the model to fix a failing pass "
                         f"(default: {DEFAULT_MAX_REPAIRS})")
+    b.add_argument("--refine", type=int, default=1,
+                   help="pass-3.5 rounds: render the result and let the model "
+                        "critique + revise its script against the photo "
+                        "(0 disables; default: 1; ~1-4 min and one model call "
+                        "per round)")
     b.set_defaults(func=cmd_bake)
 
     # inspect ----------------------------------------------------------------
