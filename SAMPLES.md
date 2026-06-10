@@ -86,15 +86,22 @@ sliver near the right arm).
 
 | Reference photo | v1.1 baseline | v1.2 |
 |---|---|---|
-| <img src="eval/photos/boulder.jpg" width="270"> | <img src="eval/baselines/v11-boulder-front.png" width="270"> | *(queued)* |
+| <img src="eval/photos/boulder.jpg" width="270"> | <img src="eval/baselines/v11-boulder-front.png" width="270"> | <img src="eval/v12-boulder-front.png" width="270"> |
 
-All angles: [v1.1 contact sheet](eval/baselines/v11-boulder-contact.png)
+All angles: [v1.1 contact sheet](eval/baselines/v11-boulder-contact.png) · [v1.2 contact sheet](eval/v12-boulder-contact.png)
 
 **v1.1:** correctly recognized a `spherical-concretion-boulder` (it knows its
 Moeraki!) and the cracked-sphere geometry concept is right — but the texture
 sampled blind crop rectangles that hit **ocean and surf**, so the rock wears
 blue-and-red blotches on dark mud. The poster child for the anti-contamination
 texture rules in v1.2.
+
+**v1.2:** clean win — **judge 3/3** (color/material 4 vs 1). The contamination
+is gone: uniform wet grey-brown mottled stone, plausible against the photo,
+slightly flattened base. Honest regression worth noting: v1.2 *lost the
+septarian crack ridges* that make Moeraki boulders distinctive (v1.1's geometry
+had them); the surface also reads a bit concrete-like up close. Candidate fix
+rides along with the texture-fidelity iteration.
 
 ---
 
@@ -166,3 +173,12 @@ leaves.
   renderer + frozen baselines + A/B judge turned "looks better to me" into
   "3/3 preferred, silhouette 4 vs 1" — and the judge's reasoning doubles as a
   defect list for the next iteration.
+- **The judge tracks human preference so far (2/2 calibration checks).** Joel's
+  independent read — "chair v1.1 far better, table v1.2 far better" — matches
+  the judge's verdicts on both items, including the one where the judge
+  overruled my own scoring. Confidence in unattended A/B judging rises
+  accordingly.
+- **Improvements can silently trade away character.** The v1.2 boulder fixed
+  color contamination but dropped the distinctive crack ridges v1.1 had; the
+  v1.2 chair fixed structure but lost wood mass. Per-item "what got worse"
+  notes are now mandatory in this journal.

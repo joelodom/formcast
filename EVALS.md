@@ -150,3 +150,20 @@ Per MASTER_PLAN §9. Entry template:
   measured off the photo, and a no-floating-parts rule (+audit).
 - Next: apply v1.2.1 manmade craft edits AFTER the retry suite finishes (prompt
   edits are unsafe mid-suite), re-bake chair only, re-judge.
+
+## 2026-06-09 P-v12.3 — v1.2 boulder promoted 3/3; judge-human calibration 2/2
+- What ran: retry `bake boulder.jpg --count 2 --refine 1` (359.7 s; refine
+  adopted a revision); judge 3 trials (~$0.21). The earlier suite attempt died
+  at pass 3 with "Claude CLI exited 1 after 1.2 s" — the account session cap;
+  documented as an ops failure mode (bakes fail fast and cleanly, no corruption).
+- Tier-3 judge: **v1.2 preferred 3/3**; color/material 4 vs 1 — the
+  anti-contamination texture rules fixed the ocean-blue blotches.
+- Honest regression: lost v1.1's septarian crack ridges (distinctive Moeraki
+  character); surface reads concrete-ish in closeup. Queue with texture-fidelity
+  iteration ("keep the character features the photo shows" prompt line).
+- **Tier-4 calibration:** Joel independently judged "chair v1.1 far better,
+  table v1.2 far better" — matches the automated judge on both items (including
+  the chair, where the judge overruled my Tier-2 scoring). Judge-human
+  agreement 2/2 so far.
+- Verdict: KEEP boulder promotion; raise judge trust; add per-item "what got
+  worse" tracking to the journal (done).
