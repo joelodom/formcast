@@ -17,7 +17,7 @@ models. You bring a picture; you get back models.
 
 ## What you can do with it
 
-formcast has three commands:
+formcast has four commands:
 
 | Command   | What it does |
 | --------- | ------------ |
@@ -25,6 +25,33 @@ formcast has three commands:
 | `inspect` | Print (or pull back out) the metadata tucked inside each `.glb` — including the original photo and the exact script that built it. |
 | `view`    | Render a preview of one model, or a whole row of variations side by side. `--save` works even with no display: it falls back to a built-in software renderer. |
 | `judge`   | Show a reference photo plus two render sheets to a fresh Claude session and get a structured preference + rubric back (used to compare model quality A/B; calls the `claude` CLI). |
+
+---
+
+## What it makes — one photo in, a model out
+
+Each pair below is a real benchmark item: the **reference photo** on the left, a
+render of the **formcast-generated 3D model** on the right (one of several
+seed-varied `.glb` outputs). These are *procedural archetypes* — believable
+instances of the same kind of thing, not exact copies of the photo. The pipeline
+is still improving, so each model is labelled with the **version that generated
+it**, for honesty; the full visual journal with what-worked / what-didn't is in
+[`SAMPLES.md`](SAMPLES.md).
+
+| Object | Reference photo | formcast model | Made by |
+|---|---|---|---|
+| Maple tree | <img src="eval/photos/maple.jpg" width="150"> | <img src="eval/v12-maple-front.png" width="150"> | v1.2 |
+| Console table | <img src="eval/photos/table.jpg" width="150"> | <img src="eval/v12-table-front.png" width="150"> | v1.2 |
+| Moeraki boulder | <img src="eval/photos/boulder.jpg" width="150"> | <img src="eval/v12-boulder-front.png" width="150"> | v1.2 |
+| White tulip | <img src="eval/photos/tulip.jpg" width="150"> | <img src="eval/v12-tulip-front.png" width="150"> | v1.2 |
+| Windsor chair | <img src="eval/photos/chair.jpg" width="150"> | <img src="eval/baselines/v11-chair-front.png" width="150"> | v1.1 |
+| Ceramic teapot | <img src="eval/photos/teapot.jpg" width="150"> | <img src="eval/v122-teapot-front.png" width="150"> | v1.2.2 |
+| Azalea shrub | <img src="eval/photos/azalea.jpg" width="150"> | <img src="eval/v122-azalea-front.png" width="150"> | v1.2.2 |
+| Tiffany lamp | <img src="eval/photos/tiffany-lamp.jpg" width="150"> | <img src="eval/v122-lamp-front.png" width="150"> | v1.2.2 |
+
+*(A pencil — a 9th example — is baking and will join the gallery. Reference
+photos are CC0/PD or repo samples; full provenance in
+[`benchmarks/manifest.json`](benchmarks/manifest.json).)*
 
 ---
 
