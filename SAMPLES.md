@@ -181,12 +181,27 @@ isn't there yet — the COLOR_0 machinery exists but is underused).
 
 ## Teapot — vessel (new benchmark item)
 
-| Reference photo | v1.2.1 |
+| Reference photo | v1.2.2 (first bake) |
 |---|---|
-| <img src="eval/photos/teapot.jpg" width="270"> | *(first bake killed by session cap — Opus playbook step 2)* |
+| <img src="eval/photos/teapot.jpg" width="270"> | <img src="eval/v122-teapot-front.png" width="270"> |
+
+All angles: [v1.2.2 contact sheet](eval/v122-teapot-contact.png)
 
 A classic revolve-body + handle + spout vessel on a bokeh background — added to
-cover the vessel class with a genuinely simple object (CC0, StockSnap).
+cover the vessel class with a genuinely simple object (CC0, StockSnap). First
+bake under **v1.2.2**, and a useful coincidence: it's a **black** glaze, so it
+stresses the new dark-material rule head-on.
+
+**v1.2.2 (first champion):** unmistakably a teapot — bulbous body, upturned
+spout, open loop handle, domed lid with a ball-knob finial, and the oxblood
+accent band rimming the lid (and spout lip). The refine round caught a too-squat
+body (front aspect 2.24) and rounded it out. **The dark-material rule landed:**
+the black glaze reads as *form* with a speckled, stony texture and visible value
+range — not the flat black silhouette the v1.2.1 chair became, which is exactly
+what the rule was written to prevent. What's a touch off vs the photo: the body
+is slightly wider/squatter, the glaze a bit more speckled than the photo's smooth
+matte, and the spout sits a little long. Tier-2 (my eyes): silhouette 4,
+proportions 4, surface 4, color/material 4, artifacts 4.
 
 ## Tiffany peacock lamp — lamp (stretch case)
 

@@ -366,3 +366,22 @@ constraint is the account **session cap**.
   lamp / azalea) — watch that furniture keeps its mass while shedding fussiness,
   and that any dark surface keeps a visible value range.
 - Next: first bakes under 1.2.2.
+
+## 2026-06-10 P-122.2 — teapot first bake (v1.2.2); dark-material rule VALIDATED
+- What ran: `bake teapot.jpg --out-dir outputs/dev/v122-teapot --count 2
+  --refine 1` (1122 s; refine round 1 adopted a revision — it diagnosed the body
+  as too squat at front aspect 2.24 and rounded it). Class `vessel`
+  (`black-ceramic-teapot`), 37,472 faces, surfaces [body, lid, spout, handle,
+  accent] from revolved profiles + swept tubes.
+- Tier-2 (my eyes, rubric 1–5): silhouette 4, proportions 4, surface 4,
+  color/material 4, artifacts 4. Unmistakably a teapot; all four parts present
+  and placed right; oxblood accent band on the lid rim + spout lip.
+- **Dark-material rule (1.2.2) VALIDATED:** the black glaze renders as *form*
+  with a speckled stony texture and a visible value range — NOT a flat black
+  silhouette (the v1.2.1 chair failure). This is the first dark object baked
+  under the new rule and it behaved exactly as intended.
+- Honest gaps vs photo: body slightly wider/squatter; glaze more speckled than
+  the photo's smooth matte; spout a hair long.
+- Verdict: KEEP — teapot becomes its own first champion (no prior bake to beat).
+  No judge needed (no champion). Renders: `eval/v122-teapot-{front,contact}.png`.
+- Next: azalea, then tiffany-lamp.
