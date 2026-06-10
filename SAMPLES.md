@@ -127,6 +127,25 @@ texture rather than leaf silhouettes, and a bark smear from roll+blur tiling.
 
 ---
 
+## Teapot — vessel (new benchmark item)
+
+| Reference photo | v1.2 |
+|---|---|
+| <img src="eval/photos/teapot.jpg" width="270"> | *(queued)* |
+
+A classic revolve-body + handle + spout vessel on a bokeh background — added to
+cover the vessel class with a genuinely simple object (CC0, StockSnap).
+
+## Tiffany peacock lamp — lamp (stretch case)
+
+| Reference photo | v1.2 |
+|---|---|
+| <img src="eval/photos/tiffany-lamp.jpg" width="270"> | *(queued)* |
+
+Museum studio shot (CC0). Deliberately hard: a mosaic stained-glass shade over
+a sculpted bronze base — stresses multi-material texturing well beyond wood and
+leaves.
+
 ## What we've learned so far (running)
 
 - **Closing the loop works.** The single biggest v1.2 change is that the model

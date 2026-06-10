@@ -63,6 +63,30 @@
       "url": "https://live.staticflickr.com/5550/9420750176_c8a2f13dae_b.jpg",
       "provider": "flickr",
       "derivation": "crop box (20, 170, 430, 500) of source"
+    },
+    {
+      "id": "teapot",
+      "class": "vessel",
+      "fidelity": "archetype",
+      "difficulty": "medium (in-situ bokeh)",
+      "file": "benchmarks/cache/picked/teapot.jpg",
+      "title": "Ceramic Teapot",
+      "license": "cc0",
+      "source": "https://stocksnap.io/photo/ceramic-teapot-5811FEC469",
+      "url": "https://cdn.stocksnap.io/img-thumbs/960w/5811FEC469.jpg",
+      "provider": "stocksnap"
+    },
+    {
+      "id": "tiffany-lamp",
+      "class": "lamp",
+      "fidelity": "faithful",
+      "difficulty": "hard (mosaic glass shade; museum studio bg)",
+      "file": "benchmarks/cache/picked/tiffany-lamp.jpg",
+      "title": "Peacock Table Lamp c. 1902",
+      "license": "cc0",
+      "source": "https://www.flickr.com/photos/200781279@N05/53862485699",
+      "url": "https://live.staticflickr.com/65535/53862485699_b84063ceec.jpg",
+      "provider": "flickr"
     }
   ]
 }
