@@ -109,13 +109,21 @@ rides along with the texture-fidelity iteration.
 
 | Reference photo | v1.1 baseline | v1.2 |
 |---|---|---|
-| <img src="eval/photos/tulip.jpg" width="270"> | <img src="eval/baselines/v11-tulip-front.png" width="270"> | *(queued)* |
+| <img src="eval/photos/tulip.jpg" width="270"> | <img src="eval/baselines/v11-tulip-front.png" width="270"> | <img src="eval/v12-tulip-front.png" width="270"> |
 
-All angles: [v1.1 contact sheet](eval/baselines/v11-tulip-contact.png)
+All angles: [v1.1 contact sheet](eval/baselines/v11-tulip-contact.png) · [v1.2 contact sheet](eval/v12-tulip-contact.png)
 
 **v1.1:** recognizable white bloom on a stem — but the stem is striped
 **purple** (crops hit the bokeh background), the petals are hard-faceted, and it
 invented floating leaf scraps that connect to nothing.
+
+**v1.2: promoted, judge 3/3** (color/material 4 vs 1–2). Purple stem gone, no
+floating parts, overlapping tepals on a proper receptacle, clean green stem —
+credibly a tulip bud. Still imperfect: the bud pinches into a slight
+"onion-dome" (the photo's cup is softer-shouldered), petals show low-poly
+facets (needs smooth shading / more segments), and the white is flat where the
+photo has cream-to-grey-green gradients. These all go on the texture/shading
+iteration list.
 
 ---
 

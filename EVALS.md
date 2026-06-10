@@ -174,3 +174,20 @@ Per MASTER_PLAN §9. Entry template:
   agreement 2/2 so far.
 - Verdict: KEEP boulder promotion; raise judge trust; add per-item "what got
   worse" tracking to the journal (done).
+
+## 2026-06-09 P-v12.4 — v1.2 tulip promoted 3/3
+- What ran: retry `bake tulip.jpg --count 2 --refine 1` (1033 s — slowest item;
+  refine adopted a revision after 275.8 s); judge 3 trials under the NEW
+  class-credibility prompt (~$0.21).
+- Tier-3 judge: **v1.2 preferred 3/3**; color/material 4 vs 1–2. Cited: closed
+  egg-shaped bud silhouette, correct stem-to-bloom proportions, clean green
+  stem, no broken geometry.
+- Fixed vs v1.1: background-purple stem (anti-contamination rules), floating
+  leaf scraps (connectivity language), petal coherence.
+- Remaining defects (queued): faceted petals (needs smooth vertex normals or
+  more segments — add a "smooth-shade curved organic surfaces" line to the
+  foliage pack), onion-dome pinch at the bud tip, flat white vs the photo's
+  cream/grey-green gradients (COLOR_0 gradient hint exists but wasn't used
+  strongly).
+- Running scoreboard: table 3/3 ✓, boulder 3/3 ✓, tulip 3/3 ✓, chair 1/3 ✗
+  (v1.2.1 queued), maple baking.
