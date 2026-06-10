@@ -67,6 +67,14 @@ This becomes a CLI flag (`--fidelity archetype|faithful`) with a per-class defau
 and it changes gates (faithful mode adds silhouette-match scoring) and prompts
 ("match the measured proportions" vs "vary within the family").
 
+> **User decision (2026-06-09): archetype is the quality bar.** Joel: "I care
+> less about it looking like the original photo than getting the class of
+> objects right." Class credibility — believable structure, mass, materials for
+> the KIND — outranks photo resemblance everywhere; `faithful` mode and its
+> silhouette-IoU gates drop to a later phase, and judging is re-weighted to
+> class credibility first. Furniture's earlier "default faithful" suggestion is
+> superseded: everything defaults to archetype.
+
 ### 1.3 Scope ladder — the honest quality bars for v1
 
 Declare these openly (README), aim development at them, and gate phases on them:

@@ -28,6 +28,13 @@ Per MASTER_PLAN §9. Entry template:
   art (rawpixel "png sticker" = often line art; "3 tulips" = posterized art).
 
 ## Decisions
+- **2026-06-09 (Joel): class credibility > photo fidelity.** "I care less about
+  it looking like the original photo than getting the class of objects right."
+  Consequences: archetype is the quality bar everywhere (faithful mode drops in
+  priority); judge prompt re-weighted to class credibility first; craft/prompt
+  lines aim at "convincing instance of the kind" (class-typical mass, materials,
+  character) rather than photo replication; the boulder's lost cracks matter
+  only insofar as cracks make a *more convincing concretion boulder*.
 - Benchmark v1 = 5 items (maple, tulip, met-console-table, windsor-chair,
   moeraki-boulder); all CC0/local; manifest at `benchmarks/manifest.json`;
   photos cached (gitignored), re-fetchable by URL (+crop derivation for boulder).

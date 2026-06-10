@@ -1400,8 +1400,12 @@ JUDGE_PROMPT = textwrap.dedent("""\
       3. render_b.png - renders of 3D model B (multiple angles in one sheet)
 
     Both models were generated from the photograph and aim to represent the
-    KIND of object in it (shape character, proportions, surfaces, colors) -
-    not a pixel-perfect copy. Judge which model is the better 3D representation.
+    KIND of object in it - not a pixel-perfect copy. Judge CLASS CREDIBILITY
+    first: which model is the more convincing instance of that kind of object
+    (believable structure, mass, materials and proportions for the kind)?
+    The photo defines the kind and its character; exact resemblance to the
+    specific photographed object matters less than being a convincing example
+    of it.
 
     Return ONLY a JSON object (no prose, no code fences):
     {"preferred": "A" or "B",
