@@ -107,3 +107,26 @@ Per MASTER_PLAN §9. Entry template:
 - Verdict: baselines confirm the plan's diagnosis: in-situ photos break blind
   crop-box texture sampling; taxonomy must broaden; palette must be measured.
 - Next: v1.2 wiring (already staged as unused functions), re-bake, A/B judge.
+- Addendum (chair/table renders): chair v1.1 is structurally a real Windsor
+  chair despite class='log' (rich description drove geometry; wrong class drove
+  bark-like charred texturing); table v1.1 is a legless mottled stone slab
+  (class='white-statuary-marble'). **Learning: description ⇒ geometry, class ⇒
+  materials/craft — both channels must be right.** Tier-2 table: 1/1/2/1/3.
+
+## 2026-06-09 P-v12.1 — v1.2 table: first full A/B promotion
+- Hypothesis/goal: v1.2 (taxonomy + manmade craft pack + texture rules + refine
+  loop) fixes the furniture failure mode end-to-end.
+- What ran: `bake table.jpg --count 2 --refine 1` (831 s, ~$2.3 incl. refine);
+  judge 3 trials sonnet (~$0.21). Cost: ≈$2.5.
+- Artifacts: `outputs/dev/v12-table/`, `eval/v12-table-*.png`, SAMPLES.md entry.
+- Gates: all passed in-bake (validation + audit; no repairs needed this run).
+- Tier-2 (my eyes): silhouette 4, proportions 4, surface 3, color 2.5,
+  artifacts 4 — real two-shelf console with cameo medallion; wood too
+  grey-mauve, no gilt on "ormolu", veining smudgy.
+- Tier-3 judge: **v1.2 preferred 3/3** vs frozen v1.1 baseline; candidate
+  rubric ≈ 4/3.5/3/3/3.5 vs baseline ≈ 1/1/1.3/1.3/3.
+- Refine-loop first live use: model critiqued its own render ("Color is
+  completely wrong"), revised, revision validated and adopted (169.6 s round).
+- Verdict: KEEP — promotes v1.2 for furniture; the craft→render→judge loop is
+  validated end-to-end exactly as MASTER_PLAN designed.
+- Next: chair/boulder/tulip/maple as the suite completes; journal in SAMPLES.md.

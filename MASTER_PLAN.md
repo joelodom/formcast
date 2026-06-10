@@ -341,6 +341,31 @@ node transforms, so the Y-up→Z-up conversion silently didn't apply. Fixed with
 `scene.dump()`. **Codified in §2.4: debug the eyes first.** (Also why Phase 0's
 renderer must be unit-tested against a known-good transform-bearing GLB.)
 
+### 5.4b Field notes from implementation (running — see EVALS.md and SAMPLES.md)
+
+Learnings from executing Phases 0–1-early on the `experiments` branch
+(2026-06-09 evening), folded back into this plan:
+
+- **Description ⇒ geometry, class ⇒ materials/craft.** A v1.1 chair classified
+  as `log` still came out chair-shaped (the rich prose description drove the
+  geometry pass) but wore charred bark (the class drove texturing). The router
+  (§6.3) therefore matters most for *craft/material* selection; the description
+  is the main geometry channel. Both channels validated independently.
+- **Material-vs-object classification needs an explicit rule.** Pass 1 keyed on
+  the marble top and called a console table `white-statuary-marble` → legless
+  stone slab. One prompt sentence ("classify by what the WHOLE OBJECT IS, never
+  by what it is made of") + the broadened class list fixed it (v1.2: correct
+  `furniture`, judge 3/3).
+- **The pass-3.5 refine loop worked on first live use** — the model saw its own
+  render, opened its critique with "Color is completely wrong", and shipped a
+  validated fix. The §6.5 design needs no changes so far.
+- **Benchmark acquisition is its own discipline**: automated scoring accepted
+  clipart/line-art/B&W museum scans; Openverse `category=photograph` (+ museum
+  sources for furniture) plus mandatory eyeball verification is the working
+  recipe (EVALS "Rejected ideas").
+- **Judge plumbing detail:** subcommands that print JSON must print it as the
+  LAST stdout output (log lines otherwise corrupt piped parsing).
+
 ### 5.5 Carried-over evidence (from PHOTOREALISM_PLAN, same day)
 
 Maple baseline numbers (crown fill 47% vs photo 67%; aspect 0.57 vs 0.84; 48%
