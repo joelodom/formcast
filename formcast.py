@@ -269,10 +269,14 @@ SCHEMA_DOC = (
     "'provenance' ({tool, engine, model, prompt_version, created_utc} -- enough to re-bake)."
 )
 
-PROMPT_VERSION = "formcast/1.2-cli"  # bump when the prompts/engine below change materially
+PROMPT_VERSION = "formcast/1.2.1-cli"  # bump when the prompts/engine below change materially
 # 1.2: any-object taxonomy (incl. man-made; humans refused), +Y-up/meters/budget
 #      contract, per-class craft packs, anti-contamination texture rules, audit
 #      gates, and the pass-3.5 visual refine loop. 1.0/1.1 bakes were Z-up.
+# 1.2.1: class-credibility emphasis (character features of the KIND); turned-
+#      profile mass + sculpted seats + member thickness for furniture; wood
+#      grain/wear (painted wood != plastic); smooth shading on curved organics;
+#      floating-fragment audit gate.
 
 
 # -----------------------------------------------------------------------------
@@ -374,6 +378,11 @@ PASS2_INSTRUCTION = textwrap.dedent("""\
       * Every returned mesh must have valid vertices and faces (triangles) and
         sane, finite bounds. Recompute normals where appropriate. No part may
         float disconnected from the object.
+      * Capture the CHARACTER FEATURES the description calls out (cracks,
+        ridges, lobes, turned bulbs, carved ornament, hardware): they are what
+        makes the result read as THIS KIND of object instead of a generic
+        primitive. A convincing instance of the kind is the goal -- not a copy
+        of the photo, and not a bland average of the class.
 
     {craft}
 
@@ -444,6 +453,10 @@ PASS3_INSTRUCTION = textwrap.dedent("""\
             alphaCutoff 0.4-0.5, doubleSided=True. Optionally derive a
             normalTexture for bark/stone from the albedo (height = inverse
             luminance, Sobel -> tangent normal); it exports correctly.
+          - Wood -- including PAINTED wood -- needs grain-scale albedo
+            variation, subtle value wear on edges, and warm undertones; a flat
+            single color reads as plastic. Stone needs its mottling AND the
+            crack/vein/ridge features the description mentions.
       * Apply UVs appropriate to each surface and assign materials:
           - trunk / branches / turned legs: cylindrical UVs along the part axis
           - rock / slab surfaces: triplanar projection baked into per-vertex UVs
@@ -792,7 +805,11 @@ CRAFT_PASS2 = {
             petals as oriented curved cards or lathe surfaces around the
             receptacle, leaves as curved cards ATTACHED to the stem (every part
             visibly connected; nothing floats); petal count and droop from the
-            description."""),
+            description.
+          * Curved organic surfaces (petals, fruit, smooth stems) must not show
+            polygonal facets: weld shared vertices (merge_vertices/process=True)
+            so normals interpolate smoothly, and use enough segments that the
+            silhouette curve reads smooth."""),
     "rock": textwrap.dedent("""\
         CRAFT (rock/boulder):
           * Start from an icosphere (3-4 subdivisions at high); displace vertices
@@ -814,9 +831,20 @@ CRAFT_PASS2 = {
             (4 legs = build one, place 4). Boolean union works (manifold3d is
             installed) where parts must merge; overlapping parts in one mesh are
             also fine.
-          * CRISP edges: no smoothing filters; >=64 revolve/cylinder segments at
-            "high". Respect the object's symmetry; seed jitter only where real
-            manufacture varies (wood warp), never in part counts.
+          * TURNED PARTS ARE NOT PLAIN CYLINDERS OR CONES. Read the lathe
+            profile off the photo -- bulbs, coves, rings, vase swells, tapers --
+            and revolve a polyline with that actual curvature. Member
+            thicknesses come from the photo too: furniture members are usually
+            THICKER and more substantial than they first appear; thin wiry
+            members read as toy wire, not wood.
+          * Sculpted surfaces (saddle seats, dished tops, carved crests): shape
+            them -- displace a subdivided slab into the saddle/dish/curve.
+            Never leave a flat disc or plain box where the photo shows shaping.
+          * CRISP edges on casework: no global smoothing filters; >=64
+            revolve/cylinder segments at "high". Respect the object's symmetry;
+            seed jitter only where real manufacture varies (wood warp), never
+            in part counts. Every part must physically meet its neighbors
+            (joints may interpenetrate); no floating fragments.
           * Keep distinct materials as distinct scene geometries ("top", "legs",
             "seat", "frame", ...) so texturing can differ."""),
     "creature": textwrap.dedent("""\
@@ -909,6 +937,36 @@ def _audit_glb(glb_path: Path, spec: dict, density: str = "high") -> list[str]:
             problems.append(
                 f"audit: largest texture is {max(sizes)}px -- use >=512px swatches "
                 f"(1024px for foliage atlases); 256px reads as mush.")
+
+    # Floating slivers: tiny fragments disconnected from everything else read
+    # as debris (e.g. a stray spindle hovering beside a chair arm). Foliage
+    # cards are exempt (cards are individually disconnected by design).
+    if kind != "foliage":
+        frags = []
+        for m in meshes:
+            try:
+                frags.extend(m.split(only_watertight=False))
+            except Exception:  # noqa: BLE001
+                frags.append(m)
+        if len(frags) > 1:
+            diag = float(np.linalg.norm(hi - lo))
+            bigs = [f for f in frags
+                    if float(np.linalg.norm(f.bounds[1] - f.bounds[0])) >= 0.05 * diag]
+            pad = 0.01 * diag
+            for f in frags:
+                fd = float(np.linalg.norm(f.bounds[1] - f.bounds[0]))
+                if fd >= 0.05 * diag:
+                    continue
+                flo, fhi = f.bounds[0] - pad, f.bounds[1] + pad
+                touches = any(
+                    (flo <= b.bounds[1]).all() and (fhi >= b.bounds[0]).all()
+                    for b in bigs)
+                if not touches:
+                    problems.append(
+                        "audit: a small fragment floats disconnected from the "
+                        "object (size {:.3f} m). Attach every part; remove "
+                        "debris.".format(fd))
+                    break
 
     return problems
 

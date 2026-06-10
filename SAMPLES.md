@@ -15,7 +15,8 @@ results) is `EVALS.md`; the plans are `MASTER_PLAN.md` and `PHOTOREALISM_PLAN.md
 | Version | What it does | One-line verdict |
 |---|---|---|
 | **v1.1** (baseline) | Original pipeline: nature-only taxonomy, no craft guidance, blind texture crops, Z-up exports, no feedback loop. | Gets the *idea* of the object; quality is a coin flip and textures often ruined by background contamination. |
-| **v1.2** | Any-object taxonomy ("classify by what the whole object IS, not its material"); per-class craft packs (foliage envelopes + clumped cards, lathe/instancing furniture, noise-displaced rocks, capsule-union creatures); +Y-up/meters/budget contract; anti-contamination texture rules (sample inside the silhouette, median of patches, no roll+blur tiling); audit gates; **pass 3.5 refine loop** — formcast renders the model's own output and shows it back for critique + revision before baking. | First A/B-judged result: furniture went from "legless stone slab" to "recognizably the photographed console table", judge 3/3. |
+| **v1.2** | Any-object taxonomy ("classify by what the whole object IS, not its material"); per-class craft packs (foliage envelopes + clumped cards, lathe/instancing furniture, noise-displaced rocks, capsule-union creatures); +Y-up/meters/budget contract; anti-contamination texture rules (sample inside the silhouette, median of patches, no roll+blur tiling); audit gates; **pass 3.5 refine loop** — formcast renders the model's own output and shows it back for critique + revision before baking. | **Suite result: 4 of 5 promoted at 3/3 each** (maple, table, boulder, tulip); chair rejected 2/3-against — correct structure, but lost v1.1's turned-wood mass. v1.2.1 fix below. |
+| **v1.2.1** | v1.2 plus: turned parts get real lathe-profile curvature (bulbs/coves read off the photo) and photo-measured member thickness; sculpted-not-flat seats; "character features from the description are what make it read as its kind" (class credibility per Joel's direction); wood-grain/wear so painted wood stops reading as plastic; smooth shading on curved organic surfaces; floating-fragment audit gate. | Chair re-match + first teapot/Tiffany-lamp bakes in progress. |
 
 ---
 
@@ -131,14 +132,23 @@ iteration list.
 
 | Reference photo | v1.1 baseline | v1.2 |
 |---|---|---|
-| <img src="eval/photos/maple.jpg" width="270"> | <img src="eval/baselines/v11-maple-front.png" width="270"> | *(queued — 2 refine rounds)* |
+| <img src="eval/photos/maple.jpg" width="270"> | <img src="eval/baselines/v11-maple-front.png" width="270"> | <img src="eval/v12-maple-front.png" width="270"> |
 
-All angles: [v1.1 contact sheet](eval/baselines/v11-maple-contact.png)
+All angles: [v1.1 contact sheet](eval/baselines/v11-maple-contact.png) · [v1.2 contact sheet](eval/v12-maple-contact.png)
 
 **v1.1:** decent-at-a-glance tree, but measured against the photo: crown too
 narrow (w/h 0.57 vs 0.84), too sparse (47% crown fill vs 67%), one flat texture
 for the whole canopy (the photo has a 4:1 sun/shade range), blurry-blob leaf
 texture rather than leaf silhouettes, and a bark smear from roll+blur tiling.
+
+**v1.2: promoted, judge 3/3** with straight 4s vs 2–3s — and both refine rounds
+adopted revisions (the model kept finding improvements in its own renders).
+The crown is now full, rounded and dense with visible leaf-cluster light/dark
+variation; the wispy gaps and floating clumps are gone. Remaining gaps for the
+next iteration: the crown is a touch *too* solid (the photo shows dark branch
+glimpses through gaps), the bare trunk is shorter than the photo's ~21%, and
+the foliage reads slightly flat-cartoon up close (the full 4:1 sun/shade depth
+isn't there yet — the COLOR_0 machinery exists but is underused).
 
 ---
 

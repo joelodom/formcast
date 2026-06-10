@@ -191,3 +191,30 @@ Per MASTER_PLAN §9. Entry template:
   strongly).
 - Running scoreboard: table 3/3 ✓, boulder 3/3 ✓, tulip 3/3 ✓, chair 1/3 ✗
   (v1.2.1 queued), maple baking.
+
+## 2026-06-09 P-v12.5 — MILESTONE: v1.2 suite complete, 4/5 promoted
+- Maple: `bake --count 2 --refine 2` (1044.8 s; BOTH refine rounds adopted
+  revisions); judge **3/3 with straight 4s** vs 2–3s for the user's original
+  v1.1 bake. Crown now full/rounded/dense with clump light-dark variation; the
+  wispy gaps, floating clumps and narrow silhouette are gone.
+- **Suite verdict: maple ✓ 3/3, table ✓ 3/3, boulder ✓ 3/3, tulip ✓ 3/3,
+  chair ✗ 1/3.** Every promotion cleared the ≥2/3 protocol bar; the one
+  rejection produced a specific, mechanistic fix (turned-wood mass).
+- What v1.2 proved: (1) the render→critique→revise loop improves results the
+  authoring model can SEE (it adopted revisions in 6 of 6 refine rounds across
+  the suite); (2) anti-contamination texture rules fixed every in-situ photo
+  failure; (3) the broadened taxonomy + craft packs fixed furniture end-to-end;
+  (4) judge-human agreement held on both items the user checked.
+- What v1.2 didn't fix (next iteration targets): turned-wood/material mass on
+  the chair (v1.2.1, applying now); foliage depth (4:1 sun/shade range still
+  partially flat; COLOR_0 underused); maple crown slightly too solid (needs
+  branch glimpses through gaps); petal facets (smooth-shading line added);
+  surface character preservation (boulder cracks).
+- Maple remaining vs PHOTOREALISM_PLAN §13 bar: not yet at "clearly the same
+  kind of tree AND clearly much better" full criteria (atlas leaf silhouettes,
+  measured crown-fill gate, two-run reproducibility) — Phase 1 continues.
+- Session cost ledger (approx, from formcast.log): baselines ≈$6, v1.2 suite
+  (incl. session-cap retry) ≈$13, judges ≈$1.3, earlier experiments ≈$2.5 —
+  total ≈$23 for: 5-class benchmark, eval infrastructure, two pipeline
+  versions, and 5 A/B verdicts.
+- Next: v1.2.1 (applied) → chair re-match + teapot + tiffany-lamp first bakes.
