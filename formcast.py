@@ -269,7 +269,7 @@ SCHEMA_DOC = (
     "'provenance' ({tool, engine, model, prompt_version, created_utc} -- enough to re-bake)."
 )
 
-PROMPT_VERSION = "formcast/1.2.1-cli"  # bump when the prompts/engine below change materially
+PROMPT_VERSION = "formcast/1.2.2-cli"  # bump when the prompts/engine below change materially
 # 1.2: any-object taxonomy (incl. man-made; humans refused), +Y-up/meters/budget
 #      contract, per-class craft packs, anti-contamination texture rules, audit
 #      gates, and the pass-3.5 visual refine loop. 1.0/1.1 bakes were Z-up.
@@ -277,6 +277,10 @@ PROMPT_VERSION = "formcast/1.2.1-cli"  # bump when the prompts/engine below chan
 #      profile mass + sculpted seats + member thickness for furniture; wood
 #      grain/wear (painted wood != plastic); smooth shading on curved organics;
 #      floating-fragment audit gate.
+# 1.2.2: simplicity / geometric essence over detail-chasing (Joel's chair call)
+#      -- simplest geometry that reads as the kind, clean silhouette before fine
+#      detail; temper turned-part over-detailing; very-dark finishes sample
+#      sheen/highlight zones so they don't render as black silhouettes.
 
 
 # -----------------------------------------------------------------------------
@@ -383,6 +387,13 @@ PASS2_INSTRUCTION = textwrap.dedent("""\
         makes the result read as THIS KIND of object instead of a generic
         primitive. A convincing instance of the kind is the goal -- not a copy
         of the photo, and not a bland average of the class.
+      * SIMPLICITY / ESSENCE FIRST (this balances the bullet above). Capture
+        those character features with the SIMPLEST geometry that still reads
+        unmistakably as the kind. Nail the essential masses, proportions and a
+        clean, legible SILHOUETTE before any fine detail; add detail only where
+        it changes what the object reads as. Never add surface or sub-part
+        detail that muddies the silhouette or blurs the major masses -- a clean,
+        simple, instantly-readable model beats a busier, more intricate one.
 
     {craft}
 
@@ -455,8 +466,13 @@ PASS3_INSTRUCTION = textwrap.dedent("""\
             luminance, Sobel -> tangent normal); it exports correctly.
           - Wood -- including PAINTED wood -- needs grain-scale albedo
             variation, subtle value wear on edges, and warm undertones; a flat
-            single color reads as plastic. Stone needs its mottling AND the
-            crack/vein/ridge features the description mentions.
+            single color reads as plastic. For VERY DARK or near-black finishes,
+            do NOT sample only the average dark tone -- it collapses to a black
+            silhouette in render: sample the photo's LIT edges / sheen /
+            highlight zones as well and keep a visible albedo value range
+            (lightest roughly 2-3x the darkest) so the form still reads. Stone
+            needs its mottling AND the crack/vein/ridge features the description
+            mentions.
       * Apply UVs appropriate to each surface and assign materials:
           - trunk / branches / turned legs: cylindrical UVs along the part axis
           - rock / slab surfaces: triplanar projection baked into per-vertex UVs
@@ -836,7 +852,11 @@ CRAFT_PASS2 = {
             and revolve a polyline with that actual curvature. Member
             thicknesses come from the photo too: furniture members are usually
             THICKER and more substantial than they first appear; thin wiry
-            members read as toy wire, not wood.
+            members read as toy wire, not wood. But capture the 2-4 MAJOR
+            profile moves (the big bulb, the cove, the taper) cleanly and stop
+            -- do not pile on fine rings, flutes or micro-ornament; a clean
+            turned silhouette already reads as turned wood, and fussy
+            sub-detail just muddies it.
           * Sculpted surfaces (saddle seats, dished tops, carved crests): shape
             them -- displace a subdivided slab into the saddle/dish/curve.
             Never leave a flat disc or plain box where the photo shows shaping.

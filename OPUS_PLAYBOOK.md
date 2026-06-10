@@ -150,6 +150,12 @@ no license caveat.
 
 ## 3. Chair lesson → pipeline principles (NO chair re-bake)
 
+> **STATUS: encoded 2026-06-10 as `formcast/1.2.2-cli`.** Both lessons are now in
+> `formcast.py` (PASS2 "simplicity/essence first" bullet; manmade turned-part
+> temper; PASS3 very-dark-finish sampling). Still to do: **validate on the next
+> bakes** (step 2) — watch that furniture keeps its mass while shedding fussiness,
+> and that dark surfaces keep a visible value range. See EVALS P-122.1.
+
 The chair is closed (step 1), but it taught two things worth encoding into the
 prompts so *other* objects benefit. Study-the-champion is still the method —
 **read the code that won**:

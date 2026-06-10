@@ -338,3 +338,31 @@ constraint is the account **session cap**.
   prompt-pack changes, ambiguous judge verdicts, architecture) — not on routine
   picks like this image swap.
 - Verdict: KEEP — benchmark is now fully CC0/PD with verified provenance.
+
+## 2026-06-10 P-122.1 — v1.2.2 prompts: simplicity/essence + dark-material (encoded)
+- Hypothesis/goal: encode Joel's chair lessons as general prompt principles so
+  EVERY future bake benefits (no chair re-bake, per his verdict). Two additions
+  with deliberate counterweights to avoid regressing the v1.2 wins.
+- What changed (`formcast.py`, PROMPT_VERSION → `formcast/1.2.2-cli`):
+  1. PASS2: new **"SIMPLICITY / ESSENCE FIRST"** bullet (simplest geometry that
+     reads as the kind; essential masses + clean silhouette before fine detail;
+     no detail that muddies the silhouette) — placed right after the character-
+     features bullet as an explicit balance to it.
+  2. `manmade` craft pack: **tempered** the turned-parts bullet — capture the
+     2–4 MAJOR profile moves cleanly and stop; no fine rings/flutes/micro-
+     ornament. Kept "thicker, substantial members" so we don't regress the v1.2
+     thin-wiry failure.
+  3. PASS3: sharpened the dark-material line — VERY DARK / near-black finishes
+     must also sample the photo's lit-edge/sheen zones and keep a visible albedo
+     value range (~2–3× lightest:darkest), or they render as black silhouettes
+     (the v1.2.1 chair failure mode).
+- Regression risk (flagged before writing — this was the planned advisor-consult
+  point; the explicit advisor tool was unavailable so I reasoned it through):
+  items 1–2 could strip needed mass/character. Mitigated by the framing above
+  ("capture features with the simplest geometry", "major moves cleanly", kept the
+  member-thickness line).
+- Gates: `py_compile` OK; up-axis auto-detect unaffected (keys only on 1.0/1.1).
+- Verdict: KEEP (encoded). **Validation pending** on the next bakes (teapot /
+  lamp / azalea) — watch that furniture keeps its mass while shedding fussiness,
+  and that any dark surface keeps a visible value range.
+- Next: first bakes under 1.2.2.
