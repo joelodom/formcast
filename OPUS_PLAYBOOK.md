@@ -11,6 +11,28 @@ keep it updated), `EVALS.md` (append-only evidence log + Decisions),
 `MASTER_PLAN.md` §1–2 + §5.4b (architecture, operating manual, field notes).
 `PHOTOREALISM_PLAN.md` is the deep spec for tree quality (step 5 uses it).
 
+### Current state & forward priorities (2026-06-10)
+
+The pipeline is at **`formcast/1.2.2-cli`** — v1.2 (taxonomy + craft packs +
+audit gates + refine loop) plus the chair lessons encoded as GENERAL principles
+(*simplicity/essence over detail-chasing*; *dark-material value range*).
+Champions: maple/table/boulder/tulip = v1.2; teapot/azalea = v1.2.2;
+**chair = v1.1** (a lucky old-pipeline outlier Joel accepts — do not special-case
+the prompts to beat it); tiffany-lamp = the documented stretch case (still
+baking); pencil (Joel-supplied, `inputs/pencil.png`) = queued first bake.
+
+**Joel's direction: optimize the GENERAL case, don't over-index on any one
+example.** Priorities, highest-leverage first:
+1. **Foliage/flower silhouette atlas + sun-shade depth** (step 5) — the #1
+   recurring weakness, visible in BOTH maple and azalea; helps every plant.
+2. **`formcast eval`** one-command regression net (step 4) — makes general-case
+   prompt changes safe to land.
+3. **Broaden class coverage** — bake the pencil; acquire a CC0 creature (dog);
+   one v1.2.2 **checkpoint** re-bake of the chair to de-outlier the benchmark
+   (then move on regardless of result — do NOT iterate the chair).
+4. Reinforce in the prompt: heavy repeating surface detail (mosaic/leaded glass)
+   = faceted surface + TEXTURE, never per-tile geometry (the lamp lesson).
+
 ## 0. Standing rules (apply to every step)
 
 - **Read everything first.** Start each session by reading every Markdown file
@@ -73,8 +95,9 @@ keep it updated), `EVALS.md` (append-only evidence log + Decisions),
 | tulip | v1.2 (`outputs/dev/v12-tulip/`) | `eval/v12-tulip-contact.png` |
 | chair | **v1.1** (`outputs/dev/base-chair/`) — confirmed by Joel 2026-06-10 | `eval/baselines/v11-chair-contact.png` |
 | teapot | v1.2.2 (`outputs/dev/v122-teapot/`) — first champion, 2026-06-10 | `eval/v122-teapot-contact.png` |
-| tiffany-lamp | — (never baked) | — |
+| tiffany-lamp | — (stretch case; baking — pass-2 timeout then pass-3 cap; retrying at `--cli-timeout 2700`) | — |
 | azalea | v1.2.2 (`outputs/dev/v122-azalea/`) — first champion, 2026-06-10 | `eval/v122-azalea-contact.png` |
+| pencil | — (Joel-supplied permanent example `inputs/pencil.png`; first bake queued behind the lamp) | — |
 
 ## 1. Chair verdict — DECIDED by Joel: v1.1 stays champion
 

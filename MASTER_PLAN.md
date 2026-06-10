@@ -2,17 +2,26 @@
 
 > **STATUS 2026-06-10 — experiments underway; START HERE for continuation:
 > [`OPUS_PLAYBOOK.md`](OPUS_PLAYBOOK.md)** (step-by-step commands, decision
-> rules, pacing/cap protocol, champion registry). Results so far: Phase 0 done
-> (headless renderer + A/B judge, validated); 8-item CC0 benchmark (incl. an
-> azalea shrub);
-> v1.2 pipeline (any-object taxonomy, craft packs, audit gates, render→critique→
-> revise refine loop) **promoted over baseline on 4/5 items at 3/3 judge
-> trials each** (maple/table/boulder/tulip); chair **decided — v1.1 stays
-> champion** (Joel's direct verdict 2026-06-10: v1.1 is simpler and captures the
-> geometric essence; v1.2.1's detail-chasing was the wrong direction). Visual
-> journal: [`SAMPLES.md`](SAMPLES.md); evidence log: [`EVALS.md`](EVALS.md).
-> Quality bar per Joel: **class credibility over photo fidelity**, and
-> **simplicity / geometric essence over detail-chasing** (§1.2 callout).
+> rules, pacing/cap protocol, champion registry). Where things stand: Phase 0
+> done (headless renderer + A/B judge, validated); **8-item CC0 benchmark**
+> (maple, table, boulder, tulip, chair, teapot, azalea, tiffany-lamp). The
+> **v1.2** pipeline (any-object taxonomy, per-class craft packs, audit gates,
+> render→critique→revise refine loop) was promoted over baseline on 4/5 items at
+> 3/3 judge each (maple/table/boulder/tulip). **v1.2.2** then encoded the chair
+> lessons as GENERAL prompt principles — *simplicity/essence over detail-chasing*
+> and a *dark-material* rule — and the first v1.2.2 bakes validated them: the
+> teapot (black glaze) reads as form, not a black silhouette, and the azalea is a
+> clean mounded shrub. **Champions:** maple/table/boulder/tulip = v1.2;
+> teapot/azalea = v1.2.2; **chair = v1.1** (a lucky old-pipeline outlier Joel
+> accepts rather than special-case); lamp = the documented stretch case (heavy
+> mosaic geometry; still baking). 7 of 8 items have champions, staged for 3D
+> review in `~/Public/formcast-champions/`. Visual journal:
+> [`SAMPLES.md`](SAMPLES.md); evidence log: [`EVALS.md`](EVALS.md).
+> **Direction (Joel, 2026-06-10):** optimize the GENERAL case, don't over-index
+> on any one example. Quality bars: **class credibility over photo fidelity** and
+> **simplicity / geometric essence over detail-chasing** (§1.2). Highest-leverage
+> next lever: the leaf/flower silhouette atlas + sun-shade depth (helps every
+> plant — the #1 recurring weakness, visible in both maple and azalea).
 
 **Mission:** evolve formcast from "natural-object archetype baker" into a general,
 dependable capability: **give it one photograph of a thing — a tree, a dog, a table,

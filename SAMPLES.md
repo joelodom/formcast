@@ -248,14 +248,32 @@ leaf/flower-silhouette atlas (OPUS_PLAYBOOK step 5c) and more sun/shade depth.
 Tier-2 (my eyes): silhouette 4, proportions 4, surface 3, color/material 4,
 artifacts 4.
 
+## Pencil — tool (Joel-supplied permanent example)
+
+| Reference photo | first bake |
+|---|---|
+| <img src="eval/photos/pencil.jpg" width="270"> | *(baking under v1.2.2 — queued behind the lamp)* |
+
+A classic yellow #2 hexagonal pencil on a clean light background (Joel-supplied,
+tracked at `inputs/pencil.png`). Deliberately **simple** — home turf for the
+simplicity/essence principle — and a compact multi-material test: painted hex
+shaft, sharpened wood cone with a graphite point, crimped brass ferrule, pink
+eraser. Also an elongated-proportions case. First v1.2.2 bake to follow.
+
 ## What happens next
 
 Continuation is handed to Opus: **`OPUS_PLAYBOOK.md`** is the step-by-step
-script (exact commands, decision rules, pacing). Current champions to beat: v1.1
-chair (now **confirmed by Joel** — closed); v1.2 maple/table/boulder/tulip. Top
-of the queue: teapot + lamp + azalea first bakes, encoding the chair's
-simplicity/essence + dark-material lessons into the prompts, then the tree-depth
-iteration (COLOR_0 sun/shade, crown gaps, leaf-silhouette atlas).
+script (exact commands, decision rules, pacing). State: the chair lessons are
+encoded as **v1.2.2** prompt principles; teapot + azalea baked as v1.2.2 first
+champions (the dark-material rule validated on the black teapot); the
+tiffany-lamp (stretch case) is still baking; the pencil (Joel-supplied) is queued
+next. **Direction (Joel): optimize the GENERAL case, don't over-index on any one
+example** — the v1.1 chair is a lucky old-pipeline outlier we accept rather than
+chase. Highest-leverage next lever: the **leaf/flower silhouette atlas + sun-shade
+depth** (helps every plant; the #1 recurring weakness across maple + azalea).
+Then: a one-command `formcast eval` regression net, broaden class coverage (a
+creature/dog), and a single v1.2.2 checkpoint re-bake of the chair to de-outlier
+the benchmark.
 
 ## What we've learned so far (running)
 
@@ -286,3 +304,22 @@ iteration (COLOR_0 sun/shade, crown gaps, leaf-silhouette atlas).
   color contamination but dropped the distinctive crack ridges v1.1 had; the
   v1.2 chair fixed structure but lost wood mass. Per-item "what got worse"
   notes are now mandatory in this journal.
+- **A per-example win can be a lucky outlier — optimize the general case.** The
+  v1.1 chair beat every newer version, but it won by accident (a rich
+  description drove chair-shaped geometry despite a wrong class, and bark-style
+  sampling gave value-rich dark wood). We accept it as an outlier rather than
+  special-case the pipeline to reproduce that luck. The job is a program that
+  works well across *all* objects; lessons from one example only matter insofar
+  as they generalize.
+- **Dark materials need a value range, not an average tone (v1.2.2).** Encoding
+  "very dark finishes must sample sheen/highlight zones and keep a visible value
+  range" fixed the v1.2.1 chair's black-silhouette failure — validated first try
+  on the black teapot, which renders as form, not a blob.
+- **The refine loop fixes the right things when the gap is structural.** It
+  caught the teapot's too-squat body and rebuilt the azalea from "a little tree"
+  into a clean mound — both pushes toward the simplest legible silhouette.
+- **Heavy repeating surface detail belongs in TEXTURE, not geometry.** The
+  Tiffany lamp's mosaic shade timed out pass 2 as tile geometry; with a longer
+  timeout the model built it as a faceted dome (the simplicity line helping).
+  Lesson queued for the prompt: mosaic/leaded glass = faceted surface + mosaic
+  texture, never per-tile solids.

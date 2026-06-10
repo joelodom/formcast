@@ -73,6 +73,21 @@ constraint is the account **session cap**.
   (shrub/foliage). Joel first supplied an AI-generated bush of unknown license;
   on his direction it was swapped for a **CC0 round azalea** (WordPress Photo
   Directory). See `benchmarks/manifest.json` and the P-docs entries at the bottom.
+- **2026-06-10 (Joel): optimize the GENERAL case; don't over-index on specifics.**
+  Prompted by the chair: the v1.1 chair beats every newer version, which means
+  the current pipeline is a *regression for that one example* — and that's
+  acceptable if the pipeline is better overall. The v1.1 chair is a lucky
+  old-pipeline outlier; we accept it rather than special-case the prompts to
+  reproduce it. Decision: keep the chair as v1.1 champion, do ONE v1.2.2
+  checkpoint re-bake (to de-outlier the benchmark + get a second furniture signal
+  under the current pipeline), then move on regardless of result. Forward
+  investment goes to what helps the broadest set of objects (foliage atlas first),
+  learning from patterns across all samples — not from any single example.
+- **2026-06-10 (Joel): pencil added as a permanent tracked example.** A
+  Joel-supplied yellow #2 pencil (`inputs/pencil.png`, tracked like
+  `maple-tree.png`; `.gitignore` exception), class `tool` — a deliberately simple
+  man-made object plus a multi-material / elongated-proportions test. Bakes under
+  v1.2.2.
 - Benchmark v1 = 5 items (maple, tulip, met-console-table, windsor-chair,
   moeraki-boulder); all CC0/local; manifest at `benchmarks/manifest.json`;
   photos cached (gitignored), re-fetchable by URL (+crop derivation for boulder).

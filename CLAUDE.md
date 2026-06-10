@@ -7,9 +7,10 @@ Guidance, preferences, and standing orders for working in this repository.
 `formcast` is a single-file Python CLI (`formcast.py`) that turns a 2D reference
 photo into a small library of seed-varied procedural 3D models (`.glb`). It drives
 the local `claude` CLI (headless, Read-tool-only) to author the modeling code, runs
-that code to bake the models, and embeds metadata in each `.glb`. Three subcommands:
-`bake`, `inspect`, `view`. See `README.md` for the user-facing guide and the header
-docstring in `formcast.py` for the full design.
+that code to bake the models, and embeds metadata in each `.glb`. Four subcommands:
+`bake`, `inspect`, `view`, and `judge` (a fresh-session VLM A/B comparison of two
+render contact sheets against the photo). See `README.md` for the user-facing guide
+and the header docstring in `formcast.py` for the full design.
 
 Keep the tool **generic 2D → 3D**. It was adapted from a planet-generator context;
 do **not** re-narrow it back to planets. Natural-object examples are welcome — the
@@ -71,8 +72,9 @@ is logged with a full traceback (to the logfile, always). Keep that convention.
 
 ## Working directories
 
-- `inputs/`  — source photos. Local-only EXCEPT `inputs/maple-tree.png`, which is
-  tracked as the README's example.
+- `inputs/`  — source photos. Local-only EXCEPT the tracked permanent examples
+  `inputs/maple-tree.png` and `inputs/pencil.png` (the README's / benchmark's
+  worked examples).
 - `outputs/` — baked `.glb` models. Never tracked; the user creates it (formcast
   also makes it on first bake).
 
