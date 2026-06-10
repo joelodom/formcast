@@ -74,7 +74,7 @@ keep it updated), `EVALS.md` (append-only evidence log + Decisions),
 | chair | **v1.1** (`outputs/dev/base-chair/`) — confirmed by Joel 2026-06-10 | `eval/baselines/v11-chair-contact.png` |
 | teapot | — (never baked) | — |
 | tiffany-lamp | — (never baked) | — |
-| bush | — (photo acquired 2026-06-10 → `benchmarks/cache/picked/bush.png`; first bake pending) | — |
+| azalea | — (photo acquired 2026-06-10, CC0 → `benchmarks/cache/picked/azalea.jpg`; first bake pending) | — |
 
 ## 1. Chair verdict — DECIDED by Joel: v1.1 stays champion
 
@@ -103,17 +103,17 @@ python3 formcast.py judge benchmarks/cache/picked/chair.jpg \
 (The JSON is the last stdout output; `candidate_wins` counts B = v1.2.1. Log it
 in EVALS as a calibration check; v1.1 remains champion regardless of the result.)
 
-## 2. First bakes: teapot, tiffany-lamp, and bush (no champion yet)
+## 2. First bakes: teapot, tiffany-lamp, and azalea (no champion yet)
 
-Serialize these — one bake at a time (§0). The bush photo is a PNG.
+Serialize these — one bake at a time (§0).
 
 ```bash
 python3 formcast.py bake benchmarks/cache/picked/teapot.jpg \
   --out-dir outputs/dev/v121-teapot --count 2 --refine 1
 python3 formcast.py bake benchmarks/cache/picked/tiffany-lamp.jpg \
   --out-dir outputs/dev/v121-lamp --count 2 --refine 1
-python3 formcast.py bake benchmarks/cache/picked/bush.png \
-  --out-dir outputs/dev/v121-bush --count 2 --refine 1
+python3 formcast.py bake benchmarks/cache/picked/azalea.jpg \
+  --out-dir outputs/dev/v121-azalea --count 2 --refine 1
 ```
 
 Then render each (this is the standard render snippet for ALL steps):
@@ -125,7 +125,7 @@ sys.path.insert(0, ".")
 import formcast
 from pathlib import Path
 for run, stem in [("v121-teapot", "v121-teapot"), ("v121-lamp", "v121-lamp"),
-                  ("v121-bush", "v121-bush")]:
+                  ("v121-azalea", "v121-azalea")]:
     glbs = sorted(glob.glob(f"outputs/dev/{run}/*-00.glb"))
     if glbs:
         print(formcast._render_glb_views(Path(glbs[0]), Path("eval"), stem)[-1])
@@ -136,18 +136,17 @@ View the contact PNGs yourself (Read tool); write Tier-2 rubric scores
 (silhouette/proportions/surface/color/artifacts, 1–5) in EVALS. No judge
 needed (no champion) — these become the first champions. Add SAMPLES.md rows
 (photo thumbnails already exist: `eval/photos/teapot.jpg`,
-`eval/photos/tiffany-lamp.jpg`, `eval/photos/bush.jpg`). Commit renders +
+`eval/photos/tiffany-lamp.jpg`, `eval/photos/azalea.jpg`). Commit renders +
 journal.
 
 Expected: teapot should do well (revolve body + handle = the manmade pack's
 home turf). The lamp is a deliberate stretch (mosaic glass) — a mediocre lamp
 is fine; document what specifically fails (likely the stained-glass texture).
-The bush is the foliage pack on a non-tree shrub; the bar is class credibility
-(a believable rounded multi-stem shrub). Note its quirk: the reference is an AI
-"compose" image split green-summer / orange-autumn down the middle — don't chase
-the split; produce one coherent shrub (palette sampling may need a dominant-side
-or averaged tone). Photo license is unknown (third-party) — fine for local
-testing; flag it to Joel before any public push.
+The azalea is the foliage pack on a non-tree shrub; the bar is class credibility
+(a believable rounded flowering shrub — the dome silhouette + bloom-over-foliage
+texture are what sell it). Palette sampling should target the magenta flowers +
+green leaves, not the green hedge backdrop. CC0 (WordPress Photo Directory), so
+no license caveat.
 
 ## 3. Chair lesson → pipeline principles (NO chair re-bake)
 
@@ -178,7 +177,7 @@ Encode the lessons generically (these help every class — not the chair):
 
 Bump `PROMPT_VERSION` to `formcast/1.2.2-cli` (up-axis detection only keys on
 1.0/1.1 prefixes — safe). **Do not re-bake the chair to chase a win.** Verify
-these changes on the *next* objects you bake (teapot / lamp / bush), where
+these changes on the *next* objects you bake (teapot / lamp / azalea), where
 simpler-is-better and dark-material-variation both apply. For a regression
 check, re-render an existing champion after the prompt change lands in code;
 never spend a bake trying to beat v1.1's chair.

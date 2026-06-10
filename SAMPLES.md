@@ -16,7 +16,7 @@ results) is `EVALS.md`; the plans are `MASTER_PLAN.md` and `PHOTOREALISM_PLAN.md
 |---|---|---|
 | **v1.1** (baseline) | Original pipeline: nature-only taxonomy, no craft guidance, blind texture crops, Z-up exports, no feedback loop. | Gets the *idea* of the object; quality is unreliable run to run and textures often ruined by background contamination. |
 | **v1.2** | Any-object taxonomy ("classify by what the whole object IS, not its material"); per-class craft packs (foliage envelopes + clumped cards, lathe/instancing furniture, noise-displaced rocks, capsule-union creatures); +Y-up/meters/budget contract; anti-contamination texture rules (sample inside the silhouette, median of patches, no roll+blur tiling); audit gates; **pass 3.5 refine loop** — formcast renders the model's own output and shows it back for critique + revision before baking. | **Suite result: 4 of 5 promoted at 3/3 each** (maple, table, boulder, tulip); chair rejected 2/3-against — correct structure, but lost v1.1's turned-wood mass. v1.2.1 fix below. |
-| **v1.2.1** | v1.2 plus: turned parts get real lathe-profile curvature (bulbs/coves read off the photo) and photo-measured member thickness; sculpted-not-flat seats; "character features from the description are what make it read as its kind" (class credibility per Joel's direction); wood-grain/wear so painted wood stops reading as plastic; smooth shading on curved organic surfaces; floating-fragment audit gate. | Chair re-match **lost to v1.1 (Joel's call — simplicity/essence wins)**; its lessons (simplest-geometry-that-reads; dark materials still need value variation) feed the next prompt rev. Teapot / lamp / bush first bakes still pending. |
+| **v1.2.1** | v1.2 plus: turned parts get real lathe-profile curvature (bulbs/coves read off the photo) and photo-measured member thickness; sculpted-not-flat seats; "character features from the description are what make it read as its kind" (class credibility per Joel's direction); wood-grain/wear so painted wood stops reading as plastic; smooth shading on curved organic surfaces; floating-fragment audit gate. | Chair re-match **lost to v1.1 (Joel's call — simplicity/essence wins)**; its lessons (simplest-geometry-that-reads; dark materials still need value variation) feed the next prompt rev. Teapot / lamp / azalea first bakes still pending. |
 
 ---
 
@@ -197,26 +197,26 @@ Museum studio shot (CC0). Deliberately hard: a mosaic stained-glass shade over
 a sculpted bronze base — stresses multi-material texturing well beyond wood and
 leaves.
 
-## Shrub / bush — foliage (new benchmark item, Joel-supplied)
+## Azalea — shrub (new benchmark item)
 
 | Reference photo | first bake |
 |---|---|
-| <img src="eval/photos/bush.jpg" width="270"> | *(not baked yet — queued in OPUS_PLAYBOOK)* |
+| <img src="eval/photos/azalea.jpg" width="270"> | *(not baked yet — queued in OPUS_PLAYBOOK)* |
 
-A single, well-isolated rounded multi-stem deciduous shrub with a clear
-silhouette, on a soft-bokeh woodland background — added 2026-06-10 to give the
-foliage pack a non-tree case. Quirk worth watching: it's an AI "compose" image
-split **green-summer on the left, orange-autumn on the right** down the middle, a
-deliberate stress on palette sampling. The bar (class credibility): a believable
-rounded multi-stem shrub; the two-tone is a texture curiosity, not a target.
-*License unknown (third-party site) — pending clearance before any public push.*
+A single, isolated, cleanly **rounded mounded azalea** in full magenta bloom on a
+lawn, with a green hedge/treeline backdrop — added 2026-06-10 to give the foliage
+pack a non-tree shrub with a strong whole-plant silhouette. CC0 (WordPress Photo
+Directory). The bar (class credibility): a believable rounded flowering shrub —
+the dome silhouette and bloom-over-foliage texture are what sell it. Palette
+sampling should target the magenta flowers + green leaves, not the backdrop hedge.
+*(Swapped in for an earlier AI-generated bush whose license was unknown.)*
 
 ## What happens next
 
 Continuation is handed to Opus: **`OPUS_PLAYBOOK.md`** is the step-by-step
 script (exact commands, decision rules, pacing). Current champions to beat: v1.1
 chair (now **confirmed by Joel** — closed); v1.2 maple/table/boulder/tulip. Top
-of the queue: teapot + lamp + bush first bakes, encoding the chair's
+of the queue: teapot + lamp + azalea first bakes, encoding the chair's
 simplicity/essence + dark-material lessons into the prompts, then the tree-depth
 iteration (COLOR_0 sun/shade, crown gaps, leaf-silhouette atlas).
 

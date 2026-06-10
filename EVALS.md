@@ -69,9 +69,10 @@ constraint is the account **session cap**.
   orders.** Other docs refer to it rather than duplicating standing constraints
   (he flagged PHOTOREALISM_PLAN repeating them). Keep documenting what worked AND
   what didn't — that practice is working and should continue. (CLAUDE.md.)
-- **2026-06-10 (Joel): bush added to the benchmark** (Joel-supplied image) — a
-  6th class (shrub/foliage); see `benchmarks/manifest.json` and the P-docs entry
-  at the bottom.
+- **2026-06-10 (Joel): azalea (shrub) added to the benchmark** — a 6th class
+  (shrub/foliage). Joel first supplied an AI-generated bush of unknown license;
+  on his direction it was swapped for a **CC0 round azalea** (WordPress Photo
+  Directory). See `benchmarks/manifest.json` and the P-docs entries at the bottom.
 - Benchmark v1 = 5 items (maple, tulip, met-console-table, windsor-chair,
   moeraki-boulder); all CC0/local; manifest at `benchmarks/manifest.json`;
   photos cached (gitignored), re-fetchable by URL (+crop derivation for boulder).
@@ -316,3 +317,24 @@ constraint is the account **session cap**.
   resumes from OPUS_PLAYBOOK.
 - Champion registry: maple/table/boulder/tulip = v1.2; chair = v1.1 (confirmed by
   Joel); teapot/lamp/bush = none yet.
+
+## 2026-06-10 P-docs.2 — bush → CC0 azalea swap; advisor enabled
+- Joel: replace the unknown-license bush with a known-license shrub ("Wikimedia
+  may be a good source; maybe pick an azalea"). Searched Openverse + Wikimedia via
+  the `benchmarks/fetch_candidates.py` helpers (`azalea bush/shrub/plant/...`); 14
+  candidates downloaded (mostly CC0/PDM) and **visually vetted** (the standing
+  rule — automated scoring alone accepts crops/clipart). Picked a **CC0 round
+  azalea bush in full magenta bloom** (WordPress Photo Directory,
+  `wordpress.org/photos/photo/985680f1d1/`, 1536×2048) — the cleanest whole-plant
+  mounded dome silhouette of the set; rejects were diffuse/off-frame shrubs and a
+  nursery of potted plants.
+- Changes: removed the bush source (gitignored) and `git rm`'d the committed
+  `eval/photos/bush.jpg`; added `eval/photos/azalea.jpg` (CC0) + manifest entry
+  (id `azalea`, class `shrub`); updated SAMPLES, OPUS_PLAYBOOK (§2 bake + registry),
+  and the MASTER_PLAN banner (now an 8-item CC0 benchmark). First bake still
+  pending.
+- Ops: Joel enabled Claude Code's **advisor** (Opus main → Fable 5) and asked me
+  to consult Fable at the most appropriate, high-stakes pipeline points (e.g.
+  prompt-pack changes, ambiguous judge verdicts, architecture) — not on routine
+  picks like this image swap.
+- Verdict: KEEP — benchmark is now fully CC0/PD with verified provenance.

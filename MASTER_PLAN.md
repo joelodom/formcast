@@ -3,7 +3,8 @@
 > **STATUS 2026-06-10 — experiments underway; START HERE for continuation:
 > [`OPUS_PLAYBOOK.md`](OPUS_PLAYBOOK.md)** (step-by-step commands, decision
 > rules, pacing/cap protocol, champion registry). Results so far: Phase 0 done
-> (headless renderer + A/B judge, validated); 7-item CC0 benchmark (bush to add);
+> (headless renderer + A/B judge, validated); 8-item CC0 benchmark (incl. an
+> azalea shrub);
 > v1.2 pipeline (any-object taxonomy, craft packs, audit gates, render→critique→
 > revise refine loop) **promoted over baseline on 4/5 items at 3/3 judge
 > trials each** (maple/table/boulder/tulip); chair **decided — v1.1 stays
