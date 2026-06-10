@@ -443,3 +443,23 @@ constraint is the account **session cap**.
   `~/Public/formcast-champions/` (with README) for Joel to view as interactive
   3D; lamp added when it lands.
 - Next: lamp re-bake result; reinforce the mosaic-as-texture lesson if it helps.
+
+## 2026-06-10 P-122.5 — tiffany-lamp COMPLETED (3rd attempt); stretch case cleared
+- What ran: re-bake after the cap reset, `--cli-timeout 2700` (1829 s; refine
+  round adopted a revision — made it tall/slender at aspect 0.66, fixed the arms,
+  flattened the dome, flipped the shade color bands). 22,744 faces; surfaces
+  [shade, base, arms, foot, fittings]. Mosaic built as a FACETED textured dome,
+  not tile solids.
+- Tier-2 (my eyes): silhouette 4, proportions 4, surface 3, color/material 4,
+  artifacts 3. For the hardest item, a genuinely credible Tiffany lamp: two-mass
+  mushroom silhouette, jewel-toned leaded-glass dome (blue-green + amber skirt +
+  suggested eyes), patinated-bronze vasiform base.
+- What worked: mosaic-as-texture (the simplicity principle) cleared the tile-
+  geometry timeout AND looks right. What didn't: peacock "eyes" are abstract
+  blobs, came-lines not crisp, bronze base a bit soft/lumpy.
+- Verdict: KEEP — lamp is its own first champion; the stretch case beat the
+  "mediocre is fine" bar. **All 8 original benchmark items now have champions.**
+- Lesson to bank in the prompt (general): heavy repeating surface detail
+  (mosaic/leaded glass, fish scales, brickwork) = faceted surface + TEXTURE,
+  never per-tile/-unit geometry.
+- Next: copy lamp to ~/Public; bake the pencil (now unblocked).

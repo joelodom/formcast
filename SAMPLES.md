@@ -205,20 +205,32 @@ proportions 4, surface 4, color/material 4, artifacts 4.
 
 ## Tiffany peacock lamp — lamp (stretch case)
 
-| Reference photo | v1.2.2 |
+| Reference photo | v1.2.2 (first bake) |
 |---|---|
-| <img src="eval/photos/tiffany-lamp.jpg" width="270"> | *(in progress — not yet a champion)* |
+| <img src="eval/photos/tiffany-lamp.jpg" width="270"> | <img src="eval/v122-lamp-front.png" width="270"> |
 
-Museum studio shot (CC0). Deliberately hard: a mosaic stained-glass shade over
-a sculpted bronze base — stresses multi-material texturing well beyond wood and
-leaves. The stretch case has been a two-step fight, both honest findings:
-1. **First attempt timed out in pass 2** — authoring the mosaic geometry
-   (hundreds of glass tiles) blew past the default 1200 s CLI limit.
-2. **Retry (`--cli-timeout 2700`) cleared pass 2** — and notably built the shade
-   as a *faceted dome surface* (9k faces), not hundreds of tile solids (the
-   simplicity principle helping) — but then **pass 3 hit the session cap**.
-Re-baking now that the cap reset; result to follow. Lesson queued: a mosaic shade
-is better as a faceted surface + mosaic TEXTURE than as tile geometry.
+All angles: [v1.2.2 contact sheet](eval/v122-lamp-contact.png)
+
+Museum studio shot (CC0). Deliberately hard: a mosaic stained-glass shade over a
+sculpted bronze base — stresses multi-material texturing well beyond wood and
+leaves. It took three attempts (honest findings all): (1) first attempt **timed
+out in pass 2** authoring the mosaic as geometry; (2) a retry at `--cli-timeout
+2700` **cleared pass 2** — building the shade as a *faceted dome surface*, not
+tile solids (the simplicity principle helping) — but **pass 3 hit the session
+cap**; (3) after the cap reset, it completed.
+
+**v1.2.2 (first champion):** for the hardest item, a genuinely credible Tiffany
+lamp — the two-mass mushroom silhouette is right (domed leaded-glass shade over a
+swelling bronze vasiform base, curved arms bridging), the shade reads as
+jewel-toned leaded glass (blue-green field, amber scalloped skirt, suggested
+peacock "eyes"), and the base reads as patinated bronze. The refine round made it
+tall and slender (aspect 0.66) to match the reference. **What worked:** the
+mosaic-as-texture approach (faceted dome + texture) sidestepped the tile-geometry
+trap *and* looks right; correct multi-material palette. **What didn't:** the
+peacock "eyes" are abstract orange blobs rather than distinct feather motifs, the
+leaded came-lines aren't crisp, and the bronze base reads a little soft/lumpy.
+Past the "a mediocre lamp is fine" bar. Tier-2 (my eyes): silhouette 4,
+proportions 4, surface 3, color/material 4, artifacts 3.
 
 ## Azalea — shrub (new benchmark item)
 
@@ -266,7 +278,8 @@ Continuation is handed to Opus: **`OPUS_PLAYBOOK.md`** is the step-by-step
 script (exact commands, decision rules, pacing). State: the chair lessons are
 encoded as **v1.2.2** prompt principles; teapot + azalea baked as v1.2.2 first
 champions (the dark-material rule validated on the black teapot); the
-tiffany-lamp (stretch case) is still baking; the pencil (Joel-supplied) is queued
+tiffany-lamp (stretch case) cleared on the 3rd attempt (mosaic as faceted surface
++ texture) — all 8 items now have champions; the pencil (Joel-supplied) bakes
 next. **Direction (Joel): optimize the GENERAL case, don't over-index on any one
 example** — the v1.1 chair is a lucky old-pipeline outlier we accept rather than
 chase. Highest-leverage next lever: the **leaf/flower silhouette atlas + sun-shade

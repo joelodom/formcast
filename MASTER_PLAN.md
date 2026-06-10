@@ -13,9 +13,10 @@
 > teapot (black glaze) reads as form, not a black silhouette, and the azalea is a
 > clean mounded shrub. **Champions:** maple/table/boulder/tulip = v1.2;
 > teapot/azalea = v1.2.2; **chair = v1.1** (a lucky old-pipeline outlier Joel
-> accepts rather than special-case); lamp = the documented stretch case (heavy
-> mosaic geometry; still baking). 7 of 8 items have champions, staged for 3D
-> review in `~/Public/formcast-champions/`. Visual journal:
+> accepts rather than special-case); lamp = the documented stretch case, now
+> cleared on the 3rd attempt (mosaic built as a faceted surface + texture). **All
+> 8 items have champions**, staged for 3D review in `~/Public/formcast-champions/`
+> (pencil bakes next). Visual journal:
 > [`SAMPLES.md`](SAMPLES.md); evidence log: [`EVALS.md`](EVALS.md).
 > **Direction (Joel, 2026-06-10):** optimize the GENERAL case, don't over-index
 > on any one example. Quality bars: **class credibility over photo fidelity** and
