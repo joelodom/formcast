@@ -373,6 +373,16 @@ Learnings from executing Phases 0–1-early on the `experiments` branch
   recipe (EVALS "Rejected ideas").
 - **Judge plumbing detail:** subcommands that print JSON must print it as the
   LAST stdout output (log lines otherwise corrupt piped parsing).
+- **v1.2 suite outcome (same evening): 4/5 promoted at 3/3 each** (maple,
+  table, boulder, tulip); chair rejected 2/3-against for losing turned-wood
+  mass — fixed in v1.2.1 (lathe-profile curvature, member thickness, sculpted
+  seats, wood grain/wear). The refine loop adopted revisions in 6/6 rounds
+  across the suite. Judge-human agreement 2/2 on user-checked items. User
+  re-weighted the quality bar to **class credibility over photo fidelity**
+  (recorded in §1.2 callout and EVALS Decisions) — faithful mode deprioritized.
+- **Ops note:** account session caps kill `claude -p` calls in ~1 s ("exited
+  1"); bakes fail fast and cleanly. Serialize bakes (don't parallelize) to
+  avoid burning the cap, and expect to re-run items after a reset.
 
 ### 5.5 Carried-over evidence (from PHOTOREALISM_PLAN, same day)
 

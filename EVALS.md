@@ -19,7 +19,10 @@ Per MASTER_PLAN §9. Entry template:
 |---|---|---|
 | Pre-plan experiments (2026-06-09, Fable session) | ≈$2.30 | — |
 | P2-early acquisition | $0 (no LLM) | — |
-| P-baselines (v1.1 bakes) | see entries | ≈$6 |
+| P-baselines (v1.1 bakes, 4 items) | ≈$6 | ≈$6 |
+| P-v12 suite (5 items, incl. cap-killed retry) | ≈$13 | ≈$15 |
+| Judges (5 items × 3 trials, sonnet) | ≈$1.3 | — |
+| Running total 2026-06-09 | **≈$23** | — |
 
 ## Rejected ideas
 - Wikimedia Commons full-text File-namespace search for benchmark photos: returns
