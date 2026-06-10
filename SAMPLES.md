@@ -262,15 +262,27 @@ artifacts 4.
 
 ## Pencil — tool (Joel-supplied permanent example)
 
-| Reference photo | first bake |
+| Reference photo | v1.2.2 (first bake) |
 |---|---|
-| <img src="eval/photos/pencil.jpg" width="270"> | *(baking under v1.2.2 — queued behind the lamp)* |
+| <img src="eval/photos/pencil.jpg" width="270"> | <img src="eval/v122-pencil-front.png" width="270"> |
+
+All angles: [v1.2.2 contact sheet](eval/v122-pencil-contact.png)
 
 A classic yellow #2 hexagonal pencil on a clean light background (Joel-supplied,
 tracked at `inputs/pencil.png`). Deliberately **simple** — home turf for the
 simplicity/essence principle — and a compact multi-material test: painted hex
 shaft, sharpened wood cone with a graphite point, crimped brass ferrule, pink
-eraser. Also an elongated-proportions case. First v1.2.2 bake to follow.
+eraser.
+
+**v1.2.2 (first champion):** a textbook pencil — clean elongated hexagonal shaft,
+sharpened wood cone to a dark graphite point, banded ferrule, pink eraser. The
+refine round even matched the photo's **diagonal pose** (front aspect 1.50 ≈ the
+photo's 1.46). The simplicity/essence principle's clearest win yet — a simple
+object rendered cleanly and unmistakably. **What worked:** silhouette,
+proportions, the bright yellow paint, distinct graphite/eraser/ferrule zones.
+**What didn't:** the brass ferrule reads a touch orange rather than metallic, and
+the bare-wood collar near the tip is faint. Tier-2 (my eyes): silhouette 5,
+proportions 5, surface 4, color/material 4, artifacts 5.
 
 ## What happens next
 

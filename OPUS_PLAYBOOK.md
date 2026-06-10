@@ -97,7 +97,7 @@ example.** Priorities, highest-leverage first:
 | teapot | v1.2.2 (`outputs/dev/v122-teapot/`) — first champion, 2026-06-10 | `eval/v122-teapot-contact.png` |
 | tiffany-lamp | v1.2.2 (`outputs/dev/v122-lamp/`) — first champion, 2026-06-10 (3rd attempt; needs `--cli-timeout 2700`) | `eval/v122-lamp-contact.png` |
 | azalea | v1.2.2 (`outputs/dev/v122-azalea/`) — first champion, 2026-06-10 | `eval/v122-azalea-contact.png` |
-| pencil | — (Joel-supplied permanent example `inputs/pencil.png`; first bake queued behind the lamp) | — |
+| pencil | v1.2.2 (`outputs/dev/v122-pencil/`) — first champion, 2026-06-10 | `eval/v122-pencil-contact.png` |
 
 ## 1. Chair verdict — DECIDED by Joel: v1.1 stays champion
 

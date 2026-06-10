@@ -463,3 +463,18 @@ constraint is the account **session cap**.
   (mosaic/leaded glass, fish scales, brickwork) = faceted surface + TEXTURE,
   never per-tile/-unit geometry.
 - Next: copy lamp to ~/Public; bake the pencil (now unblocked).
+
+## 2026-06-10 P-122.6 — pencil first bake (v1.2.2); simplicity principle's clearest win
+- What ran: `bake inputs/pencil.png --out-dir outputs/dev/v122-pencil --count 2
+  --refine 1` (1941 s; refine matched the photo's diagonal pose — aspect 1.50 ≈
+  1.46 — and brightened the yellow). Class `tool` (`yellow-graphite-pencil`);
+  surfaces by zone (paint / wood / graphite / ferrule / eraser).
+- Tier-2 (my eyes): silhouette 5, proportions 5, surface 4, color/material 4,
+  artifacts 5. A textbook pencil — the simplicity/essence principle's clearest
+  win (a simple object rendered cleanly and unmistakably).
+- What didn't: brass ferrule reads slightly orange (not metallic); bare-wood
+  collar near the tip faint.
+- Verdict: KEEP — pencil is its own first champion. Renders:
+  `eval/v122-pencil-{front,contact}.png`; staged at ~/Public.
+- Next: the 5 v1.2.2 re-bakes (maple/table/boulder/tulip/chair) so every SAMPLES
+  item shows reference + champion + 1.2.2 (Joel's request).

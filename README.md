@@ -48,10 +48,12 @@ it**, for honesty; the full visual journal with what-worked / what-didn't is in
 | Ceramic teapot | <img src="eval/photos/teapot.jpg" width="150"> | <img src="eval/v122-teapot-front.png" width="150"> | v1.2.2 |
 | Azalea shrub | <img src="eval/photos/azalea.jpg" width="150"> | <img src="eval/v122-azalea-front.png" width="150"> | v1.2.2 |
 | Tiffany lamp | <img src="eval/photos/tiffany-lamp.jpg" width="150"> | <img src="eval/v122-lamp-front.png" width="150"> | v1.2.2 |
+| Pencil | <img src="eval/photos/pencil.jpg" width="150"> | <img src="eval/v122-pencil-front.png" width="150"> | v1.2.2 |
 
-*(A pencil — a 9th example — is baking and will join the gallery. Reference
-photos are CC0/PD or repo samples; full provenance in
-[`benchmarks/manifest.json`](benchmarks/manifest.json).)*
+*(Reference photos are CC0/PD or repo samples; full provenance in
+[`benchmarks/manifest.json`](benchmarks/manifest.json). The pipeline is mid-stream
+— the four `v1.2` items above are being re-baked under `v1.2.2`, and this table
+tracks whichever version is the current champion.)*
 
 ---
 
