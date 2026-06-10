@@ -13,17 +13,24 @@ keep it updated), `EVALS.md` (append-only evidence log + Decisions),
 
 ## 0. Standing rules (apply to every step)
 
-- **Budget discipline.** A bake ≈ $1.5–2.5 / 8–17 min (opus authoring +
-  `--refine 1`). A judge ≈ $0.21 (3 sonnet trials). NEVER run two bakes at
-  once. Joel's account hits session caps: when a bake's log shows
-  `Claude CLI exited 1 after ~1s`, STOP — the cap is hit; note it in EVALS,
-  wait for reset, re-run only the failed items.
+- **Read everything first.** Start each session by reading every Markdown file
+  and `formcast.py` in full (a CLAUDE.md standing order). Don't act on a stale
+  summary — the champions and the open questions live in these docs.
+- **Pacing, not budgeting.** Don't fuss over token or dollar cost — Joel runs on
+  a subscription, and a long, token-heavy session is fine when the work genuinely
+  needs it. Just keep making real progress; don't spin. The one hard constraint
+  is the account **session cap**: when a bake's log shows
+  `Claude CLI exited 1 after ~1s`, the cap is hit — STOP, note it in EVALS, wait
+  for the reset, and re-run only the failed items. Never run two bakes at once
+  (you lose attribution and hammer the machine). A bake takes ~8–17 min wall;
+  serialize them.
 - **The free loop comes first.** Every bake saves its generator at
   `outputs/dev/<run>/<id>.generator.py`. You can edit that script directly and
-  re-run it for ZERO model cost:
+  re-run it without another bake (no model call):
   `python3 <gen>.py --image <photo> --seed 0 --density high --output /tmp/t.glb`
-  Prototype texture/geometry ideas there; only when a hand edit visibly helps
-  do you encode it as a prompt change and pay for a bake.
+  Prototype texture/geometry ideas there; only once a hand edit visibly helps do
+  you encode it as a prompt change and spend a bake. This is about fast iteration
+  and clean attribution — not thrift.
 - **One change per bake.** Otherwise you can't attribute the result.
 - **Promotion protocol.** Render with
   `python3 -c "import formcast; formcast._render_glb_views(...)"` (see step 1
@@ -31,14 +38,30 @@ keep it updated), `EVALS.md` (append-only evidence log + Decisions),
   below): `python3 formcast.py judge <photo> <champion-contact> <candidate-contact> --trials 3`.
   Promote only on ≥2/3. Tie/loss → log honestly, fix or pivot. **Never judge
   your own work by eye alone — your eyes scored the v1.2 chair ahead and the
-  judge (and Joel) disagreed.**
+  judge (and Joel) disagreed.** A human verdict from Joel outranks the judge.
 - **Document every step**: EVALS.md entry (template at the top of that file),
   SAMPLES.md image row + verdict (Joel watches this file — commit the PNGs you
   reference!), then `git commit` (you have standing permission on this branch;
   follow the existing commit-message style; never push).
+- **Refresh docs + code comments before every commit** (a CLAUDE.md standing
+  order): re-read and update README, this playbook, SAMPLES.md, EVALS.md, and any
+  stale inline comments in `formcast.py` in the *same* commit as the change.
+- **Invite Joel's eyes regularly** (his standing direction — user review is
+  welcome, not rare). At milestones, and whenever a result is interesting or
+  you're unsure, proactively ask Joel to look at `SAMPLES.md` and its
+  contact-sheet links and comment. Keep working while you wait — don't block —
+  but ask often; his verdict outranks the judge and has recalibrated this effort
+  twice (class credibility; the chair / simplicity-over-detail).
 - **Class credibility over photo fidelity** (Joel's standing direction): the
   bar is "a convincing instance of this KIND of object", not resemblance to
   the exact photo.
+- **Simplicity and geometric essence beat detail-chasing** (Joel, on the chair,
+  2026-06-10): a clean model that nails the essential masses and proportions of
+  the kind beats a busier one that chases fine surface or geometric detail —
+  *"what I like about [the v1.1 chair] is that it's simple and it captures the
+  geometric essence."* When a change adds detail at the cost of a clean, legible
+  silhouette and clear masses, that is the wrong direction. Reach for the
+  simplest geometry that reads unmistakably as the kind.
 
 ### Champion registry (update after every promotion)
 
@@ -48,14 +71,28 @@ keep it updated), `EVALS.md` (append-only evidence log + Decisions),
 | table | v1.2 (`outputs/dev/v12-table/`) | `eval/v12-table-contact.png` |
 | boulder | v1.2 (`outputs/dev/v12-boulder/`) | `eval/v12-boulder-contact.png` |
 | tulip | v1.2 (`outputs/dev/v12-tulip/`) | `eval/v12-tulip-contact.png` |
-| chair | **v1.1** (`outputs/dev/base-chair/`) | `eval/baselines/v11-chair-contact.png` |
+| chair | **v1.1** (`outputs/dev/base-chair/`) — confirmed by Joel 2026-06-10 | `eval/baselines/v11-chair-contact.png` |
 | teapot | — (never baked) | — |
 | tiffany-lamp | — (never baked) | — |
+| bush | — (photo acquired 2026-06-10 → `benchmarks/cache/picked/bush.png`; first bake pending) | — |
 
-## 1. Chair verdict (one judge call, ~$0.21)
+## 1. Chair verdict — DECIDED by Joel: v1.1 stays champion
 
-The v1.2.1 chair is baked and rendered (`eval/v121-chair-contact.png`) but the
-session cap killed the judge. Run:
+Joel gave a direct human verdict (2026-06-10): **the v1.1 chair is the best.**
+*"I still think the 1.1 chair is the best. I see that 1.2.1 is trying to capture
+geometry details like the swirls on the top. What I like about 1.1 is that it's
+simple and it captures the geometric essence."* A human verdict outranks the
+judge, so the chair question is closed: **v1.1 is and stays the chair champion.**
+Do **not** re-bake the chair to try to win it back.
+
+The lesson generalizes — see step 3: v1.2 → v1.2.1 chased mass and fine detail
+(turned swirls, heavy balusters) and went silhouette-black; that was the wrong
+direction. The win condition for the chair was the *simple, legible essence* that
+v1.1 already had.
+
+Optional, calibration only (NOT a gate): run the judge once to see whether the
+automated A/B agrees with Joel — a third judge–human data point (currently 2/2).
+It changes nothing about the champion.
 
 ```bash
 python3 formcast.py judge benchmarks/cache/picked/chair.jpg \
@@ -63,21 +100,20 @@ python3 formcast.py judge benchmarks/cache/picked/chair.jpg \
   --trials 3 --log-file /tmp/fcj.log 2>/dev/null
 ```
 
-(The JSON is the last stdout output; `candidate_wins` counts B = v1.2.1.)
+(The JSON is the last stdout output; `candidate_wins` counts B = v1.2.1. Log it
+in EVALS as a calibration check; v1.1 remains champion regardless of the result.)
 
-- **≥2/3:** promote v1.2.1 as chair champion; update the registry above,
-  SAMPLES.md chair section, EVALS entry; commit.
-- **≤1/3:** go to step 3 (study-the-champion) before any re-bake. Likely
-  failure mode (visible in the render): the chair is silhouette-black — mass
-  improved but material variation didn't materialize.
+## 2. First bakes: teapot, tiffany-lamp, and bush (no champion yet)
 
-## 2. First bakes: teapot and tiffany-lamp (~$2–3 + ~$0 judge — no champion yet)
+Serialize these — one bake at a time (§0). The bush photo is a PNG.
 
 ```bash
 python3 formcast.py bake benchmarks/cache/picked/teapot.jpg \
   --out-dir outputs/dev/v121-teapot --count 2 --refine 1
 python3 formcast.py bake benchmarks/cache/picked/tiffany-lamp.jpg \
   --out-dir outputs/dev/v121-lamp --count 2 --refine 1
+python3 formcast.py bake benchmarks/cache/picked/bush.png \
+  --out-dir outputs/dev/v121-bush --count 2 --refine 1
 ```
 
 Then render each (this is the standard render snippet for ALL steps):
@@ -88,7 +124,8 @@ import sys, glob
 sys.path.insert(0, ".")
 import formcast
 from pathlib import Path
-for run, stem in [("v121-teapot", "v121-teapot"), ("v121-lamp", "v121-lamp")]:
+for run, stem in [("v121-teapot", "v121-teapot"), ("v121-lamp", "v121-lamp"),
+                  ("v121-bush", "v121-bush")]:
     glbs = sorted(glob.glob(f"outputs/dev/{run}/*-00.glb"))
     if glbs:
         print(formcast._render_glb_views(Path(glbs[0]), Path("eval"), stem)[-1])
@@ -99,39 +136,54 @@ View the contact PNGs yourself (Read tool); write Tier-2 rubric scores
 (silhouette/proportions/surface/color/artifacts, 1–5) in EVALS. No judge
 needed (no champion) — these become the first champions. Add SAMPLES.md rows
 (photo thumbnails already exist: `eval/photos/teapot.jpg`,
-`eval/photos/tiffany-lamp.jpg`). Commit renders + journal.
+`eval/photos/tiffany-lamp.jpg`, `eval/photos/bush.jpg`). Commit renders +
+journal.
 
 Expected: teapot should do well (revolve body + handle = the manmade pack's
 home turf). The lamp is a deliberate stretch (mosaic glass) — a mediocre lamp
 is fine; document what specifically fails (likely the stained-glass texture).
+The bush is the foliage pack on a non-tree shrub; the bar is class credibility
+(a believable rounded multi-stem shrub). Note its quirk: the reference is an AI
+"compose" image split green-summer / orange-autumn down the middle — don't chase
+the split; produce one coherent shrub (palette sampling may need a dominant-side
+or averaged tone). Photo license is unknown (third-party) — fine for local
+testing; flag it to Joel before any public push.
 
-## 3. Chair material fix (only if step 1 verdict was ≤1/3)
+## 3. Chair lesson → pipeline principles (NO chair re-bake)
 
-The information you need is already on disk — **read the champion's code**:
+The chair is closed (step 1), but it taught two things worth encoding into the
+prompts so *other* objects benefit. Study-the-champion is still the method —
+**read the code that won**:
 
-1. Read `outputs/dev/base-chair/windsor-armchair.generator.py` (v1.1 champion)
-   — find how it textures wood (it accidentally used bark-style swatch
-   sampling, giving value-rich dark wood).
-2. Read `outputs/dev/v121-chair/comb-back-windsor-armchair.generator.py` —
-   find why it's flat near-black (likely: sampled the photo's dark paint as a
-   single color; no grain/wear modulation despite the prompt line).
-3. **Free-loop prototype:** edit the v1.2.1 generator directly — add value
-   variation to the wood albedo (e.g. multiply by 0.85–1.25 low-frequency
-   noise + lighten edges/highlights toward the photo's sheen color), re-run
-   the script (zero cost), re-render, eyeball. Iterate until the front render
-   shows visible turning detail instead of silhouette.
-4. Encode what worked as 1–2 sentences in `CRAFT_PASS2["manmade"]` or the
-   PASS3 wood-material bullet in `formcast.py` (keep it generic: "very dark
-   painted objects still need visible value variation — sample the photo's
-   highlight/sheen zones, not just the average; modulate albedo with
-   grain-scale noise"). Bump `PROMPT_VERSION` to `formcast/1.2.2-cli`
-   (up-axis detection only cares about 1.0/1.1 prefixes — safe).
-5. One re-bake (`--out-dir outputs/dev/v122-chair`), render, judge vs v1.1.
-   If it STILL loses: write a POSTMORTEM in EVALS (include both generators'
-   relevant snippets), leave v1.1 as champion, move on. Do not iterate a third
-   time without new information.
+1. Read `outputs/dev/base-chair/windsor-armchair.generator.py` (v1.1 champion):
+   note how *little* it does — simple turned masses, one value-rich dark wood
+   swatch (it accidentally used bark-style sampling), a legible silhouette. That
+   simplicity is *why* Joel prefers it.
+2. Read `outputs/dev/v121-chair/comb-back-windsor-armchair.generator.py`: see
+   where v1.2.1 went wrong — it piled on swirl/turning detail and sampled the
+   photo's near-black paint as one flat color, so it reads as a black blob.
 
-## 4. Make the eval suite one command (engineering, $0 model cost)
+Encode the lessons generically (these help every class — not the chair):
+
+- **Simplicity / essence** (the headline lesson, Joel's standing direction):
+  add a line to `CRAFT_PASS2` / PASS2 that the goal is the *simplest geometry
+  that reads unmistakably as the kind* — prioritize clean, legible essential
+  masses and a clear silhouette over fine surface or turned detail; never add
+  geometric detail that muddies the silhouette.
+- **Dark materials still need value variation** (a real, general bug): very
+  dark painted/finished objects must still show albedo value variation — sample
+  the photo's highlight/sheen zones, not just the average, and modulate albedo
+  with grain-scale noise — or they render as black silhouettes. One sentence in
+  the PASS3 material rules.
+
+Bump `PROMPT_VERSION` to `formcast/1.2.2-cli` (up-axis detection only keys on
+1.0/1.1 prefixes — safe). **Do not re-bake the chair to chase a win.** Verify
+these changes on the *next* objects you bake (teapot / lamp / bush), where
+simpler-is-better and dark-material-variation both apply. For a regression
+check, re-render an existing champion after the prompt change lands in code;
+never spend a bake trying to beat v1.1's chair.
+
+## 4. Make the eval suite one command (engineering, no bake needed)
 
 Implement `formcast eval` per MASTER_PLAN §6.8, minimal version:
 
@@ -194,7 +246,7 @@ prompt lines and queue them. Verify claims against the actual source.
    judge-by-eye whether variants differ meaningfully; if near-clones, add
    seed-variation requirements to PASS2 (MASTER_PLAN WS6).
 2. Boulder character: restore crack ridges via the character-features line
-   (already in v1.2.1) — needs one re-bake + judge when budget allows.
+   (already in v1.2.1) — needs one re-bake + judge.
 3. Tulip facets: smooth-shading line is in v1.2.1 — verify on the next tulip
    bake (cheap: piggyback whenever tulip is re-baked for another reason).
 4. Creature class: acquire a CC0 standing-dog side-view photo (use
@@ -209,6 +261,7 @@ prompt lines and queue them. Verify claims against the actual source.
 
 ## 8. When to stop / ask Joel
 
-Per MASTER_PLAN §2.5: paid API keys; phase budget 1.5×-exceeded twice; scope
-calls; or three full failed attempts with contingencies exhausted (write the
-POSTMORTEM first). Otherwise: decide, log the decision in EVALS, continue.
+Per MASTER_PLAN §2.5: paid API keys/accounts; scope or ethics calls; or three
+full failed attempts with contingencies exhausted (write the POSTMORTEM first).
+**Cost/budget is not a stopping reason** — Joel runs on a subscription.
+Otherwise: decide, log the decision in EVALS, continue.

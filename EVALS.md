@@ -5,7 +5,7 @@ Per MASTER_PLAN §9. Entry template:
 ```markdown
 ## <date> <phase>.<step> — <short title>
 - Hypothesis/goal:
-- What ran: (commands, model, flags)            Cost: $X.XX  Wall: Xm
+- What ran: (commands, model, flags)            Wall: Xm
 - Artifacts: (paths)
 - Gates: (pass/fail or n/a)
 - Tier-2 (my eyes, rubric 1–5): silhouette X, proportions X, surface X, color X, artifacts X — notes
@@ -14,15 +14,14 @@ Per MASTER_PLAN §9. Entry template:
 - Next:
 ```
 
-## Cost ledger
-| Phase | Spent | Soft budget |
-|---|---|---|
-| Pre-plan experiments (2026-06-09, Fable session) | ≈$2.30 | — |
-| P2-early acquisition | $0 (no LLM) | — |
-| P-baselines (v1.1 bakes, 4 items) | ≈$6 | ≈$6 |
-| P-v12 suite (5 items, incl. cap-killed retry) | ≈$13 | ≈$15 |
-| Judges (5 items × 3 trials, sonnet) | ≈$1.3 | — |
-| Running total 2026-06-09 | **≈$23** | — |
+## Pacing note (cost tracking retired 2026-06-10)
+
+Dollar/cost tracking has been dropped — Joel runs on a subscription and money
+budgets were a distraction from getting it right (CLAUDE.md standing order;
+MASTER_PLAN §2.1). Use the **right model for the task, biased toward the stronger
+one** (author bakes on opus, judge on sonnet); no strict budget rules. Wall-clock
+times and session-cap events are still worth logging; the one real pacing
+constraint is the account **session cap**.
 
 ## Rejected ideas
 - Wikimedia Commons full-text File-namespace search for benchmark photos: returns
@@ -38,6 +37,41 @@ Per MASTER_PLAN §9. Entry template:
   lines aim at "convincing instance of the kind" (class-typical mass, materials,
   character) rather than photo replication; the boulder's lost cracks matter
   only insofar as cracks make a *more convincing concretion boulder*.
+- **2026-06-10 (Joel): simplicity / geometric essence over detail-chasing.**
+  v1.1 chair preferred over v1.2.1 — *"simple and it captures the geometric
+  essence"* vs v1.2.1 *"trying to capture geometry details like the swirls on
+  the top."* Corollary to class credibility: prefer the simplest geometry that
+  reads unmistakably as the kind; clean essential masses + a legible silhouette
+  beat fine surface/geometric detail. **Chair is decided — v1.1 stays champion**
+  (a human verdict outranks the judge). See SAMPLES.md chair section; OPUS_PLAYBOOK
+  §0/§1/§3.
+- **2026-06-10 (Joel): cost/budget tracking retired.** Subscription; money
+  budgets were a distraction from getting it right. Removed dollar amounts and
+  per-phase money budgets from all docs and the "stop when over budget" rules.
+  Kept: right-model-for-the-task (biased toward the stronger model; cheaper only
+  where the task allows), the free loop, one-change-per-bake, and session-cap
+  handling. (CLAUDE.md; MASTER_PLAN §2.1/§2.5.)
+- **2026-06-10 (Joel): user evaluation is welcome, not rare.** Proactively ask
+  Joel to review SAMPLES.md + its links from time to time; don't block on him.
+  (MASTER_PLAN §2.4 Tier 4; OPUS_PLAYBOOK §0.)
+- **2026-06-10 (Joel): two new standing rules.** Start every session by reading
+  all the Markdown files + `formcast.py` before anything else; refresh docs and
+  code comments before every commit. (CLAUDE.md.)
+- **2026-06-10 (Joel): repeatability is a soft aim, not a hard rule.** "Make
+  quality repeatable instead of a per-run dice roll" was too strong — LLMs do
+  best with some temperature, and run-to-run randomness is welcome when it
+  improves results. Two same-parameter runs should land in *about* the same
+  place, but that's a soft aim; Joel may prefer to be shown a few samples and
+  pick the best (formcast already bakes a seed-varied library). The bar is a
+  reliable quality *floor* (every run good), not bit-exact output. Softened the
+  "dice roll / coin flip / byte-stable / determinism" language across the docs.
+- **2026-06-10 (Joel): CLAUDE.md is the single source of truth for standing
+  orders.** Other docs refer to it rather than duplicating standing constraints
+  (he flagged PHOTOREALISM_PLAN repeating them). Keep documenting what worked AND
+  what didn't — that practice is working and should continue. (CLAUDE.md.)
+- **2026-06-10 (Joel): bush added to the benchmark** (Joel-supplied image) — a
+  6th class (shrub/foliage); see `benchmarks/manifest.json` and the P-docs entry
+  at the bottom.
 - Benchmark v1 = 5 items (maple, tulip, met-console-table, windsor-chair,
   moeraki-boulder); all CC0/local; manifest at `benchmarks/manifest.json`;
   photos cached (gitignored), re-fetchable by URL (+crop derivation for boulder).
@@ -55,7 +89,7 @@ Per MASTER_PLAN §9. Entry template:
   furniture) + Wikimedia Commons API (fallback; rate-limited). Downloader:
   `benchmarks/fetch_candidates.py`; scorer: `benchmarks/analyze_candidates.py`
   (border-uniformity + blob analysis — doubles as the Pass-0 preflight
-  prototype). ~30 candidates fetched, scored, visually verified. Cost: $0.
+  prototype). ~30 candidates fetched, scored, visually verified. (No model calls.)
 - Artifacts: `benchmarks/manifest.json`, `benchmarks/cache/picked/{tulip,table,
   chair,boulder}.jpg`, candidates in `benchmarks/cache/candidates/`.
 - Findings: automated score alone is insufficient — top scorers included line-art
@@ -81,7 +115,7 @@ Per MASTER_PLAN §9. Entry template:
 - What ran: `fcviz.py render/views` on maple-00.glb (Z-up, v1.1 metadata),
   t2_dog_yup.glb + t3_table_yup.glb (genuine Y-up re-exports); judge self-test
   maple-render vs dog-render against the maple photo, 2 trials (swap both ways).
-  Cost: $0.14 (judge), renders free.
+  Renders free; judge ran on sonnet.
 - Artifacts: `fcviz.py` (to be merged into formcast.py), /tmp/p0test/*,
   `outputs/experiments/2026-06-09/{t2_dog_yup,t3_table_yup}.glb`.
 - Findings: (1) up-axis auto-detect via embedded provenance.prompt_version works
@@ -90,7 +124,7 @@ Per MASTER_PLAN §9. Entry template:
   rotation in before export) — "known-good test assets" must have their
   conventions verified, not assumed; regenerated genuine Y-up copies (`*_yup.glb`).
   (3) Judge self-test: 0/2 candidate wins, correct object-class reasoning in BOTH
-  A/B orders — swap logic confirmed; ~$0.07, ~18 s per sonnet trial.
+  A/B orders — swap logic confirmed; ~18 s per sonnet trial.
 - Verdict: KEEP — Phase-0 components validated; merge into formcast.py after
   baseline bakes finish (not editing formcast.py while bakes re-exec it).
 - Next: v1.1 baselines render + freeze; then v1.2 overhaul.
@@ -99,8 +133,8 @@ Per MASTER_PLAN §9. Entry template:
 - Hypothesis/goal: freeze "before" state of current prompts across classes;
   expected the nature-only PASS1 taxonomy to fail on furniture.
 - What ran: `bake <item> --count 2` for tulip/boulder/chair/table with frozen
-  v1.1 prompts (sequential background loop). Costs in formcast.log (~$1.3-1.6
-  each, 1 repair typical).
+  v1.1 prompts (sequential background loop; ~1 repair typical; timings in
+  formcast.log).
 - Artifacts: `outputs/dev/base-*/`, frozen sheets `eval/baselines/v11-*.png`.
 - Findings so far (tulip, boulder, chair pass-1):
   - **tulip** (`white-tulip`/plant, 7.5k tris): recognizable bloom + stem;
@@ -126,8 +160,8 @@ Per MASTER_PLAN §9. Entry template:
 ## 2026-06-09 P-v12.1 — v1.2 table: first full A/B promotion
 - Hypothesis/goal: v1.2 (taxonomy + manmade craft pack + texture rules + refine
   loop) fixes the furniture failure mode end-to-end.
-- What ran: `bake table.jpg --count 2 --refine 1` (831 s, ~$2.3 incl. refine);
-  judge 3 trials sonnet (~$0.21). Cost: ≈$2.5.
+- What ran: `bake table.jpg --count 2 --refine 1` (831 s incl. refine);
+  judge 3 trials sonnet.
 - Artifacts: `outputs/dev/v12-table/`, `eval/v12-table-*.png`, SAMPLES.md entry.
 - Gates: all passed in-bake (validation + audit; no repairs needed this run).
 - Tier-2 (my eyes): silhouette 4, proportions 4, surface 3, color 2.5,
@@ -163,7 +197,7 @@ Per MASTER_PLAN §9. Entry template:
 
 ## 2026-06-09 P-v12.3 — v1.2 boulder promoted 3/3; judge-human calibration 2/2
 - What ran: retry `bake boulder.jpg --count 2 --refine 1` (359.7 s; refine
-  adopted a revision); judge 3 trials (~$0.21). The earlier suite attempt died
+  adopted a revision); judge 3 trials. The earlier suite attempt died
   at pass 3 with "Claude CLI exited 1 after 1.2 s" — the account session cap;
   documented as an ops failure mode (bakes fail fast and cleanly, no corruption).
 - Tier-3 judge: **v1.2 preferred 3/3**; color/material 4 vs 1 — the
@@ -181,7 +215,7 @@ Per MASTER_PLAN §9. Entry template:
 ## 2026-06-09 P-v12.4 — v1.2 tulip promoted 3/3
 - What ran: retry `bake tulip.jpg --count 2 --refine 1` (1033 s — slowest item;
   refine adopted a revision after 275.8 s); judge 3 trials under the NEW
-  class-credibility prompt (~$0.21).
+  class-credibility prompt.
 - Tier-3 judge: **v1.2 preferred 3/3**; color/material 4 vs 1–2. Cited: closed
   egg-shaped bud silhouette, correct stem-to-bloom proportions, clean green
   stem, no broken geometry.
@@ -215,11 +249,11 @@ Per MASTER_PLAN §9. Entry template:
   surface character preservation (boulder cracks).
 - Maple remaining vs PHOTOREALISM_PLAN §13 bar: not yet at "clearly the same
   kind of tree AND clearly much better" full criteria (atlas leaf silhouettes,
-  measured crown-fill gate, two-run reproducibility) — Phase 1 continues.
-- Session cost ledger (approx, from formcast.log): baselines ≈$6, v1.2 suite
-  (incl. session-cap retry) ≈$13, judges ≈$1.3, earlier experiments ≈$2.5 —
-  total ≈$23 for: 5-class benchmark, eval infrastructure, two pipeline
-  versions, and 5 A/B verdicts.
+  measured crown-fill gate, two-run quality consistency) — Phase 1 continues.
+- Session output (timings in formcast.log): a 5-class CC0 benchmark, the eval
+  infrastructure (headless renderer + A/B judge), two pipeline versions
+  (v1.1 → v1.2), and 5 A/B verdicts — across baselines, the v1.2 suite (incl. a
+  session-cap retry), and judges.
 - Next: v1.2.1 (applied) → chair re-match + teapot + tiffany-lamp first bakes.
 
 ## 2026-06-10 P-v121.1 — v1.2.1 chair baked; session cap ends the Fable shift
@@ -239,3 +273,46 @@ Per MASTER_PLAN §9. Entry template:
   protocol; champion registry).
 - Champion registry at handoff: maple/table/boulder/tulip = v1.2;
   chair = v1.1; teapot/lamp = none yet.
+
+## 2026-06-10 P-docs.1 — Opus takes over; doc pass on Joel's review comments
+- Goal: Joel switched to Opus, read the docs, and gave a batch of direction.
+  Revise all docs to match before resuming mainline bakes.
+- What ran: documentation only (no model bakes).
+- Joel's directions, applied:
+  1. **Chair decided — v1.1 stays champion.** *"I still think the 1.1 chair is
+     the best… simple and it captures the geometric essence"*; v1.2.1 was
+     *"trying to capture geometry details like the swirls."* New standing
+     principle: **simplicity / geometric essence over detail-chasing** (corollary
+     to class credibility). Chair is closed; do not re-bake to win it.
+     OPUS_PLAYBOOK §1 reframed (decided; judge is optional calibration only); §3
+     reframed from "fix-and-rebake the chair" to "extract two general lessons"
+     (simplest-geometry-that-reads; dark materials still need albedo value
+     variation).
+  2. **Cost/budget tracking retired.** Removed all dollar amounts, per-phase money
+     budgets, and "stop when over budget" rules across CLAUDE.md, MASTER_PLAN,
+     OPUS_PLAYBOOK, EVALS, PHOTOREALISM_PLAN. Kept right-model-for-the-task
+     (biased toward the stronger model; cheaper where the task allows), the free
+     loop, one-change-per-bake, and session-cap handling.
+  3. **Repeatability softened.** "Repeatable instead of a per-run dice roll" was
+     too strong; some temperature/randomness is welcome; two same-param runs land
+     in *about* the same place (a soft aim). Bar = reliable quality floor, not
+     bit-exact; Joel may want to pick the best of a few samples. Softened "dice
+     roll / coin flip / byte-stable / determinism" wording everywhere.
+  4. **New standing rules (CLAUDE.md):** read all md + `formcast.py` at session
+     start; refresh docs + code comments before every commit; CLAUDE.md is the
+     single source of truth for standing orders (other docs refer, don't
+     duplicate — PHOTOREALISM_PLAN de-duplicated); keep documenting what worked
+     AND what didn't.
+  5. **User evaluation is welcome, not rare** (Tier 4): proactively invite Joel to
+     review SAMPLES.md + its links; don't block on him.
+  6. **Bush added to the benchmark** (Joel-supplied image): rounded multi-stem
+     deciduous shrub, AI-composed green/autumn split, soft bokeh bg. Cached at
+     `benchmarks/cache/picked/bush.png` (gitignored); thumbnail
+     `eval/photos/bush.jpg` committed; manifest entry added. **License unknown
+     (third-party site)** — local test use only; flag before any public push.
+     First bake pending (OPUS_PLAYBOOK §2).
+- Verdict: KEEP — docs now reflect Joel's current direction; mainline (teapot /
+  lamp / bush first bakes, then encode the chair lessons + tree-depth iteration)
+  resumes from OPUS_PLAYBOOK.
+- Champion registry: maple/table/boulder/tulip = v1.2; chair = v1.1 (confirmed by
+  Joel); teapot/lamp/bush = none yet.

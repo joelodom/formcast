@@ -6,12 +6,20 @@
 > correction found by later experiment: the Appendix A renderer must apply
 > scene-graph node transforms — iterate `scene.dump()` instead of
 > `scene.geometry.items()` (see the note in Appendix A and MASTER_PLAN §5.4).
+>
+> **Standing constraints** (commit discipline, session pacing, model choice, doc
+> upkeep) live in **`CLAUDE.md`** — the single source of truth. This plan does not
+> restate them; refer there. No fixed dollar/time budget applies.
 > A transform-aware reference copy lives at
 > `outputs/experiments/2026-06-09/fc_render.py`.
 
 **Goal:** make `bake` output dramatically more photorealistic, starting with (but not
-hardcoded to) the maple example, and make quality *repeatable* instead of a per-run
-dice roll. This document is an implementation plan for Claude (Opus) working in this
+hardcoded to) the maple example, and raise the quality *floor* so every run lands a
+good model. (This is about reliability, not bit-exact repeatability — some run-to-run
+variation from seeds/temperature is fine, even useful: formcast bakes a seed-varied
+library to choose from, and Joel may want to pick the best of a few samples. Two
+same-parameter runs should land in *about* the same place, but that's a soft aim, not
+a hard rule.) This document is an implementation plan for Claude (Opus) working in this
 repo. It is grounded in measurements taken on 2026-06-09 against two real bakes of
 `inputs/maple-tree.png`; every claim below was verified empirically in this repo,
 including the trimesh export mechanisms (Appendix C) and the software renderer
@@ -48,7 +56,7 @@ Two end-to-end bakes of the same image, default settings (`--model opus`):
 
 | Metric | Run A (user, 11:24) | Run B (selftest, 14:00) | Reference photo |
 |---|---|---|---|
-| Wall time / model cost | 458 s / ~$1.32 | 402 s / ~$1.3 | — |
+| Wall time | 458 s | 402 s | — |
 | Repairs needed | 1 (pass 3, SyntaxError) | 1 (pass 2, `ndarray.ptp` removed in numpy 2) | — |
 | Total triangles (high) | 12,676 | ~73,000 | — |
 | Canopy cards | 620 (2 tris each) | 520 (8 tris each) | — |
@@ -80,7 +88,7 @@ Key takeaways:
    have no `rotation`). three.js / `<model-viewer>` / Blender import assume +Y-up.
 4. **Run-to-run variance is huge** (12.7k vs 73k tris; different surface naming —
    Run B merged branches into "trunk"; both runs needed one repair). The prompts
-   under-constrain the result, so quality is a coin flip at ~$1.3 + 7 min per flip.
+   under-constrain the result, so the quality floor is unreliable run to run (~7 min per attempt).
 5. **The texture pipeline destroys its own detail.** Both runs derive a 256² swatch
    from the photo, then "make it tileable" by rolling and blurring a cross through
    the middle — measured local contrast in the blurred cross is 9.5 vs 16.9 outside
@@ -238,7 +246,7 @@ archetypes) …; for rocks/boulders …". The bullets below are the content to e
 - Y-up + meters + base-at-origin per WS1.
 - Determinism per existing rules.
 
-**API gotchas paragraph (saves a repair round ≈ 60–75 s + ~$0.25 each):** add to
+**API gotchas paragraph (saves a repair round ≈ 60–75 s each):** add to
 both PASS2 and PASS3 prompts: "Environment: numpy 2.x (`ndarray.ptp()` removed —
 use `np.ptp(arr)`; no `np.float`/`np.int`), Pillow 12 (`Image.ANTIALIAS` removed —
 use `Image.LANCZOS`), trimesh 4.x. Do not import scipy. Before returning, mentally
@@ -358,11 +366,11 @@ Implementation notes:
 - Plumbing: `--refine N` (0 disables), wire into `cmd_bake` between pass 3 and the
   artifact save; log per-iteration timings/cost at DEBUG like other passes; save
   each iteration's script as `workdir/script_refine_<i>.py` for the logfile trail.
-- Cost/time: each iteration ≈ one pass-3-sized call (~$0.3–0.5, 1–3 min) + ~5 s of
-  bake/render. Default `--refine 2` keeps a full bake under ~15 min / ~$2.5. Put
-  the numbers in README.
-- Optional cost lever (document, don't default): `--refine-model sonnet` to run
-  critique iterations on a cheaper model while authoring stays on opus.
+- Time: each iteration ≈ one pass-3-sized call (~1–3 min) + ~5 s of bake/render;
+  default `--refine 2` keeps a full bake under ~15 min. Note the timings in README.
+- Optional model lever (document, don't default): `--refine-model sonnet` runs
+  critique iterations on a cheaper model while authoring stays on opus —
+  right-model-for-the-task (see CLAUDE.md).
 - The final refined script is what gets saved/embedded — provenance already records
   `prompt_version`; also record `refine_iterations` in the metadata `provenance`.
 
@@ -390,7 +398,7 @@ silhouette metrics. Suggested gates (hard unless noted):
 | Foliage palette | rendered foliage mean RGB within ΔE*ab ≈ 12 (or RGB dist < 40) of photo foliage mean * |
 | Two-tone | rendered foliage luminance p90/p10 ≥ 2.2 (photo ≈ 4) |
 | Budgets | tris ≤ 80k/25k/8k for high/med/low; canopy cards 1.2k–4k at high |
-| Determinism | same seed bakes byte-identical twice (warn only — PNG encoder noise possible) |
+| Seed consistency | same seed bakes a closely-matching model twice (warn only — seed/temperature/PNG-encoder variation is expected) |
 
 \* photo-relative gates only run when the reference has a measurable near-uniform
 background (the mask heuristic from §7.3, computed by formcast in Python — same
@@ -419,21 +427,23 @@ as siblings, not different species). Verify with a 6-up contact sheet render
    `python outputs/dev/<tag>/broadleaf-maple.generator.py --image inputs/maple-tree.png
    --seed 0 --density high --output /tmp/t.glb` — then render + audit. Use this
    while developing WS0/WS1/WS5 and when hand-checking texture techniques.
-2. Full loop (model in the loop, ~$1.5–2.5, 7–15 min):
+2. Full loop (model in the loop, ~7–15 min):
    `python formcast.py bake inputs/maple-tree.png --out-dir outputs/dev/<tag> --count 3 -v`
-   then render the row, view the PNGs with Read, record metrics + cost (from
-   `formcast.log`: per-pass `cost_usd`, durations) in a short table in your summary.
+   then render the row, view the PNGs with Read, record metrics + timings (from
+   `formcast.log`: per-pass durations) in a short table in your summary.
 3. Compare against: the photo, the §1 baseline numbers, and the user's original
    `outputs/*.glb` (render them with `up='+z'`).
 4. A change ships only if: all hard gates pass AND the front render visibly beats
    the baseline when you look at them side by side. Trust your eyes over metrics
    when they disagree — then improve the metric.
-5. Re-bake variance check before declaring victory: run the full bake twice; both
-   runs must pass gates (this is the anti-coin-flip criterion).
+5. Re-bake consistency check before declaring victory: run the full bake twice;
+   both runs should land a *good* model (pass gates). The bar is a reliable
+   quality floor, not identical output — seed/temperature variation is expected
+   and fine.
 
-Budget guidance: the whole plan should be implementable within roughly 10–15 full
-bakes (~$25 ± 10). If a prompt change needs more than 3 full-bake iterations to
-stabilize, the constraint belongs in a gate (deterministic) rather than in prose.
+Engineering heuristic: if a prompt change needs more than ~3 full-bake iterations
+to stabilize, the constraint probably belongs in a gate (checked in code) rather
+than in prose. (No fixed bake/dollar budget — see CLAUDE.md for pacing.)
 
 ---
 

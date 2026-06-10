@@ -2,14 +2,16 @@
 
 > **STATUS 2026-06-10 — experiments underway; START HERE for continuation:
 > [`OPUS_PLAYBOOK.md`](OPUS_PLAYBOOK.md)** (step-by-step commands, decision
-> rules, budget/cap protocol, champion registry). Results so far: Phase 0 done
-> (headless renderer + A/B judge, validated); 7-item CC0 benchmark; v1.2
-> pipeline (any-object taxonomy, craft packs, audit gates, render→critique→
+> rules, pacing/cap protocol, champion registry). Results so far: Phase 0 done
+> (headless renderer + A/B judge, validated); 7-item CC0 benchmark (bush to add);
+> v1.2 pipeline (any-object taxonomy, craft packs, audit gates, render→critique→
 > revise refine loop) **promoted over baseline on 4/5 items at 3/3 judge
-> trials each** (maple/table/boulder/tulip); chair iteration in progress
-> (v1.2.1 baked, verdict pending). Visual journal: [`SAMPLES.md`](SAMPLES.md);
-> evidence log: [`EVALS.md`](EVALS.md). Quality bar per Joel: **class
-> credibility over photo fidelity** (§1.2 callout).
+> trials each** (maple/table/boulder/tulip); chair **decided — v1.1 stays
+> champion** (Joel's direct verdict 2026-06-10: v1.1 is simpler and captures the
+> geometric essence; v1.2.1's detail-chasing was the wrong direction). Visual
+> journal: [`SAMPLES.md`](SAMPLES.md); evidence log: [`EVALS.md`](EVALS.md).
+> Quality bar per Joel: **class credibility over photo fidelity**, and
+> **simplicity / geometric essence over detail-chasing** (§1.2 callout).
 
 **Mission:** evolve formcast from "natural-object archetype baker" into a general,
 dependable capability: **give it one photograph of a thing — a tree, a dog, a table,
@@ -86,6 +88,16 @@ and it changes gates (faithful mode adds silhouette-match scoring) and prompts
 > class credibility first. Furniture's earlier "default faithful" suggestion is
 > superseded: everything defaults to archetype.
 
+> **User decision (2026-06-10): simplicity / geometric essence over
+> detail-chasing.** On the chair, Joel: "I still think the 1.1 chair is the best…
+> what I like about 1.1 is that it's simple and it captures the geometric
+> essence" — preferring it over v1.2.1, which "is trying to capture geometry
+> details like the swirls on the top." Corollary to class credibility: a clean
+> model that nails the essential masses, proportions and silhouette of the KIND
+> beats a busier one that chases fine surface or geometric detail. Prefer the
+> simplest geometry that reads unmistakably as the kind; never add detail that
+> muddies the silhouette. (See the chair section in `SAMPLES.md`.)
+
 ### 1.3 Scope ladder — the honest quality bars for v1
 
 Declare these openly (README), aim development at them, and gate phases on them:
@@ -120,24 +132,31 @@ cleanup, variants, metadata, and evaluation.
 
 You will mostly work unattended. These rules keep you fast, cheap, and honest.
 
-### 2.1 Budget & model discipline (the user has limited frontier access)
+### 2.1 Model discipline & pacing
 
 - **Implementation model:** you (Opus) in Claude Code. **Engine model for bake:**
   the `claude` CLI with `--model opus` (current default; the `opus` alias tracks
   the latest Opus). **Judge model:** `--model sonnet` (cheap, different-enough).
-  Never assume Fable-class access for any recurring loop.
-- Measured costs to plan around (this machine, 2026-06-09): full authoring bake
-  ≈ **$1.3 / 7–8 min** (pass 1 ≈ $0.10/17 s; pass 2 ≈ $0.20–0.39/70–185 s; pass 3
-  ≈ $0.5–0.8/175–270 s; one repair ≈ $0.2–0.3/60–75 s); per-variant bake ≈ 0.7 s
-  free; isolated single-call experiments ≈ $0.3–0.6; vision measurement ≈ $0.09.
+  **Right model for the task, biased toward the stronger one:** this is a hard
+  problem, so default to the strongest model a task warrants (authoring bakes →
+  opus); reach for a cheaper model only where the task genuinely doesn't need the
+  stronger one (A/B judging → sonnet). It's a quality call, not a cost cap — no
+  strict budget rules.
+- **Pacing, not budgeting.** Joel runs on a subscription, so don't fuss over
+  token or dollar cost — a long, token-heavy session is fine when the work
+  genuinely needs it; just keep making real progress and don't spin. Dollar
+  figures and per-phase money budgets have been removed from this plan on
+  purpose; they were a distraction from getting it right. The one hard pacing
+  constraint is the account **session cap** (§2.5, and the Phase notes): when
+  `claude -p` dies with `Claude CLI exited 1 after ~1s`, the cap is hit — stop,
+  log it, wait for the reset, and re-run only the failed items. A full authoring
+  bake takes ~8–17 min wall; serialize bakes, never run two at once.
 - **The free loop is the default loop:** the saved generator script
   (`outputs/dev/<tag>/<id>.generator.py`) runs standalone —
   `python <gen>.py --image ... --seed 0 --output t.glb` — so texture/geometry/gate/
-  renderer iteration costs **zero model calls**. Touch the CLI only when prompts
-  change or the refine loop runs.
-- Keep a running cost ledger per phase in `EVALS.md`. Soft budgets are listed per
-  phase in §7. If a phase projects > 1.5× its budget, stop, log why, and either
-  pick the cheaper contingency branch or queue a question for the user.
+  renderer iteration uses **no model calls**. Touch the CLI only when prompts
+  change or the refine loop runs. This is for fast iteration and clean
+  attribution, not thrift.
 - Cache what's reusable: pass-1 descriptions keyed by image hash (`--reuse-spec`
   flag, Phase 3) so re-bakes of the same photo skip pass 1.
 
@@ -177,14 +196,19 @@ Four tiers, cheapest first; every quality claim must cite which tier produced it
   `[photo | render]` composite; Read them; score a fixed rubric 1–5 in `EVALS.md`:
   silhouette / proportions / surface detail / color-material match / artifacts.
   Always view the **same standard views** so comparisons mean something.
-- **Tier 3 — independent VLM judge (~$0.05–0.15/trial):** a *fresh* `claude -p
+- **Tier 3 — independent VLM judge:** a *fresh* `claude -p
   --model sonnet` session (never the session that authored the code) gets the
   photo + two unlabeled renders (baseline vs candidate, A/B order randomized per
   trial) and returns forced-choice + rubric JSON. Run 3 trials; candidate wins if
   preferred ≥ 2/3 with no rubric dimension dropping > 1 point. This is your
   promotion test for "did this change actually help."
-- **Tier 4 — the user (rare):** per milestone, leave one contact sheet + scorecard
-  table ready for them; never block on them.
+- **Tier 4 — the user (welcome, not rare — Joel's standing direction):** Joel
+  *wants* to weigh in. From time to time — at milestones, and whenever a result
+  is interesting or you're unsure — **proactively ask him to look at `SAMPLES.md`
+  and its contact-sheet links and comment.** Keep a contact sheet + scorecard
+  ready so it's a low-effort ask. Don't *block* on him (keep working while you
+  wait), but invite his eyes regularly: his verdicts have outranked the judge and
+  recalibrated the whole effort (class credibility; the chair, simplicity/essence).
 
 **Anti-self-deception rules:**
 - Freeze baseline renders per benchmark item (`eval/baselines/`); every comparison
@@ -199,12 +223,12 @@ Four tiers, cheapest first; every quality claim must cite which tier produced it
 
 ### 2.5 When to stop and ask the user (otherwise: decide and log)
 
-Only these: (a) anything requiring a paid account/API key; (b) phase budget
-exceeded 1.5× twice; (c) scope/ethics calls (humans in photos, licensed
-characters, photos of identifiable private property where it matters); (d) a Tier
-A acceptance bar that you've failed three full attempts with all listed
-contingencies exhausted. Everything else: pick the default named in this plan, log
-the decision in `EVALS.md`, continue.
+Only these: (a) anything requiring a paid account/API key; (b) scope/ethics calls
+(humans in photos, licensed characters, photos of identifiable private property
+where it matters); (c) a Tier A acceptance bar that you've failed three full
+attempts with all listed contingencies exhausted. **Cost/budget is never a
+stopping reason** (Joel runs on a subscription). Everything else: pick the default
+named in this plan, log the decision in `EVALS.md`, continue.
 
 ---
 
@@ -219,7 +243,7 @@ Verified state (2026-06-09; details in PHOTOREALISM_PLAN §1 and `formcast.log`)
 | Geometry authoring | Competent code, wrong asks: no envelope/clump craft, no budgets (12.7k vs 73k tri variance run-to-run), Z-up exports (spec violation) |
 | Texturing | 256² swatches, detail-destroying tiling, single-tile foliage, no normal maps / vertex colors |
 | Viewing/eval | Broken headless (no display; pyglet IndexError); misleading error; **no way to see output where it's made** — fixed by Phase 0 |
-| Quality feedback | None — open-loop; quality is a coin flip |
+| Quality feedback | None — open-loop; quality unreliable run to run |
 | Classes | Trees work (Tier-B-ish); rocks probably; everything else untested before this session |
 | Fidelity | Archetype only |
 | Backends | Procedural trimesh only |
@@ -245,7 +269,7 @@ seconds, lower quality, lighting baked into textures).
 | **Meta SAM 3D Objects** ([blog](https://ai.meta.com/blog/sam-3d/), [paper](https://arxiv.org/abs/2511.16624)) | Checkpoints + inference code released; single natural image → textured mesh (+ layout); seconds on GPU; SA-3DAO eval set. **SAM 3D Animal** followed ([paper](https://arxiv.org/html/2605.07604)) — directly targets our hardest class | Likely the strongest open faithful-organics path. **Research task P5-R1:** verify license terms + macOS/MPS runnability |
 | **Hunyuan3D 2.x** ([2.1 repo](https://github.com/tencent-hunyuan/hunyuan3d-2.1), [2.0 repo](https://github.com/Tencent-Hunyuan/Hunyuan3D-2)) | **Apache-2.0**, weights + training code; PBR texture synthesis | The license-safest backend. **Runs on this Mac** via community forks: [Brainkeys macOS fork](https://github.com/Brainkeys/Hunyuan3D-2.1-mac/blob/main/README_macOS.md) — shape gen works on MPS (2–5 min, ~4–8 GB, **Python 3.11/3.12 venv required**, not 3.13); texturing mostly broken on Mac (nvdiffrast is CUDA-bound) → **formcast supplies textures from the photo — a perfect division of labor.** Also: [MLX port](https://github.com/ZimengXiong/Hunyuan3D-MLX), [MPS port](https://github.com/Maxim-Lanskoy/Hunyuan3D-2-Mac) |
 | **TRELLIS / TRELLIS.2** ([repo](https://github.com/microsoft/TRELLIS), [TRELLIS.2](https://github.com/microsoft/TRELLIS.2), [project](https://microsoft.github.io/TRELLIS.2/)) | Open; structured-latent (SLAT/O-Voxel) generation, up to 4B params | Quality reference; likely CUDA-first — check before betting on local use |
-| **Hosted APIs:** [Meshy](https://www.meshy.ai/api), [Tripo](https://www.tripo3d.ai/api) ([pricing comparison](https://www.sloyd.ai/blog/3d-ai-price-comparison)) | Credit-based; image→textured mesh ≈ 20–30 credits (~$0.10–0.50/asset); quad remesh, PBR options | Zero-install fallback backend; needs user-approved key + terms check (asset ownership/commercial use) |
+| **Hosted APIs:** [Meshy](https://www.meshy.ai/api), [Tripo](https://www.tripo3d.ai/api) ([pricing comparison](https://www.sloyd.ai/blog/3d-ai-price-comparison)) | Credit-based; image→textured mesh ≈ 20–30 credits/asset; quad remesh, PBR options | Zero-install fallback backend; needs user-approved key + terms check (asset ownership/commercial use) |
 | TripoSR / SF3D / SPAR3D, InstantMesh, Unique3D | Open, fast | Lower quality tier; only if the above fail locally |
 
 **Implication:** reconstruction is a *pluggable backend*, default-off, chosen by
@@ -306,7 +330,7 @@ plan, with one renderer correction (§5.4).
 All artifacts preserved in `outputs/experiments/2026-06-09/` (gitignored). Costs
 are real measured costs on this machine. Use these harnesses as templates.
 
-### 5.1 T1 — Can the engine *measure* a photo by eye? (cost $0.09, 15 s)
+### 5.1 T1 — Can the engine *measure* a photo by eye? (15 s)
 
 One `claude -p --model opus` call with Read on the maple photo, asked for
 structured measurements; compared to numpy ground truth:
@@ -324,7 +348,7 @@ structured measurements; compared to numpy ground truth:
 absolute, so gates use generous tolerances when host measurement is impossible);
 **palette must always be pixel-sampled host-side or in-script**, never estimated.
 
-### 5.2 T2 — Procedural quadruped ceiling (cost $0.30, 118 s, first try ran)
+### 5.2 T2 — Procedural quadruped ceiling (118 s, first try ran)
 
 One opus call wrote a trimesh dog generator from a prose description + an explicit
 recipe (capsule skeleton → `trimesh.boolean.union` → subdivide → Taubin smooth —
@@ -340,7 +364,7 @@ Tier B (stylized) blind — anatomy craft + refine loop will improve but not rea
 photoreal; (b) add `len(mesh.split()) == 1` gate for creature class; (c) Tier C
 (faithful animals) goes through the reconstruction backend (Phase 5).
 
-### 5.3 T3 — Procedural furniture (cost $0.58, 270 s, first try ran)
+### 5.3 T3 — Procedural furniture (270 s, first try ran)
 
 Same harness, round pedestal dining table. Result: **exactly-specified dimensions**
 (1.2 m top, 0.75 m height as constants), revolved profiles, four instanced S-curve
@@ -398,8 +422,8 @@ Learnings from executing Phases 0–1-early on the `experiments` branch
 ### 5.5 Carried-over evidence (from PHOTOREALISM_PLAN, same day)
 
 Maple baseline numbers (crown fill 47% vs photo 67%; aspect 0.57 vs 0.84; 48%
-semi-transparent leaf alpha; bark smear; Z-up bug; broken headless viewer; $1.3 /
-7.5 min per bake; 1 repair per run on average; 6× tri-count variance run-to-run).
+semi-transparent leaf alpha; bark smear; Z-up bug; broken headless viewer; ~7.5
+min per bake; 1 repair per run on average; 6× tri-count variance run-to-run).
 Verified mechanisms: COLOR_0 + TEXCOORD_0 + normalTexture + MASK export and
 round-trip in trimesh 4.12.2.
 
@@ -545,7 +569,7 @@ Each phase lists: goal, steps, deliverables, acceptance (with eval tier), budget
 open research questions, and **contingencies**. Work strictly in order; phases 2+
 may interleave with ongoing fixes but never skip acceptance.
 
-### Phase 0 — Eyes, spec-compliance, evidence log (budget ≈ $5, 1–2 sessions)
+### Phase 0 — Eyes, spec-compliance, evidence log (~1–2 sessions)
 
 *Goal: you can see, measure, and log everything headlessly.*
 
@@ -568,7 +592,7 @@ iterate / 1024px final; judge returns malformed JSON → strict-JSON reprompt wr
 (reuse `_extract_json`); judge can't discriminate the self-test pair → revise
 judge prompt (rubric anchors) before any real use.
 
-### Phase 1 — Trees to the photoreal bar (budget ≈ $25, the quality template)
+### Phase 1 — Trees to the photoreal bar (the quality template)
 
 Execute PHOTOREALISM_PLAN §6–§10 exactly (geometry envelope/clump pack, leaf
 atlas + bark + COLOR_0 + normal maps, refine loop, gates, variant differentiation),
@@ -579,9 +603,9 @@ prompt structure, gate wiring, refine-loop plumbing, EVALS discipline.
 Contingencies (in addition to that doc's): refine loop converges to "APPROVED"
 without visible improvement → tighten critique prompt with the metrics table and
 explicit "name 3 gaps"; refine oscillates → keep best-of-N by gate score, cap at
-`--refine` and move on; cost overrun → drop refine to seed-0-only renders.
+`--refine` and move on; refine not earning its keep → drop it to seed-0-only renders.
 
-### Phase 2 — Eval harness + benchmark suite (budget ≈ $8)
+### Phase 2 — Eval harness + benchmark suite
 
 1. Build `formcast eval` + manifest per §6.8.
 2. Acquire benchmark photos (research task P2-R1): CC0/PD images, cutout-style
@@ -599,7 +623,7 @@ contact sheets; manifest licenses verified. Contingency: can't find a good CC0
 photo for a class → generate a stand-in description-only benchmark entry (the
 pipeline minus pass-1-vision) and flag it; ask the user to drop in a photo later.
 
-### Phase 3 — PhotoSpec, router, and the two easy packs (budget ≈ $15)
+### Phase 3 — PhotoSpec, router, and the two easy packs
 
 1. Pass 0 preflight + PhotoSpec + router + `--fidelity/--strategy` flags +
    `--reuse-spec` caching (§6.1–6.3). Broaden Pass 1 taxonomy (update CLAUDE.md +
@@ -624,7 +648,7 @@ aspect + part-proportion checks, log; revolve API limitations → polygon-soup l
 (manual ring stitching, same as `_tube`); class misrouting → add a `--class`
 override flag for the user and a router confusion-matrix entry in EVALS.
 
-### Phase 4 — Creature pack, stylized tier (budget ≈ $15–20)
+### Phase 4 — Creature pack, stylized tier
 
 The T2 recipe, upgraded with craft (this is a *quality* push, accepting Tier B):
 
@@ -647,9 +671,10 @@ The T2 recipe, upgraded with craft (this is a *quality* push, accepting Tier B):
 Acceptance (Tier B bar): judge scores ≥ 4/5 on "recognizable as the photographed
 species" and "clean, artifact-free", ≥ 2/3 preference vs Phase-2 baseline; gates
 green. **Explicitly NOT photoreal.**
-**Decision point P4-D1:** if after the full budget the dog judge scores < 4/5 →
-stop polishing; procedural creatures remain "variant/stylized mode" and faithful
-animals go exclusively through Phase 5. Log the decision; don't sink more cost.
+**Decision point P4-D1:** if after a full, honest effort the dog judge scores
+< 4/5 → stop polishing; procedural creatures remain "variant/stylized mode" and
+faithful animals go exclusively through Phase 5. Log the decision; don't keep
+polishing a dead end.
 Contingencies: boolean union failures on complex part sets (manifold3d edge cases)
 → union incrementally largest-first, fall back to voxel remesh
 (`trimesh.voxel.creation.voxelize` + marching via manifold? **research P4-R1**;
@@ -657,7 +682,7 @@ if no clean no-new-dep path, keep parts separate but enforce overlap + per-part
 watertight and relax the single-component gate to "visually seamless"); smoothing
 erases limb definition → smooth body only, union crisp parts after.
 
-### Phase 5 — Reconstruction backend for faithful organics (budget: setup time + ≈$5)
+### Phase 5 — Reconstruction backend for faithful organics (research-first; setup-time-heavy)
 
 1. **Research first (P5-R1):** SAM 3D Objects license + macOS/MPS feasibility;
   Hunyuan3D mac-fork current state; hosted API terms (asset ownership, commercial
@@ -683,7 +708,7 @@ procedural-only and an honest class-support matrix in README (the capability is
 architected; the backend plugs in later); reconstruction mesh quality too poor →
 try SAM 3D / TRELLIS variants before giving up (one each, time-boxed).
 
-### Phase 6 — Blender backend experiment (time-boxed: 2 sessions, ≈$5)
+### Phase 6 — Blender backend experiment (time-boxed: 2 sessions)
 
 Hypothesis: bpy unlocks fur/particles, bevels, proper UV unwrap + AO baking and
 raises every pack's ceiling (per LL3M/Infinigen). Experiment only:
@@ -697,11 +722,13 @@ Contingency: bpy wheel/python mismatch on this machine → try the official buil
 wheels; still no → record as not-viable-now, revisit when python/wheel versions
 align.
 
-### Phase 7 — Hardening & product polish (budget ≈ $10)
+### Phase 7 — Hardening & product polish
 
-Full benchmark sweep ×2 (reproducibility: both sweeps pass; seeds byte-stable or
-warn-listed); README overhaul (scope, class-support matrix with honest tiers,
-flags, costs, examples incl. one furniture example using a benchmark photo);
+Full benchmark sweep ×2 (quality consistency: both sweeps pass gates — not
+byte-identical; seed/temperature variation is expected and fine, and presenting a
+few samples to choose from is a valid mode); README overhaul (scope, class-support
+matrix with honest tiers,
+flags, examples incl. one furniture example using a benchmark photo);
 CLAUDE.md scope refresh; header docstring rewrite; `inspect` shows PhotoSpec +
 routing + backend provenance; final demo kit for the user (`eval/scorecard.md` +
 contact sheets); prompt-version bump and a CHANGELOG section in README.
@@ -790,7 +817,7 @@ Plus standing sections: `## Cost ledger` (running totals per phase),
 | manifold3d/boolean robustness on adversarial part sets | §8 infrastructure branch; gates catch silently-broken output |
 | Reconstruction licensing/ToS surprises | P5-R1 primary-source check before any integration; provenance records backend |
 | Benchmark photo licenses | Manifest records license+URL; CC0/PD only; photos never committed |
-| Cost creep from refine/judge loops | Ledger + per-phase soft budgets + §8 cost branch |
+| Refine/judge loops spin without improving output | Free-loop-first iteration; judge is the promotion gate; cap refine rounds; drop refine if it stops earning its keep |
 | numpy/PIL/trimesh API drift breaks generated code | API-gotchas paragraph in prompts (saves ~1 repair/run); env pins in requirements.txt |
 | Scope creep toward "everything" | Scope ladder §1.3 + class-support matrix; out-of-scope list is a feature |
 
@@ -806,7 +833,7 @@ Plus standing sections: `## Cost ledger` (running totals per phase),
    landed (judge prefers over Tier B 3/3, IoU ≥ 0.85).
 3. `formcast eval` reproduces the scorecard twice in a row; EVALS.md tells the
    whole story (a stranger could reconstruct every decision).
-4. README/CLAUDE.md/docstring reflect reality (scope, matrix, flags, costs);
+4. README/CLAUDE.md/docstring reflect reality (scope, matrix, flags);
    PROMPT_VERSION bumped; user demo kit ready; nothing committed without the
    user's go-ahead.
 
@@ -849,8 +876,8 @@ APIs/tooling: [Meshy API](https://www.meshy.ai/api) · [Tripo API](https://www.t
 ## Appendix B — Experiment artifacts (this session)
 
 `outputs/experiments/2026-06-09/` — `t2_gen.py` + `t2_dog.glb` + `t2_dog_side.png`
-(procedural dog, $0.30); `t3_gen.py` + `t3_table.glb` + `t3_table_view.png`
-(procedural table, $0.58); `fc_render.py` (transform-aware soft renderer — the
+(procedural dog); `t3_gen.py` + `t3_table.glb` + `t3_table_view.png`
+(procedural table); `fc_render.py` (transform-aware soft renderer — the
 reference implementation for Phase 0, supersedes PHOTOREALISM_PLAN Appendix A's
 gather()); maple baseline renders + extracted textures. T1 harness + comparison
 table: see §5.1 (script was `/tmp/fc_exp/t1_measure.py`; recreate from §5.1 if

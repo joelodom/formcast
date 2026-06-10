@@ -87,6 +87,20 @@
       "source": "https://www.flickr.com/photos/200781279@N05/53862485699",
       "url": "https://live.staticflickr.com/65535/53862485699_b84063ceec.jpg",
       "provider": "flickr"
+    },
+    {
+      "id": "bush",
+      "class": "shrub",
+      "fidelity": "archetype",
+      "difficulty": "medium (in-situ bokeh; AI-composed two-tone foliage)",
+      "file": "benchmarks/cache/picked/bush.png",
+      "title": "Rounded multi-stem deciduous shrub (green/autumn split)",
+      "license": "UNKNOWN — third-party site; appears AI-generated; LOCAL TEST USE ONLY, do not redistribute or commit the source PNG pending license confirmation",
+      "source": "https://cerbogreenhouse.com/",
+      "url": "https://cerbogreenhouse.com/wp-content/uploads/20260205_1431_Image-Generation_simple_compose_01kgqmk4yfe0za019bmxnq1pp3-e1770320015351.png",
+      "provider": "cerbogreenhouse.com",
+      "added": "2026-06-10 (Joel-supplied)",
+      "note": "Single well-isolated rounded multi-stem shrub, clear silhouette, soft bokeh woodland bg with leaf-litter ground. Quirk: AI 'compose' image split green-summer (left) / orange-autumn (right) down the middle — a stress on palette sampling for the foliage pack. First bake pending (OPUS_PLAYBOOK)."
     }
   ]
 }

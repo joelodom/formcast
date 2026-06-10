@@ -18,13 +18,41 @@ oaks, rocks, and shrubs are fine too.
 
 ## Standing orders / preferences
 
+- **Start every session by reading the docs and the code, before anything else.**
+  Read every Markdown file in the repo (`README.md`, `MASTER_PLAN.md`,
+  `OPUS_PLAYBOOK.md`, `SAMPLES.md`, `EVALS.md`, `PHOTOREALISM_PLAN.md`, this file)
+  and `formcast.py` in full before doing any work. They carry the standing plan,
+  the experiment history, and the current champions — don't act on a stale summary
+  or a half-remembered state.
 - **Do not commit or push until explicitly told to.** Standing order for the whole
   session, not just one change. Wait for the user to say "commit".
+- **Refresh the docs and code comments before every commit.** Re-read the docs and
+  inline comments touched by the change (README, the planning/journal docs above,
+  any stale comments in `formcast.py`) and bring them up to date in the *same*
+  commit. Documentation tracks the code; never let it drift, never fix it "later".
 - **Do not create new branches unless explicitly asked.** Work directly on `main`
   by default.
 - **Keep `README.md` up to date.** Any change to behavior, flags, commands, or the
   workflow must be reflected in the README as part of the same change. The README is
   the front door; never let it drift from the code.
+- **This file (`CLAUDE.md`) is the single source of truth for standing orders.**
+  Other docs (`MASTER_PLAN.md`, `OPUS_PLAYBOOK.md`, `PHOTOREALISM_PLAN.md`,
+  `README.md`) should *refer* here for the standing behavioral constraints, not
+  re-derive or duplicate them. Where a working doc restates a rule for the reader's
+  convenience, it cites CLAUDE.md as the source so the rules can't drift.
+- **Document what worked AND what didn't — always.** The docs exist to keep us from
+  repeating mistakes, and this is working well: keep it up. `EVALS.md` holds
+  per-experiment verdicts plus a `Rejected ideas` section; `SAMPLES.md` carries a
+  per-item "what worked / what didn't / what got worse" for each version; the plans
+  keep honest field notes. Every experiment records its outcome — wins, regressions,
+  and dead ends — before moving on.
+- **Favor getting it right over saving tokens.** Joel works on a subscription;
+  long, token-heavy sessions are fine when the work genuinely needs them. Don't
+  navel-gaze on cost, and don't stop early to conserve budget — but don't spin
+  without making progress either. Dollar amounts and per-phase money budgets have
+  been removed from the docs on purpose; they were a distraction from getting it
+  right. The only real pacing constraint is the account **session cap** (see
+  Logging & diagnosis / the playbook).
 - **Prefer `ct`** (the in-memory code-intelligence daemon) over the built-in
   Read / Grep / Glob tools for indexed files: `ct_read`, `ct_grep`, `ct_outline`,
   `ct_lookup`, `ct_search`, etc. Built-in tools are fine for unindexed / newly

@@ -14,9 +14,9 @@ results) is `EVALS.md`; the plans are `MASTER_PLAN.md` and `PHOTOREALISM_PLAN.md
 
 | Version | What it does | One-line verdict |
 |---|---|---|
-| **v1.1** (baseline) | Original pipeline: nature-only taxonomy, no craft guidance, blind texture crops, Z-up exports, no feedback loop. | Gets the *idea* of the object; quality is a coin flip and textures often ruined by background contamination. |
+| **v1.1** (baseline) | Original pipeline: nature-only taxonomy, no craft guidance, blind texture crops, Z-up exports, no feedback loop. | Gets the *idea* of the object; quality is unreliable run to run and textures often ruined by background contamination. |
 | **v1.2** | Any-object taxonomy ("classify by what the whole object IS, not its material"); per-class craft packs (foliage envelopes + clumped cards, lathe/instancing furniture, noise-displaced rocks, capsule-union creatures); +Y-up/meters/budget contract; anti-contamination texture rules (sample inside the silhouette, median of patches, no roll+blur tiling); audit gates; **pass 3.5 refine loop** — formcast renders the model's own output and shows it back for critique + revision before baking. | **Suite result: 4 of 5 promoted at 3/3 each** (maple, table, boulder, tulip); chair rejected 2/3-against — correct structure, but lost v1.1's turned-wood mass. v1.2.1 fix below. |
-| **v1.2.1** | v1.2 plus: turned parts get real lathe-profile curvature (bulbs/coves read off the photo) and photo-measured member thickness; sculpted-not-flat seats; "character features from the description are what make it read as its kind" (class credibility per Joel's direction); wood-grain/wear so painted wood stops reading as plastic; smooth shading on curved organic surfaces; floating-fragment audit gate. | Chair re-match + first teapot/Tiffany-lamp bakes in progress. |
+| **v1.2.1** | v1.2 plus: turned parts get real lathe-profile curvature (bulbs/coves read off the photo) and photo-measured member thickness; sculpted-not-flat seats; "character features from the description are what make it read as its kind" (class credibility per Joel's direction); wood-grain/wear so painted wood stops reading as plastic; smooth shading on curved organic surfaces; floating-fragment audit gate. | Chair re-match **lost to v1.1 (Joel's call — simplicity/essence wins)**; its lessons (simplest-geometry-that-reads; dark materials still need value variation) feed the next prompt rev. Teapot / lamp / bush first bakes still pending. |
 
 ---
 
@@ -81,7 +81,7 @@ need sculpted displacement rather than flat extrusion, and member thicknesses
 should be measured off the photo. Plus a no-floating-parts gate (one stray
 sliver near the right arm).
 
-**v1.2.1 re-match (baked; judge pending — session cap):**
+**v1.2.1 re-match — DECIDED: v1.1 wins (Joel's verdict, 2026-06-10):**
 
 | v1.1 (champion) | v1.2.1 |
 |---|---|
@@ -89,12 +89,23 @@ sliver near the right arm).
 
 All angles: [v1.2.1 contact sheet](eval/v121-chair-contact.png)
 
-The turned-wood mass arrived: real baluster bulbs and coves on the legs,
-substantial members, curled comb ears. New problem: it renders nearly
-**silhouette-black** — the script sampled the photo's near-black paint
-faithfully but skipped the requested grain/wear value variation, so internal
-detail vanishes. The judge verdict (and, if it loses, a
-"study-the-champion-script" step) is the first item in `OPUS_PLAYBOOK.md`.
+The turned-wood mass arrived (real baluster bulbs and coves on the legs,
+substantial members, curled comb ears) — but it renders nearly
+**silhouette-black** (the script sampled the photo's near-black paint faithfully
+but skipped grain/wear value variation, so internal detail vanishes). **Joel ruled
+v1.1 the best and the chair is closed:** *"I still think the 1.1 chair is the
+best… what I like about 1.1 is that it's simple and it captures the geometric
+essence,"* whereas v1.2.1 "is trying to capture geometry details like the swirls
+on the top." So **v1.1 stays champion** — and the takeaway isn't "fix v1.2.1," it's
+the general principle now in the plans: **simplicity / geometric essence beats
+detail-chasing.** (Two real bugs the chair still feeds back into the pipeline:
+very dark materials need albedo value variation, and turned/sculpted parts must
+not be over-detailed at the cost of a clean silhouette — OPUS_PLAYBOOK §3.)
+
+**What worked:** v1.1's simple turned masses and legible silhouette. **What
+didn't:** v1.2 went thin and wiry; v1.2.1 over-corrected into heavy, dark, and
+over-detailed. The lesson is to aim for the *simplest* geometry that still reads
+unmistakably as the kind.
 
 ---
 
@@ -186,13 +197,28 @@ Museum studio shot (CC0). Deliberately hard: a mosaic stained-glass shade over
 a sculpted bronze base — stresses multi-material texturing well beyond wood and
 leaves.
 
+## Shrub / bush — foliage (new benchmark item, Joel-supplied)
+
+| Reference photo | first bake |
+|---|---|
+| <img src="eval/photos/bush.jpg" width="270"> | *(not baked yet — queued in OPUS_PLAYBOOK)* |
+
+A single, well-isolated rounded multi-stem deciduous shrub with a clear
+silhouette, on a soft-bokeh woodland background — added 2026-06-10 to give the
+foliage pack a non-tree case. Quirk worth watching: it's an AI "compose" image
+split **green-summer on the left, orange-autumn on the right** down the middle, a
+deliberate stress on palette sampling. The bar (class credibility): a believable
+rounded multi-stem shrub; the two-tone is a texture curiosity, not a target.
+*License unknown (third-party site) — pending clearance before any public push.*
+
 ## What happens next
 
 Continuation is handed to Opus: **`OPUS_PLAYBOOK.md`** is the step-by-step
-script (exact commands, decision rules, budget discipline). Current champions
-to beat: v1.1 chair; v1.2 maple/table/boulder/tulip. Top of the queue: chair
-judge verdict, teapot + lamp first bakes, then the tree-depth iteration
-(COLOR_0 sun/shade, crown gaps, leaf-silhouette atlas).
+script (exact commands, decision rules, pacing). Current champions to beat: v1.1
+chair (now **confirmed by Joel** — closed); v1.2 maple/table/boulder/tulip. Top
+of the queue: teapot + lamp + bush first bakes, encoding the chair's
+simplicity/essence + dark-material lessons into the prompts, then the tree-depth
+iteration (COLOR_0 sun/shade, crown gaps, leaf-silhouette atlas).
 
 ## What we've learned so far (running)
 
