@@ -405,3 +405,26 @@ constraint is the account **session cap**.
 - Verdict: KEEP — azalea is its own first champion. Renders:
   `eval/v122-azalea-{front,contact}.png`.
 - Next: tiffany-lamp.
+
+## 2026-06-10 P-122.4 — tiffany-lamp: timeout then session cap (still chasing it)
+- Stretch case (mosaic stained-glass shade + cast-bronze base). Attempts:
+  1. Default cli-timeout (1200 s): pass 1 classified correctly; **pass 2 timed
+     out** authoring the mosaic — no GLB. NOT a session cap (which dies in ~1 s);
+     a real authoring timeout.
+  2. `--cli-timeout 2700`: **pass 2 cleared** (9,056 faces; surfaces
+     [shade, base, arms, foot, fittings]) and built the shade as a FACETED DOME
+     surface rather than hundreds of tile solids (the v1.2.2 simplicity line
+     helping). Then **pass 3 was killed by the session cap** (429, "session
+     limit · resets 11:20am") — nothing persisted (the generator saves after
+     pass 3).
+  3. After the cap reset: re-baking at `--cli-timeout 2700` (in progress).
+- Findings: (a) heavy geometry needs `--cli-timeout` raised for the lamp class;
+  (b) the simplicity principle is already steering the mosaic toward a faceted
+  surface instead of tile solids — worth reinforcing in the prompt (mosaic shade
+  = faceted surface + mosaic TEXTURE, never per-tile geometry).
+- Verdict: lamp NOT yet a champion (acceptable — the documented stretch case).
+  **7 of 8 benchmark items have champions.**
+- Hand-off: the 7 champions + reference photos are staged at
+  `~/Public/formcast-champions/` (with README) for Joel to view as interactive
+  3D; lamp added when it lands.
+- Next: lamp re-bake result; reinforce the mosaic-as-texture lesson if it helps.

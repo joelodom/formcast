@@ -205,13 +205,20 @@ proportions 4, surface 4, color/material 4, artifacts 4.
 
 ## Tiffany peacock lamp — lamp (stretch case)
 
-| Reference photo | v1.2.1 |
+| Reference photo | v1.2.2 |
 |---|---|
-| <img src="eval/photos/tiffany-lamp.jpg" width="270"> | *(first bake killed by session cap — Opus playbook step 2)* |
+| <img src="eval/photos/tiffany-lamp.jpg" width="270"> | *(in progress — not yet a champion)* |
 
 Museum studio shot (CC0). Deliberately hard: a mosaic stained-glass shade over
 a sculpted bronze base — stresses multi-material texturing well beyond wood and
-leaves.
+leaves. The stretch case has been a two-step fight, both honest findings:
+1. **First attempt timed out in pass 2** — authoring the mosaic geometry
+   (hundreds of glass tiles) blew past the default 1200 s CLI limit.
+2. **Retry (`--cli-timeout 2700`) cleared pass 2** — and notably built the shade
+   as a *faceted dome surface* (9k faces), not hundreds of tile solids (the
+   simplicity principle helping) — but then **pass 3 hit the session cap**.
+Re-baking now that the cap reset; result to follow. Lesson queued: a mosaic shade
+is better as a faceted surface + mosaic TEXTURE than as tile geometry.
 
 ## Azalea — shrub (new benchmark item)
 
