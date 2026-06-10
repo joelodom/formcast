@@ -130,3 +130,23 @@ Per MASTER_PLAN §9. Entry template:
 - Verdict: KEEP — promotes v1.2 for furniture; the craft→render→judge loop is
   validated end-to-end exactly as MASTER_PLAN designed.
 - Next: chair/boulder/tulip/maple as the suite completes; journal in SAMPLES.md.
+
+## 2026-06-09 P-v12.2 — v1.2 chair: first judge REJECTION (kept honestly)
+- What ran: `bake chair.jpg --count 2 --refine 1` (~14 min; refine round fixed
+  seat shape per its own critique); judge 3 trials. Suite items 3-5 (boulder/
+  tulip/maple) died in ~1 s each — the user's session usage limit hit mid-suite
+  ("Claude CLI exited 1 after 1.2s"); re-launched after reset.
+- Tier-2 (my eyes): scored v1.2 ahead (cleaner comb-back structure, correct
+  class/materials channel).
+- Tier-3 judge: **v1.1 preferred 2/3.** Reasons: v1.1 has turned-wood MASS —
+  bulbous ball feet, chunky balusters, sculpted seat; v1.2 reads thin/wiry,
+  flat-disc seat. The one v1.2 win cited the comb-back silhouette + scrolled
+  ears.
+- Verdict: REJECT promotion for chair (protocol ≥2/3). **The judge overruled my
+  own eyes — anti-self-deception machinery working as designed.** Learning:
+  "crisp edges / no smoothing" guidance under-serves *turned* furniture; v1.2.1
+  manmade pack must add: pronounced turned-profile curvature (bulbs/coves/rings
+  from the photo), sculpted-not-flat seats (displaced slab), member thickness
+  measured off the photo, and a no-floating-parts rule (+audit).
+- Next: apply v1.2.1 manmade craft edits AFTER the retry suite finishes (prompt
+  edits are unsafe mid-suite), re-bake chair only, re-judge.

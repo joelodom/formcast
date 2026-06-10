@@ -54,9 +54,9 @@ is smudgy; leg joins slightly chunky.
 
 | Reference photo | v1.1 baseline | v1.2 |
 |---|---|---|
-| <img src="eval/photos/chair.jpg" width="270"> | <img src="eval/baselines/v11-chair-front.png" width="270"> | *(baking…)* |
+| <img src="eval/photos/chair.jpg" width="270"> | <img src="eval/baselines/v11-chair-front.png" width="270"> | <img src="eval/v12-chair-front.png" width="270"> |
 
-All angles: [v1.1 contact sheet](eval/baselines/v11-chair-contact.png)
+All angles: [v1.1 contact sheet](eval/baselines/v11-chair-contact.png) · [v1.2 contact sheet](eval/v12-chair-contact.png)
 
 **v1.1:** the model *recognized* a `windsor-armchair` but the taxonomy forced
 `class='log'` — and the texturing treated it like bark: a structurally
@@ -64,6 +64,21 @@ respectable spindle-back chair (genuinely surprising, the rich prose description
 did the heavy lifting) dressed in charred near-black wood. Lesson: the
 description drives geometry more than the class word; the class drives the
 *materials* — both must be right.
+
+**v1.2:** correctly `furniture` / `comb-back-windsor-armchair`, with semantic
+parts `[arms, crest, legs, seat, spindles, stretchers]` and a much cleaner
+comb-back silhouette (curled crest ears, bent arm rail). **But the judge
+preferred v1.1 by 2/3** — and reading its reasons, fairly: v1.1's chair has
+*turned-wood mass* (bulbous ball feet, chunky baluster legs, a sculpted seat)
+while v1.2 reads thin and wiry with a flat-disc seat. Honest scoreboard:
+correct structure ≠ convincing wood. This is also the first time the
+independent judge overruled my own eyes — exactly what it's for.
+
+**Queued fix (v1.2.1 craft pack):** turned parts need *pronounced profile
+curvature* (bulbs, coves, rings matched to the photo), seats and carved parts
+need sculpted displacement rather than flat extrusion, and member thicknesses
+should be measured off the photo. Plus a no-floating-parts gate (one stray
+sliver near the right arm).
 
 ---
 
