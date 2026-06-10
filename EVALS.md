@@ -385,3 +385,23 @@ constraint is the account **session cap**.
 - Verdict: KEEP — teapot becomes its own first champion (no prior bake to beat).
   No judge needed (no champion). Renders: `eval/v122-teapot-{front,contact}.png`.
 - Next: azalea, then tiffany-lamp.
+
+## 2026-06-10 P-122.3 — azalea first bake (v1.2.2); foliage-on-shrub
+- What ran: `bake azalea.jpg --out-dir outputs/dev/v122-azalea --count 2
+  --refine 1` (1120 s; refine round 1 adopted a revision — it diagnosed the first
+  attempt as reading like "a little tree" with an exposed woody trunk + hollow
+  underside, and rebuilt it as a solid mound). Class `shrub`
+  (`mounded-azalea-shrub`), 8,060 faces, surfaces [branches, flowers, foliage].
+- Tier-2 (my eyes): silhouette 4, proportions 4, surface 3, color/material 4,
+  artifacts 4. Reads unmistakably as a flowering mounded shrub.
+- What worked: the refine→mound rescue is a clean win for the simplicity/essence
+  principle (a legible dome silhouette beats a fussy tree); correct magenta-bloom
+  + green palette; solid base, no floaters.
+- What didn't (queued, points straight at step 5): flowers concentrate as a pink
+  "cap" with green only at the base, not distributed over the whole mound with
+  foliage interspersed (the photo); bloom texture is a blotchy painted blanket,
+  not distinct azalea flowers — the foliage pack needs the leaf/flower-silhouette
+  ATLAS (step 5c) and more sun/shade depth (5a). Strong evidence to prioritize 5c.
+- Verdict: KEEP — azalea is its own first champion. Renders:
+  `eval/v122-azalea-{front,contact}.png`.
+- Next: tiffany-lamp.

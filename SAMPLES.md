@@ -215,17 +215,31 @@ leaves.
 
 ## Azalea — shrub (new benchmark item)
 
-| Reference photo | first bake |
+| Reference photo | v1.2.2 (first bake) |
 |---|---|
-| <img src="eval/photos/azalea.jpg" width="270"> | *(not baked yet — queued in OPUS_PLAYBOOK)* |
+| <img src="eval/photos/azalea.jpg" width="270"> | <img src="eval/v122-azalea-front.png" width="270"> |
+
+All angles: [v1.2.2 contact sheet](eval/v122-azalea-contact.png)
 
 A single, isolated, cleanly **rounded mounded azalea** in full magenta bloom on a
 lawn, with a green hedge/treeline backdrop — added 2026-06-10 to give the foliage
 pack a non-tree shrub with a strong whole-plant silhouette. CC0 (WordPress Photo
-Directory). The bar (class credibility): a believable rounded flowering shrub —
-the dome silhouette and bloom-over-foliage texture are what sell it. Palette
-sampling should target the magenta flowers + green leaves, not the backdrop hedge.
-*(Swapped in for an earlier AI-generated bush whose license was unknown.)*
+Directory). *(Swapped in for an earlier AI-generated bush whose license was
+unknown.)*
+
+**v1.2.2 (first champion):** reads unmistakably as a flowering mounded shrub — a
+clean rounded dome in azalea magenta with green foliage, sitting solidly on the
+ground. The refine round earned its keep: it caught the first attempt reading as
+"a little *tree*" (exposed woody trunk, hollow underside) and rebuilt it as a
+solid mound — a nice demonstration of simplicity/essence (the dome silhouette is
+what sells it). **What worked:** clean mounded silhouette, correct magenta-bloom +
+green palette, legible at a glance. **What didn't:** the flowers read as a pink
+"cap" with green only at the base, rather than blooms distributed over the whole
+mound with foliage interspersed (as in the photo); and the bloom is a blotchy
+painted blanket, not distinct azalea flowers — the foliage pack still needs the
+leaf/flower-silhouette atlas (OPUS_PLAYBOOK step 5c) and more sun/shade depth.
+Tier-2 (my eyes): silhouette 4, proportions 4, surface 3, color/material 4,
+artifacts 4.
 
 ## What happens next
 

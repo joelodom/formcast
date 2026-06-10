@@ -74,7 +74,7 @@ keep it updated), `EVALS.md` (append-only evidence log + Decisions),
 | chair | **v1.1** (`outputs/dev/base-chair/`) — confirmed by Joel 2026-06-10 | `eval/baselines/v11-chair-contact.png` |
 | teapot | v1.2.2 (`outputs/dev/v122-teapot/`) — first champion, 2026-06-10 | `eval/v122-teapot-contact.png` |
 | tiffany-lamp | — (never baked) | — |
-| azalea | — (photo acquired 2026-06-10, CC0 → `benchmarks/cache/picked/azalea.jpg`; first bake pending) | — |
+| azalea | v1.2.2 (`outputs/dev/v122-azalea/`) — first champion, 2026-06-10 | `eval/v122-azalea-contact.png` |
 
 ## 1. Chair verdict — DECIDED by Joel: v1.1 stays champion
 
