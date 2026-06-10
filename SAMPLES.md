@@ -81,6 +81,21 @@ need sculpted displacement rather than flat extrusion, and member thicknesses
 should be measured off the photo. Plus a no-floating-parts gate (one stray
 sliver near the right arm).
 
+**v1.2.1 re-match (baked; judge pending — session cap):**
+
+| v1.1 (champion) | v1.2.1 |
+|---|---|
+| <img src="eval/baselines/v11-chair-front.png" width="270"> | <img src="eval/v121-chair-front.png" width="270"> |
+
+All angles: [v1.2.1 contact sheet](eval/v121-chair-contact.png)
+
+The turned-wood mass arrived: real baluster bulbs and coves on the legs,
+substantial members, curled comb ears. New problem: it renders nearly
+**silhouette-black** — the script sampled the photo's near-black paint
+faithfully but skipped the requested grain/wear value variation, so internal
+detail vanishes. The judge verdict (and, if it loses, a
+"study-the-champion-script" step) is the first item in `OPUS_PLAYBOOK.md`.
+
 ---
 
 ## Moeraki boulder — rock, in-situ photo (hard background)
@@ -154,22 +169,30 @@ isn't there yet — the COLOR_0 machinery exists but is underused).
 
 ## Teapot — vessel (new benchmark item)
 
-| Reference photo | v1.2 |
+| Reference photo | v1.2.1 |
 |---|---|
-| <img src="eval/photos/teapot.jpg" width="270"> | *(queued)* |
+| <img src="eval/photos/teapot.jpg" width="270"> | *(first bake killed by session cap — Opus playbook step 2)* |
 
 A classic revolve-body + handle + spout vessel on a bokeh background — added to
 cover the vessel class with a genuinely simple object (CC0, StockSnap).
 
 ## Tiffany peacock lamp — lamp (stretch case)
 
-| Reference photo | v1.2 |
+| Reference photo | v1.2.1 |
 |---|---|
-| <img src="eval/photos/tiffany-lamp.jpg" width="270"> | *(queued)* |
+| <img src="eval/photos/tiffany-lamp.jpg" width="270"> | *(first bake killed by session cap — Opus playbook step 2)* |
 
 Museum studio shot (CC0). Deliberately hard: a mosaic stained-glass shade over
 a sculpted bronze base — stresses multi-material texturing well beyond wood and
 leaves.
+
+## What happens next
+
+Continuation is handed to Opus: **`OPUS_PLAYBOOK.md`** is the step-by-step
+script (exact commands, decision rules, budget discipline). Current champions
+to beat: v1.1 chair; v1.2 maple/table/boulder/tulip. Top of the queue: chair
+judge verdict, teapot + lamp first bakes, then the tree-depth iteration
+(COLOR_0 sun/shade, crown gaps, leaf-silhouette atlas).
 
 ## What we've learned so far (running)
 

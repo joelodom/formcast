@@ -1,5 +1,16 @@
 # Formcast Master Plan — General Photo → 3D
 
+> **STATUS 2026-06-10 — experiments underway; START HERE for continuation:
+> [`OPUS_PLAYBOOK.md`](OPUS_PLAYBOOK.md)** (step-by-step commands, decision
+> rules, budget/cap protocol, champion registry). Results so far: Phase 0 done
+> (headless renderer + A/B judge, validated); 7-item CC0 benchmark; v1.2
+> pipeline (any-object taxonomy, craft packs, audit gates, render→critique→
+> revise refine loop) **promoted over baseline on 4/5 items at 3/3 judge
+> trials each** (maple/table/boulder/tulip); chair iteration in progress
+> (v1.2.1 baked, verdict pending). Visual journal: [`SAMPLES.md`](SAMPLES.md);
+> evidence log: [`EVALS.md`](EVALS.md). Quality bar per Joel: **class
+> credibility over photo fidelity** (§1.2 callout).
+
 **Mission:** evolve formcast from "natural-object archetype baker" into a general,
 dependable capability: **give it one photograph of a thing — a tree, a dog, a table,
 a boulder, a mug — and get back a good 3D model (.glb) of that thing or that kind of

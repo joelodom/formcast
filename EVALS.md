@@ -221,3 +221,21 @@ Per MASTER_PLAN §9. Entry template:
   total ≈$23 for: 5-class benchmark, eval infrastructure, two pipeline
   versions, and 5 A/B verdicts.
 - Next: v1.2.1 (applied) → chair re-match + teapot + tiffany-lamp first bakes.
+
+## 2026-06-10 P-v121.1 — v1.2.1 chair baked; session cap ends the Fable shift
+- What ran: `bake chair.jpg --count 2 --refine 1` (956 s; refine adopted a
+  revision). Teapot + lamp bakes and the chair judge were killed by the
+  session cap (`Claude CLI exited 1 after ~1s`).
+- Chair v1.2.1 render (`eval/v121-chair-contact.png`): **turned-wood mass
+  arrived** — baluster bulbs/coves on the legs, substantial members, curled
+  comb ears, surfaces `[arms, comb, legs, seat, spindles, stretchers]`,
+  11,760 tris. New defect: near-silhouette BLACK — the script honored the
+  photo's dark paint but skipped the requested grain/wear value variation, so
+  internal detail vanishes in renders. Judge verdict pending (cap).
+- Verdict: handoff. **Continuation is scripted in `OPUS_PLAYBOOK.md`** (step 1
+  = chair judge; step 2 = teapot/lamp; step 3 = chair material fix via
+  study-the-champion + free-loop prototyping; step 4 = `formcast eval` runner;
+  step 5 = tree depth iteration; research detours with URLs; budget + cap
+  protocol; champion registry).
+- Champion registry at handoff: maple/table/boulder/tulip = v1.2;
+  chair = v1.1; teapot/lamp = none yet.
