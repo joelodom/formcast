@@ -43,7 +43,7 @@ it**, for honesty; the full visual journal with what-worked / what-didn't is in
 | Maple tree | <img src="eval/photos/maple.jpg" width="150"> | <img src="eval/v12-maple-front.png" width="150"> | v1.2 |
 | Console table | <img src="eval/photos/table.jpg" width="150"> | <img src="eval/v122-table-front.png" width="150"> | v1.2.2 |
 | Moeraki boulder | <img src="eval/photos/boulder.jpg" width="150"> | <img src="eval/v12-boulder-front.png" width="150"> | v1.2 |
-| White tulip | <img src="eval/photos/tulip.jpg" width="150"> | <img src="eval/v12-tulip-front.png" width="150"> | v1.2 |
+| White tulip | <img src="eval/photos/tulip.jpg" width="150"> | <img src="eval/v122-tulip-front.png" width="150"> | v1.2.2 |
 | Windsor chair | <img src="eval/photos/chair.jpg" width="150"> | <img src="eval/baselines/v11-chair-front.png" width="150"> | v1.1 |
 | Ceramic teapot | <img src="eval/photos/teapot.jpg" width="150"> | <img src="eval/v122-teapot-front.png" width="150"> | v1.2.2 |
 | Azalea shrub | <img src="eval/photos/azalea.jpg" width="150"> | <img src="eval/v122-azalea-front.png" width="150"> | v1.2.2 |

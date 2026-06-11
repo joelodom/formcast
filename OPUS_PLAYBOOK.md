@@ -92,7 +92,7 @@ example.** Priorities, highest-leverage first:
 | maple | v1.2 (`outputs/dev/v12-maple/`) | `eval/v12-maple-contact.png` |
 | table | **v1.2.2** (`outputs/dev/v122-table/`) — promoted 2026-06-10 (blue+gilt+cameo) | `eval/v122-table-contact.png` |
 | boulder | v1.2 (`outputs/dev/v12-boulder/`) | `eval/v12-boulder-contact.png` |
-| tulip | v1.2 (`outputs/dev/v12-tulip/`) | `eval/v12-tulip-contact.png` |
+| tulip | **v1.2.2** (`outputs/dev/v122-tulip/`) — promoted 2026-06-10 (onion-dome pinch fixed) | `eval/v122-tulip-contact.png` |
 | chair | **v1.1** (`outputs/dev/base-chair/`) — confirmed by Joel 2026-06-10 | `eval/baselines/v11-chair-contact.png` |
 | teapot | v1.2.2 (`outputs/dev/v122-teapot/`) — first champion, 2026-06-10 | `eval/v122-teapot-contact.png` |
 | tiffany-lamp | v1.2.2 (`outputs/dev/v122-lamp/`) — first champion, 2026-06-10 (3rd attempt; needs `--cli-timeout 2700`) | `eval/v122-lamp-contact.png` |

@@ -190,6 +190,23 @@ facets (needs smooth shading / more segments), and the white is flat where the
 photo has cream-to-grey-green gradients. These all go on the texture/shading
 iteration list.
 
+**v1.2.2: PROMOTED to champion.**
+
+| v1.2 | v1.2.2 (new champion) |
+|---|---|
+| <img src="eval/v12-tulip-front.png" width="270"> | <img src="eval/v122-tulip-front.png" width="270"> |
+
+All angles: [v1.2.2 contact sheet](eval/v122-tulip-contact.png)
+
+The v1.2.2 re-bake fixes v1.2's documented **onion-dome pinch**: it's a clean,
+softer-shouldered closed bud that matches the photo's cup better, on a clean green
+stem with two blade leaves. The simplicity/essence line pays off here — a tidier,
+more legible tulip silhouette. **Better:** silhouette (no pinch), leaves added.
+**Still off:** petals keep some low-poly facets, and the white is flat (the
+cream-to-grey-green gradient still wants the foliage/petal texture work). Promotion
+is a Tier-2 eye call on a documented-weakness fix; judge deferred (running batch).
+Tier-2: silhouette 5, proportions 4, surface 3, color 3, artifacts 4.
+
 ---
 
 ## Maple tree — the original flagship
