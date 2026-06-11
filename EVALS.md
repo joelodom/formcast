@@ -593,3 +593,32 @@ constraint is the account **session cap**.
 - Verdict: KEEP — table & tulip champions stay v1.2.2, now judge-confirmed.
   Release checklist §1.1–1.5 all done; only §6 (final doc pass) and §7 (tag
   `v1.0.0`) remain, both gated on Joel's review + push.
+
+## 2026-06-11 P-rel.3 — Remove human-subject guardrail; release §6 doc pass
+- Joel's call: remove the `class == "human"` refusal (only that check + its
+  error), change **no prompt text**, then do the §6 doc pass fixing obvious
+  errors (the now-stale "people refused" claims) and verify the version string.
+- Rationale (his decision; I laid out the likeness/consent tradeoff in chat and
+  he chose to proceed): formcast makes an *archetype*, not a faithful
+  reconstruction, and `human` has no craft pack — it falls back to the `generic`
+  builder, so output is a crude generic humanoid, not a likeness/deepfake.
+- What changed:
+  - `formcast.py`: deleted the 5-line guard in `cmd_bake` (was the ONLY human
+    enforcement; no other human-specific logic exists). PASS1's class list still
+    includes `human` (prompt text — untouched), so people are still *classified*,
+    just no longer refused. `CLASS_TO_CRAFT` has no `human` key → `_craft_block`
+    returns `generic` (noted for a future craft-pack decision).
+  - Stale-claim cleanup (obvious errors): dropped "people refused" from the
+    README, TECHNICAL §2.1, the `formcast.py` header docstring, and the
+    PROMPT_VERSION changelog comment ("humans refused" → removed).
+  - Version logging: `__version__ = "1.0.0"` confirmed correct; added it to the
+    universal `setup_logging` start line so EVERY invocation logs
+    `=== formcast 1.0.0 start: <argv> ===` (not just `bake`).
+- Tests ($0): `py_compile`; `grep human formcast.py` shows only the PASS1 class
+  list + the unrelated cap-code comments (guard/docstring/changelog gone);
+  `--version` → `formcast 1.0.0`; `inspect --verbose` prints the versioned
+  startup banner. No bake/model calls (a real human-photo bake is untested by
+  design — first such bake will exercise the `generic` fallback).
+- Verdict: KEEP — guardrail removed, docs consistent, version correct + logged.
+  Checklist §1–§6 all done; only §7 (tag `v1.0.0`) remains, gated on Joel's
+  review + push (tag recipe now in ROADMAP §1).

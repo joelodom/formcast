@@ -12,7 +12,7 @@
 #            OUT. The models are NOT a faithful reconstruction of the
 #            photographed object -- they are convincing, seed-varied instances
 #            "of the same kind of thing", in that style. This is the main event.
-#            (Photos of people are politely refused.) (See PIPELINE below.)
+#            (See PIPELINE below.)
 #
 #   inspect  Decode and print the custom metadata bundle we embed inside each
 #            .glb (the prose description, the original source image, the exact
@@ -238,7 +238,8 @@ def setup_logging(verbose: bool, log_file: str | os.PathLike) -> None:
     file_handler.setFormatter(formatter)
     log.addHandler(file_handler)
 
-    log.debug("=== formcast start: %s ===", " ".join(sys.argv[1:]) or "(no args)")
+    log.debug("=== formcast %s start: %s ===", __version__,
+              " ".join(sys.argv[1:]) or "(no args)")
 
 
 # -----------------------------------------------------------------------------
@@ -278,7 +279,7 @@ SCHEMA_DOC = (
 )
 
 PROMPT_VERSION = "formcast/1.2.2-cli"  # bump when the prompts/engine below change materially
-# 1.2: any-object taxonomy (incl. man-made; humans refused), +Y-up/meters/budget
+# 1.2: any-object taxonomy (incl. man-made), +Y-up/meters/budget
 #      contract, per-class craft packs, anti-contamination texture rules, audit
 #      gates, and the pass-3.5 visual refine loop. 1.0/1.1 bakes were Z-up.
 # 1.2.1: class-credibility emphasis (character features of the KIND); turned-
@@ -1640,12 +1641,6 @@ def cmd_bake(args: argparse.Namespace) -> int:
         t0 = time.monotonic()
         spec = pass1_classify(llm)
         log.debug("pass 1 (classify) finished in %.1fs", time.monotonic() - t0)
-
-        if str(spec.get("class", "")).lower() == "human":
-            raise FormcastError(
-                "The photo's primary subject appears to be a person. formcast "
-                "does not generate human models -- try an object, plant, animal, "
-                "or piece of furniture instead.")
 
         t0 = time.monotonic()
         geometry_code = pass2_geometry(llm, spec, workdir, args.max_repairs)

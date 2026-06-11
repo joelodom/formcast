@@ -211,8 +211,7 @@ machine, your photo never uploaded anywhere except to the model API).
   matter: the *description* drives the geometry; the *class* selects the
   craft and materials. (We learned this when a chair misclassified as `log`
   still came out chair-shaped from its rich description — but textured like
-  bark.) Classification is by what the whole object *is*, never its material;
-  photos of people are refused.
+  bark.) Classification is by what the whole object *is*, never its material.
 - **Pass 2 — geometry authoring.** Claude writes the generator module
   (`build_mesh(seed, density)`), guided by a per-class **craft pack** — a
   block of distilled know-how injected into the prompt: foliage envelopes and

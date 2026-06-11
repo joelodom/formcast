@@ -154,8 +154,7 @@ formcast handles single objects with clear structure and surfaces — natural
 things (trees, shrubs, flowers, boulders, logs) and man-made ones (chairs,
 tables, vases, lamps). Each class gets tailored modeling guidance under the
 hood (foliage envelopes with leaf-card clumps; lathe-and-instance construction
-for furniture; noise-displaced hulls for rocks). Photos of people are politely
-refused. Two knobs worth knowing:
+for furniture; noise-displaced hulls for rocks). Two knobs worth knowing:
 
 ```bash
 # Let the model SEE and revise its own work N times before baking (pass 3.5;

@@ -56,9 +56,30 @@ commit.
    2/2.3/2.7/3.7/2.7. No disagreement to flag. Boulder needed no judge (Joel
    decided it directly). Logged in EVALS (P-rel.2); raw JSON + a readable
    summary dropped in `/Users/claude/Public/` for Joel's UI review.
-6. **Final doc pass** (the CLAUDE.md pre-commit rule): README gallery current,
-   SAMPLES sections match champions, this checklist updated.
-7. **Tag** `v1.0.0` after Joel reviews and pushes.
+6. ✅ **DONE — Final doc pass** (the CLAUDE.md pre-commit rule). README gallery
+   current (9 champions, versioned; table/tulip judge-confirmed); SAMPLES
+   sections match champions; this checklist updated. Also (Joel's call) the
+   `class == "human"` guardrail was removed and every now-stale "people
+   refused" claim was dropped from the README, TECHNICAL, the `formcast.py`
+   header docstring, and the PROMPT_VERSION comment — no prompt text changed
+   (the `human` class stays in the PASS1 list for classification). Verified the
+   version string (`__version__ = "1.0.0"`) and that it is logged on every
+   start (`=== formcast 1.0.0 start: … ===`).
+7. **Tag** `v1.0.0` after Joel reviews and pushes (see "How to tag" below).
+
+### How to tag the release (step 7)
+
+Everything else is done. To cut 1.0.0 once you're happy:
+
+```bash
+git push                      # push main (commits from this session)
+git tag -a v1.0.0 -m "formcast 1.0.0"
+git push origin v1.0.0        # push the tag
+```
+
+Notes: `__version__` is already `1.0.0`, so the tag matches the code. I won't
+push or tag without you (standing order). If you'd rather I create the annotated
+tag locally for you to push, just say so.
 
 ## 2. Low-hanging fruit (post-1.0 quick wins, roughly in order of value/effort)
 
