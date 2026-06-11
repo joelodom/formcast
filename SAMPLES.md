@@ -354,7 +354,7 @@ green palette, legible at a glance. **What didn't:** the flowers read as a pink
 "cap" with green only at the base, rather than blooms distributed over the whole
 mound with foliage interspersed (as in the photo); and the bloom is a blotchy
 painted blanket, not distinct azalea flowers — the foliage pack still needs the
-leaf/flower-silhouette atlas (ROADMAP §3.1) and more sun/shade depth.
+leaf/flower-silhouette atlas (ROADMAP §2.1) and more sun/shade depth.
 Tier-2 (my eyes): silhouette 4, proportions 4, surface 3, color/material 4,
 artifacts 4.
 

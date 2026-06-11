@@ -1,8 +1,10 @@
 # formcast Roadmap
 
-Everything future-facing lives here: the 1.0 release checklist, quick wins, the
-remaining research/experiment program, and working directions for Opus. The
-visual record of results is [`SAMPLES.md`](SAMPLES.md); the technical
+Everything future-facing lives here: quick wins, the remaining
+research/experiment program, and working directions for Opus. (formcast
+**1.0.0** shipped 2026-06-11, tag `v1.0.0` — the release checklist that used to
+open this file is done and has been removed.) The visual record of results is
+[`SAMPLES.md`](SAMPLES.md); the technical
 explanation of the system is [`TECHNICAL.md`](TECHNICAL.md); the append-only
 experiment log is [`EVALS.md`](EVALS.md); standing orders are in `CLAUDE.md`.
 
@@ -10,78 +12,7 @@ experiment log is [`EVALS.md`](EVALS.md); standing orders are in `CLAUDE.md`.
 > `OPUS_PLAYBOOK.md`, `PHOTOREALISM_PLAN.md`). Their still-open items were
 > folded in below; their full texts remain in git history.
 
-## 1. Release 1.0 checklist
-
-Do these in order; each is small. Items marked **(code)** change `formcast.py`
-and need a quick smoke test (`bake` one cheap item, or run the free loop) before
-commit.
-
-1. ✅ **DONE — (code) Add a project version.** `__version__ = "1.0.0"` near the
-   top of `formcast.py`, a `--version` flag on the top-level parser, and print
-   it in the `bake` startup log line. Note: `PROMPT_VERSION` (`formcast/1.2.2-cli`)
-   is a *different* number — it versions the prompt engine and is embedded in
-   each GLB's provenance. Leave it as is; bump it only when prompts change.
-   (Any future prefix is safe for up-axis detection, which only treats
-   `formcast/1.0*`/`1.1*` as Z-up.)
-   *Landed:* `formcast --version` → `formcast 1.0.0`; every bake logs
-   `formcast 1.0.0 (prompts formcast/1.2.2-cli) starting bake of …` at INFO.
-   `PROMPT_VERSION` left untouched.
-2. ✅ **DONE — (code) Detect the session cap and fail clearly.** When the
-   `claude` CLI dies, its JSON stdout carries `"api_error_status": 429` and a
-   human message like `"You've hit your session limit · resets 4:20pm"`. Before
-   this it surfaced as a generic `Claude CLI exited 1 after ~1s`. Now
-   `_session_cap_hint()` sniffs both stdout and stderr (before the returncode
-   branch, so it wins however the cap manifests) and `ClaudeCLI.ask()` raises
-   `FormcastError("Claude session limit reached (resets 4:20pm); re-run this
-   bake after the reset…")`. *Landed:* triggers on the limit phrase **or** the
-   `api_error_status` 429 field; extracts the `resets …` clause when present;
-   unit-tested (incl. no false positive on a script containing a literal `429`)
-   plus a hermetic fake-CLI end-to-end (clean message, exit 1, no traceback).
-3. ✅ **DONE — (code) Raise the per-call timeout default.** `CLI_TIMEOUT_S` was
-   1200, too low for the Tiffany lamp (needed `--cli-timeout 2700` to author its
-   geometry). Raised the default to **2700**; the `--cli-timeout` flag still
-   overrides. *Landed:* `bake --help` now shows `(default: 2700)`; the lamp no
-   longer needs the explicit flag.
-4. ✅ **DONE — (code) Pin dependency floors in `requirements.txt`.** The
-   authoring prompts hard-assume numpy 2.x (`np.ptp`), Pillow ≥ 10
-   (`Image.LANCZOS`), trimesh 4.x. Pinned `numpy>=2`, `Pillow>=10`,
-   `trimesh[easy]>=4` (with a comment recording why) so a stale environment
-   can't silently mismatch the prompts. *Landed:* file parses and all floors
-   are satisfied by the current env (numpy 2.4.6, Pillow 12.0.0, trimesh
-   4.12.2). `pygltflib`/`pyglet<2` left as-is.
-5. ✅ **DONE — Confirm the eye-call promotions with the judge.** 3-trial
-   `formcast judge` for table and tulip v1.2.2 vs their old v1.2 champions.
-   *Result (2026-06-11):* **both confirmed 3/3 for v1.2.2** — table rubric ≈
-   4/4/3.3/3.7/4 vs v1.2 ≈ 2.7/3/1.7/2/4; tulip ≈ 4/4/3/3.3/4 vs v1.2 ≈
-   2/2.3/2.7/3.7/2.7. No disagreement to flag. Boulder needed no judge (Joel
-   decided it directly). Logged in EVALS (P-rel.2); raw JSON + a readable
-   summary dropped in `/Users/claude/Public/` for Joel's UI review.
-6. ✅ **DONE — Final doc pass** (the CLAUDE.md pre-commit rule). README gallery
-   current (9 champions, versioned; table/tulip judge-confirmed); SAMPLES
-   sections match champions; this checklist updated. Also (Joel's call) the
-   `class == "human"` guardrail was removed and every now-stale "people
-   refused" claim was dropped from the README, TECHNICAL, the `formcast.py`
-   header docstring, and the PROMPT_VERSION comment — no prompt text changed
-   (the `human` class stays in the PASS1 list for classification). Verified the
-   version string (`__version__ = "1.0.0"`) and that it is logged on every
-   start (`=== formcast 1.0.0 start: … ===`).
-7. **Tag** `v1.0.0` after Joel reviews and pushes (see "How to tag" below).
-
-### How to tag the release (step 7)
-
-Everything else is done. To cut 1.0.0 once you're happy:
-
-```bash
-git push                      # push main (commits from this session)
-git tag -a v1.0.0 -m "formcast 1.0.0"
-git push origin v1.0.0        # push the tag
-```
-
-Notes: `__version__` is already `1.0.0`, so the tag matches the code. I won't
-push or tag without you (standing order). If you'd rather I create the annotated
-tag locally for you to push, just say so.
-
-## 2. Low-hanging fruit (post-1.0 quick wins, roughly in order of value/effort)
+## 1. Low-hanging fruit (post-1.0 quick wins, roughly in order of value/effort)
 
 - **Three banked prompt lines** (one sentence each in `formcast.py`; bump
   `PROMPT_VERSION` to `formcast/1.2.3-cli`; verify on the next routine bake —
@@ -108,7 +39,7 @@ tag locally for you to push, just say so.
   small script to copy the `-00.glb` + reference into
   `~/Public/formcast-champions/` instead of the manual `cp` ritual.
 
-## 3. The experiment program (the real quality levers, in priority order)
+## 2. The experiment program (the real quality levers, in priority order)
 
 1. **Foliage/flower silhouette atlas + sun-shade depth — the #1 lever.**
    The evidence: in the v1.2.2 re-bake sweep, *every* class moved except
@@ -161,7 +92,7 @@ tag locally for you to push, just say so.
   [SAM 3D](https://ai.meta.com/blog/sam-3d/). Verify licenses against primary
   sources before any integration.
 
-## 4. Bigger bets (propose to Joel before starting)
+## 3. Bigger bets (propose to Joel before starting)
 
 - **Reconstruction backend for faithful organics.** If procedural hits a
   ceiling on animals/faithful mode: a local image→mesh model (Hunyuan3D-2.1
@@ -181,7 +112,7 @@ tag locally for you to push, just say so.
   does informally today. Worth it when faithful mode becomes a real goal;
   archetype mode (Joel's stated priority) doesn't need it.
 
-## 5. Directions for Opus (how to work this roadmap)
+## 4. Directions for Opus (how to work this roadmap)
 
 Read `CLAUDE.md` first — it is the single source of truth for standing orders
 (read all docs + `formcast.py` at session start; refresh docs before every
@@ -203,9 +134,9 @@ Then:
 - **Document every experiment** (EVALS entry + SAMPLES image row with honest
   what-worked / what-didn't), commit per item so session caps can't lose work.
 - **Ops gotchas:** a `claude` call dying in ~1 s with exit 1 is the session
-  cap — stop, note it, re-run after the reset (until checklist item 2 makes
-  this a clear error). Heavy geometry (mosaic-like) may need `--cli-timeout
-  2700`. Never run two bakes at once.
+  cap — formcast now detects this and raises a clear "session limit reached
+  (resets …)" error; re-run after the reset. Heavy geometry (mosaic-like) is
+  covered by the 2700 s default `--cli-timeout`. Never run two bakes at once.
 - **Don't chase the chair.** v1.1 stays its champion (Joel's call; the v1.2.2
   checkpoint failed for an understood reason — matte paint). The matte-dark
   prompt line is the only follow-up, and it's validated on *other* objects.

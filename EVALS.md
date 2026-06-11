@@ -622,3 +622,20 @@ constraint is the account **session cap**.
 - Verdict: KEEP — guardrail removed, docs consistent, version correct + logged.
   Checklist §1–§6 all done; only §7 (tag `v1.0.0`) remains, gated on Joel's
   review + push (tag recipe now in ROADMAP §1).
+
+## 2026-06-11 P-rel.4 — v1.0.0 shipped: tag + GitHub release; roadmap checklist retired
+- Joel reviewed + pushed `main`, then had me tag and publish the release.
+- Tag: annotated `v1.0.0` → commit `004d34c`, pushed to origin
+  (`refs/tags/v1.0.0`). `__version__` matches the tag.
+- GitHub release: created the formal release page via the REST API (gh CLI not
+  installed; authenticated with git's stored credential, curl for TLS since the
+  framework-Python had no CA bundle) — published (not draft):
+  https://github.com/joelodom/formcast/releases/tag/v1.0.0
+- ROADMAP: removed the now-complete "Release 1.0 checklist" (old §1) and
+  renumbered the survivors (low-hanging fruit → §1, experiment program → §2,
+  bigger bets → §3, Opus directions → §4); updated the intro, the SAMPLES
+  atlas reference (§3.1 → §2.1), and the §4 ops-gotcha note (session-cap
+  detection now exists; 2700 s is the default timeout). EVALS history left
+  as-is (append-only; older §-references are point-in-time).
+- Verdict: DONE — formcast 1.0.0 is released. The roadmap is now purely
+  forward-looking (post-1.0 work).
