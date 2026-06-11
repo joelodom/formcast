@@ -151,6 +151,23 @@ septarian crack ridges* that make Moeraki boulders distinctive (v1.1's geometry
 had them); the surface also reads a bit concrete-like up close. Candidate fix
 rides along with the texture-fidelity iteration.
 
+**v1.2.2 re-bake (champion stays v1.2):**
+
+| v1.2 (champion) | v1.2.2 |
+|---|---|
+| <img src="eval/v12-boulder-front.png" width="270"> | <img src="eval/v122-boulder-front.png" width="270"> |
+
+All angles: [v1.2.2 contact sheet](eval/v122-boulder-contact.png)
+
+The v1.2.2 re-bake came out with stronger dark vertical banding — at first glance
+more "cracked/characterful," but it's actually a **spherical-UV pole-pinch**: flat
+albedo streaks converging at the apex, not relief, and not the septarian *network*
+the real Moeraki shows. That reads more artificial than v1.2's clean mottling, so
+it's a slight *regression* on surface/artifacts. **Champion stays v1.2.** The real
+fix for boulder character is geometric crack ridges + a cellular (not streaky)
+texture — still queued. Tier-2: silhouette 4, proportions 4, surface 3, color 3,
+artifacts 2 (pole-pinch).
+
 ---
 
 ## White tulip — flower, in-situ photo (bokeh background)
