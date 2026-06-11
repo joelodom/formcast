@@ -20,11 +20,10 @@ oaks, rocks, and shrubs are fine too.
 ## Standing orders / preferences
 
 - **Start every session by reading the docs and the code, before anything else.**
-  Read every Markdown file in the repo (`README.md`, `MASTER_PLAN.md`,
-  `OPUS_PLAYBOOK.md`, `SAMPLES.md`, `EVALS.md`, `PHOTOREALISM_PLAN.md`, this file)
-  and `formcast.py` in full before doing any work. They carry the standing plan,
-  the experiment history, and the current champions — don't act on a stale summary
-  or a half-remembered state.
+  Read every Markdown file in the repo (`README.md`, `SAMPLES.md`, `ROADMAP.md`,
+  `TECHNICAL.md`, `EVALS.md`, this file) and `formcast.py` in full before doing
+  any work. They carry the standing plan, the experiment history, and the current
+  champions — don't act on a stale summary or a half-remembered state.
 - **Do not commit or push until explicitly told to.** Standing order for the whole
   session, not just one change. Wait for the user to say "commit".
 - **Refresh the docs and code comments before every commit.** Re-read the docs and
@@ -37,10 +36,10 @@ oaks, rocks, and shrubs are fine too.
   workflow must be reflected in the README as part of the same change. The README is
   the front door; never let it drift from the code.
 - **This file (`CLAUDE.md`) is the single source of truth for standing orders.**
-  Other docs (`MASTER_PLAN.md`, `OPUS_PLAYBOOK.md`, `PHOTOREALISM_PLAN.md`,
-  `README.md`) should *refer* here for the standing behavioral constraints, not
-  re-derive or duplicate them. Where a working doc restates a rule for the reader's
-  convenience, it cites CLAUDE.md as the source so the rules can't drift.
+  Other docs (`README.md`, `SAMPLES.md`, `ROADMAP.md`, `TECHNICAL.md`) should
+  *refer* here for the standing behavioral constraints, not re-derive or duplicate
+  them. Where a working doc restates a rule for the reader's convenience, it cites
+  CLAUDE.md as the source so the rules can't drift.
 - **Document what worked AND what didn't — always.** The docs exist to keep us from
   repeating mistakes, and this is working well: keep it up. `EVALS.md` holds
   per-experiment verdicts plus a `Rejected ideas` section; `SAMPLES.md` carries a

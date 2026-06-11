@@ -51,9 +51,20 @@ it**, for honesty; the full visual journal with what-worked / what-didn't is in
 | Pencil | <img src="eval/photos/pencil.jpg" width="150"> | <img src="eval/v122-pencil-front.png" width="150"> | v1.2.2 |
 
 *(Reference photos are CC0/PD or repo samples; full provenance in
-[`benchmarks/manifest.json`](benchmarks/manifest.json). The pipeline is mid-stream
-— the four `v1.2` items above are being re-baked under `v1.2.2`, and this table
-tracks whichever version is the current champion.)*
+[`benchmarks/manifest.json`](benchmarks/manifest.json). Each row shows the
+current champion for that item — the "Made by" column is the pipeline version
+that generated it, kept honest as the pipeline improves.)*
+
+---
+
+## Documentation
+
+| Doc | What's in it |
+|---|---|
+| [`SAMPLES.md`](SAMPLES.md) | The visual journal: every benchmark item with its reference photo, the champion model, version history, and honest what-worked / what-didn't notes. |
+| [`TECHNICAL.md`](TECHNICAL.md) | How formcast works — including a from-scratch introduction to 3D modeling (meshes, UVs, materials, glTF) for readers with a computing background. |
+| [`ROADMAP.md`](ROADMAP.md) | Everything future-facing: the 1.0 release checklist, quick wins, and the remaining research/experiment program. |
+| [`EVALS.md`](EVALS.md) | The append-only experiment log: hypotheses, results, costs, verdicts, and decisions. |
 
 ---
 

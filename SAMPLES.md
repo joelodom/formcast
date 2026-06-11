@@ -8,7 +8,8 @@ view is shown inline — click the contact-sheet links for all four).
 
 All reference photos are CC0/public-domain or repo samples; full provenance in
 `benchmarks/manifest.json`. The technical evidence log (commands, costs, gate
-results) is `EVALS.md`; the plans are `MASTER_PLAN.md` and `PHOTOREALISM_PLAN.md`.
+results) is `EVALS.md`; future work lives in `ROADMAP.md`; how it all works
+(including a 3D-modeling primer) is `TECHNICAL.md`.
 
 ## The versions so far
 
@@ -121,7 +122,8 @@ on the top." So **v1.1 stays champion** — and the takeaway isn't "fix v1.2.1,"
 the general principle now in the plans: **simplicity / geometric essence beats
 detail-chasing.** (Two real bugs the chair still feeds back into the pipeline:
 very dark materials need albedo value variation, and turned/sculpted parts must
-not be over-detailed at the cost of a clean silhouette — OPUS_PLAYBOOK §3.)
+not be over-detailed at the cost of a clean silhouette — both now encoded in
+the v1.2.2 prompts.)
 
 **What worked:** v1.1's simple turned masses and legible silhouette. **What
 didn't:** v1.2 went thin and wiry; v1.2.1 over-corrected into heavy, dark, and
@@ -347,7 +349,7 @@ green palette, legible at a glance. **What didn't:** the flowers read as a pink
 "cap" with green only at the base, rather than blooms distributed over the whole
 mound with foliage interspersed (as in the photo); and the bloom is a blotchy
 painted blanket, not distinct azalea flowers — the foliage pack still needs the
-leaf/flower-silhouette atlas (OPUS_PLAYBOOK step 5c) and more sun/shade depth.
+leaf/flower-silhouette atlas (ROADMAP §3.1) and more sun/shade depth.
 Tier-2 (my eyes): silhouette 4, proportions 4, surface 3, color/material 4,
 artifacts 4.
 
@@ -377,19 +379,13 @@ proportions 5, surface 4, color/material 4, artifacts 5.
 
 ## What happens next
 
-Continuation is handed to Opus: **`OPUS_PLAYBOOK.md`** is the step-by-step
-script (exact commands, decision rules, pacing). State: the chair lessons are
-encoded as **v1.2.2** prompt principles, and the full benchmark (9 items) now has
-champions. The v1.2.2 re-bake sweep is **complete**: table/tulip/boulder promoted
-to v1.2.2; maple held at v1.2 (foliage wash); the chair checkpoint came back
-**negative** (still silhouette-black on matte paint — v1.1 stays champion, the
-outlier is accepted). **Direction (Joel): optimize the GENERAL case, don't
-over-index on any one example.** Highest-leverage next lever: the **leaf/flower
-silhouette atlas + sun-shade depth** (the maple was the only sweep item v1.2.2
-didn't move; helps every plant). Then: a one-command `formcast eval` regression
-net; two banked prompt findings (matte-dark surfaces need a *synthesized* value
-range; mosaic = texture not geometry); and broaden class coverage (a creature/dog,
-the one untested major class).
+All future work — the 1.0 release checklist, quick wins, and the remaining
+experiment program — lives in **[`ROADMAP.md`](ROADMAP.md)**. State at handoff:
+the full 9-item benchmark has champions (7 of 9 at v1.2.2; maple held at v1.2,
+chair stays v1.1 as the accepted outlier), and the highest-leverage next lever
+is the **leaf/flower silhouette atlas + sun-shade depth** — the one thing the
+v1.2.2 sweep didn't move. New samples will keep appearing in this file, one
+section per benchmark item, newest result at the bottom of each section.
 
 ## What we've learned so far (running)
 

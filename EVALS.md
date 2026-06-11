@@ -1,6 +1,8 @@
 # formcast evidence log (append-only; newest at bottom)
 
-Per MASTER_PLAN §9. Entry template:
+References to `MASTER_PLAN` / `OPUS_PLAYBOOK` / `PHOTOREALISM_PLAN` in older
+entries point at retired planning docs (folded into `ROADMAP.md` 2026-06-11;
+full texts in git history). Entry template:
 
 ```markdown
 ## <date> <phase>.<step> — <short title>
@@ -515,3 +517,24 @@ constraint is the account **session cap**.
   Also: Joel's human review overruled my eye on the boulder — keep inviting it on
   close calls.
 - Next: chair checkpoint result → sweep complete.
+
+## 2026-06-11 P-docs.3 — Fable: doc restructure + low-hanging-fruit pass (pre-1.0)
+- Joel merged `experiments` into `main`, switched the session to Fable, and asked
+  for a release-1.0 prep: simplify the docs into README (overview + gallery),
+  SAMPLES (visual journal), ROADMAP (all future work + Opus directions), and
+  TECHNICAL (how it works + a 3D-modeling primer for a computing reader).
+- Done: created `ROADMAP.md` (release checklist, quick wins, experiment program
+  with sweep-updated priorities, research links, Opus directions, champion
+  registry) and `TECHNICAL.md`; retired `MASTER_PLAN.md`, `OPUS_PLAYBOOK.md`,
+  `PHOTOREALISM_PLAN.md` (open items folded into ROADMAP; full texts in git
+  history); README got a Documentation section + gallery footnote fix; SAMPLES
+  and CLAUDE.md repointed.
+- Low-hanging fruit found (now ROADMAP §1–2): no session-cap detection (generic
+  "exited 1" — cost 4 dead bakes this week); CLI_TIMEOUT_S=1200 too low (lamp
+  needed 2700); requirements.txt unpinned while prompts hard-assume numpy 2.x /
+  Pillow≥10 / trimesh 4.x; no __version__/--version; DEFAULT_COUNT=10 vs every
+  real run using --count 2; three banked prompt lines (matte-dark value lift,
+  repeating-detail-as-texture, no pole-pinch UVs) not yet folded in; judge
+  confirmations of the table/tulip eye-call promotions still pending.
+- Verdict: docs are now four human-readable files + this log; handoff to Opus is
+  ROADMAP §1 (release checklist) then §2–3.
