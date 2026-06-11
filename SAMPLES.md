@@ -177,6 +177,22 @@ glimpses through gaps), the bare trunk is shorter than the photo's ~21%, and
 the foliage reads slightly flat-cartoon up close (the full 4:1 sun/shade depth
 isn't there yet — the COLOR_0 machinery exists but is underused).
 
+**v1.2.2 re-bake (champion stays v1.2):**
+
+| v1.2 (champion) | v1.2.2 |
+|---|---|
+| <img src="eval/v12-maple-front.png" width="270"> | <img src="eval/v122-maple-front.png" width="270"> |
+
+All angles: [v1.2.2 contact sheet](eval/v122-maple-contact.png)
+
+Re-baked under v1.2.2 so the maple shows a current-version render. It's a near
+tie: the v1.2.2 crown is full and round but a touch smoother with a couple of
+stray edge wisps, while v1.2 keeps marginally more crown *depth* (lumpier
+leaf-clumps, a hint of branch structure). The v1.2.2 changes (simplicity /
+dark-material) don't target foliage, so no improvement is expected — and there
+isn't one. **Champion stays v1.2.** This is direct evidence that the real lever
+for plants is the leaf-silhouette atlas (not yet built), not prompt tweaks.
+
 ---
 
 ## Teapot — vessel (new benchmark item)
