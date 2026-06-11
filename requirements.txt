@@ -4,8 +4,12 @@
 #   npm install -g @anthropic-ai/claude-code   # then run `claude` once to sign in
 # See the README for details.
 
-trimesh[easy]      # mesh construction, GLB import/export, and the 3D viewer
+# Version floors match what the authoring prompts and the generated bake scripts
+# hard-assume: numpy 2.x (np.ptp), Pillow >= 10 (Image.LANCZOS, no ANTIALIAS),
+# trimesh 4.x (working boolean union via manifold3d). Pin them so a stale
+# environment can't silently mismatch the prompts.
+trimesh[easy]>=4   # mesh construction, GLB import/export, and the 3D viewer
 pygltflib          # read/write the metadata bundle embedded in each .glb
-Pillow             # image I/O for texture-swatch extraction (used by bake scripts)
+Pillow>=10         # image I/O for texture-swatch extraction (used by bake scripts)
 pyglet<2           # OpenGL backend for `view` (trimesh needs pyglet 1.x)
-numpy              # geometry math in the generated build_mesh() code
+numpy>=2           # geometry math in the generated build_mesh() code

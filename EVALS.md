@@ -538,3 +538,35 @@ constraint is the account **session cap**.
   confirmations of the table/tulip eye-call promotions still pending.
 - Verdict: docs are now four human-readable files + this log; handoff to Opus is
   ROADMAP §1 (release checklist) then §2–3.
+
+## 2026-06-11 P-rel.1 — Release-1.0 checklist steps 1–4 (code prep; no model bakes)
+- Goal (Joel): execute ROADMAP §1 steps 1–4 while away, commit at milestones,
+  then report what's needed for step 5 (the judge eye-calls). Code/ops prep only;
+  no `bake`/`judge` model calls (so zero session-cap exposure during the work).
+- What changed (`formcast.py`, `requirements.txt`; PROMPT_VERSION left untouched):
+  1. **`__version__ = "1.0.0"`** (PEP 396), kept distinct from `PROMPT_VERSION`;
+     `--version` flag on the top-level parser; bake startup INFO line prints both
+     (`formcast 1.0.0 (prompts formcast/1.2.2-cli) starting bake of …`).
+  2. **Session-cap detection:** `_session_cap_hint()` + a check in
+     `ClaudeCLI.ask()` (both stdout+stderr, BEFORE the returncode branch) raise
+     `FormcastError("Claude session limit reached (resets …); re-run …")` on an
+     HTTP-429 cap, instead of the generic "exited 1" dump.
+  3. **`CLI_TIMEOUT_S` 1200 → 2700** (lamp needed it); `--cli-timeout` still wins.
+  4. **requirements pins:** `numpy>=2`, `Pillow>=10`, `trimesh[easy]>=4` (with a
+     why-comment); `pygltflib`/`pyglet<2` unchanged.
+- Tests (all $0, no model calls): `py_compile`; `--version` → `formcast 1.0.0`
+  and listed in `--help`; `bake --help` shows `--cli-timeout (default: 2700)`;
+  8 `_session_cap_hint` unit cases incl. **no false positive on a literal 429 in
+  a generated script**; a hermetic fake-CLI end-to-end — cap fake → clean
+  "session limit reached (resets 4:20pm)" + exit 1 + **no traceback**, generic
+  fake → unchanged "exited 1" path; requirements parse + all floors satisfied by
+  the env (numpy 2.4.6 / Pillow 12.0.0 / trimesh 4.12.2).
+- Commits (incremental, per Joel; on `main`, not pushed): `edace40` (#1),
+  `de2a556` (#2+#3), and #4 carries this entry.
+- Verdict: KEEP — steps 1–4 done and verified; ROADMAP §1.1–1.4 marked done.
+- Next (needs Joel): step 5 = 3-trial `formcast judge` for table + tulip v1.2.2
+  vs their old v1.2 champions (all six artifacts present in `eval/`). It makes
+  ~6 sonnet `claude` calls, so it wants a go-ahead + a session window clear of
+  his own usage so the cap doesn't interrupt; results then logged here and the
+  champions confirmed (or reverted). Steps 6–7 (final doc pass, tag `v1.0.0`)
+  follow Joel's review/push.

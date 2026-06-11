@@ -42,10 +42,13 @@ commit.
    geometry). Raised the default to **2700**; the `--cli-timeout` flag still
    overrides. *Landed:* `bake --help` now shows `(default: 2700)`; the lamp no
    longer needs the explicit flag.
-4. **(code) Pin dependency floors in `requirements.txt`.** The authoring
-   prompts hard-assume numpy 2.x (`np.ptp`), Pillow ≥ 10 (`Image.LANCZOS`),
-   trimesh 4.x. Pin `numpy>=2`, `Pillow>=10`, `trimesh[easy]>=4` so a stale
-   environment can't silently mismatch the prompts.
+4. ✅ **DONE — (code) Pin dependency floors in `requirements.txt`.** The
+   authoring prompts hard-assume numpy 2.x (`np.ptp`), Pillow ≥ 10
+   (`Image.LANCZOS`), trimesh 4.x. Pinned `numpy>=2`, `Pillow>=10`,
+   `trimesh[easy]>=4` (with a comment recording why) so a stale environment
+   can't silently mismatch the prompts. *Landed:* file parses and all floors
+   are satisfied by the current env (numpy 2.4.6, Pillow 12.0.0, trimesh
+   4.12.2). `pygltflib`/`pyglet<2` left as-is.
 5. **Confirm the eye-call promotions with the judge** (optional but cheap,
    ~$0 marginal on subscription): 3-trial `formcast judge` for table and tulip
    v1.2.2 vs their old v1.2 champions. Boulder needs no judge — Joel decided it
