@@ -498,7 +498,14 @@ constraint is the account **session cap**.
     call. (Pole-pinch still worth fixing later: cellular texture + crack ridges.)
   - **tulip** — **PROMOTED to v1.2.2.** Fixes the documented onion-dome pinch
     (softer-shouldered closed bud matching the photo) + adds leaves. 5/4/3/3/4.
-  - **chair** — re-baking (the de-outlier checkpoint vs the lucky v1.1).
+  - **chair** — **STAYS v1.1.** The de-outlier checkpoint came back NEGATIVE:
+    v1.2.2 has better structure (full comb-back, writing-tablet arm, splayed legs
+    + stretcher) but renders silhouette-BLACK again (the v1.2.1 failure). The
+    dark-material rule (which fixed the black teapot) didn't take — the chair's
+    paint is matte/low-sheen, so there's little sheen to *sample*. Finding: the
+    rule must LIFT/synthesize a value range for matte near-black surfaces, not
+    just sample one. Queued, NOT chased (general-case direction). The chair
+    outlier persists — now for an understood reason.
 - **PATTERN (general-case learning):** a blanket prompt rev helps UNEVENLY.
   Three of four re-bakes promoted to v1.2.2 — material (table), silhouette
   (tulip), and rock character (boulder, on Joel's call) — while only **foliage

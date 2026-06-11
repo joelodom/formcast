@@ -128,6 +128,28 @@ didn't:** v1.2 went thin and wiry; v1.2.1 over-corrected into heavy, dark, and
 over-detailed. The lesson is to aim for the *simplest* geometry that still reads
 unmistakably as the kind.
 
+**v1.2.2 checkpoint (champion stays v1.1):**
+
+| v1.1 (champion) | v1.2.2 |
+|---|---|
+| <img src="eval/baselines/v11-chair-front.png" width="270"> | <img src="eval/v122-chair-front.png" width="270"> |
+
+All angles: [v1.2.2 contact sheet](eval/v122-chair-contact.png)
+
+The de-outlier test: v1.2.2 carries *both* lessons the chair taught (simplicity/
+essence + the dark-material rule), so this asked whether the general pipeline has
+finally caught the lucky v1.1. **Answer: not yet.** The structure is good — a full
+comb-back with writing-tablet arm, saddle seat, splayed turned legs with a
+stretcher — but it renders **almost solid silhouette-black again**, the same
+failure as v1.2.1. The dark-material rule (which fixed the black *teapot*) didn't
+take here: the chair photo's paint is **matte / low-sheen** near-black, so there's
+little highlight to sample — and the rule *samples* sheen rather than *synthesizing*
+a value range when none exists. So **v1.1 stays champion** and the chair remains
+the accepted outlier. The specific, general finding: the dark-material rule needs
+visible sheen; for *matte* near-black surfaces it must LIFT/synthesize an albedo
+value range, not just sample one. Queued as a candidate refinement — **not chased
+here** (per the general-case direction).
+
 ---
 
 ## Moeraki boulder — rock, in-situ photo (hard background)
@@ -357,17 +379,17 @@ proportions 5, surface 4, color/material 4, artifacts 5.
 
 Continuation is handed to Opus: **`OPUS_PLAYBOOK.md`** is the step-by-step
 script (exact commands, decision rules, pacing). State: the chair lessons are
-encoded as **v1.2.2** prompt principles; teapot + azalea baked as v1.2.2 first
-champions (the dark-material rule validated on the black teapot); the
-tiffany-lamp (stretch case) cleared on the 3rd attempt (mosaic as faceted surface
-+ texture) — all 8 items now have champions; the pencil (Joel-supplied) bakes
-next. **Direction (Joel): optimize the GENERAL case, don't over-index on any one
-example** — the v1.1 chair is a lucky old-pipeline outlier we accept rather than
-chase. Highest-leverage next lever: the **leaf/flower silhouette atlas + sun-shade
-depth** (helps every plant; the #1 recurring weakness across maple + azalea).
-Then: a one-command `formcast eval` regression net, broaden class coverage (a
-creature/dog), and a single v1.2.2 checkpoint re-bake of the chair to de-outlier
-the benchmark.
+encoded as **v1.2.2** prompt principles, and the full benchmark (9 items) now has
+champions. The v1.2.2 re-bake sweep is **complete**: table/tulip/boulder promoted
+to v1.2.2; maple held at v1.2 (foliage wash); the chair checkpoint came back
+**negative** (still silhouette-black on matte paint — v1.1 stays champion, the
+outlier is accepted). **Direction (Joel): optimize the GENERAL case, don't
+over-index on any one example.** Highest-leverage next lever: the **leaf/flower
+silhouette atlas + sun-shade depth** (the maple was the only sweep item v1.2.2
+didn't move; helps every plant). Then: a one-command `formcast eval` regression
+net; two banked prompt findings (matte-dark surfaces need a *synthesized* value
+range; mosaic = texture not geometry); and broaden class coverage (a creature/dog,
+the one untested major class).
 
 ## What we've learned so far (running)
 
@@ -405,10 +427,14 @@ the benchmark.
   special-case the pipeline to reproduce that luck. The job is a program that
   works well across *all* objects; lessons from one example only matter insofar
   as they generalize.
-- **Dark materials need a value range, not an average tone (v1.2.2).** Encoding
-  "very dark finishes must sample sheen/highlight zones and keep a visible value
-  range" fixed the v1.2.1 chair's black-silhouette failure — validated first try
-  on the black teapot, which renders as form, not a blob.
+- **Dark materials: sampling sheen works for glossy, fails for matte (v1.2.2).**
+  The dark-material rule ("very dark finishes must sample sheen/highlight zones
+  and keep a value range") validated first try on the black *teapot* — a glaze
+  with visible sheen — which renders as form, not a blob. But the matte near-black
+  *chair* still rendered silhouette-black under the same rule: with almost no
+  sheen in the photo to sample, sampling isn't enough. Next lever for that class:
+  for matte dark surfaces, LIFT/synthesize an albedo value range rather than only
+  sampling one.
 - **The refine loop fixes the right things when the gap is structural.** It
   caught the teapot's too-squat body and rebuilt the azalea from "a little tree"
   into a clean mound — both pushes toward the simplest legible silhouette.

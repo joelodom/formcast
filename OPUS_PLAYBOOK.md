@@ -11,27 +11,32 @@ keep it updated), `EVALS.md` (append-only evidence log + Decisions),
 `MASTER_PLAN.md` §1–2 + §5.4b (architecture, operating manual, field notes).
 `PHOTOREALISM_PLAN.md` is the deep spec for tree quality (step 5 uses it).
 
-### Current state & forward priorities (2026-06-10)
+### Current state & forward priorities (2026-06-11)
 
 The pipeline is at **`formcast/1.2.2-cli`** — v1.2 (taxonomy + craft packs +
 audit gates + refine loop) plus the chair lessons encoded as GENERAL principles
 (*simplicity/essence over detail-chasing*; *dark-material value range*).
-Champions: maple/table/boulder/tulip = v1.2; teapot/azalea = v1.2.2;
-**chair = v1.1** (a lucky old-pipeline outlier Joel accepts — do not special-case
-the prompts to beat it); tiffany-lamp = the documented stretch case (still
-baking); pencil (Joel-supplied, `inputs/pencil.png`) = queued first bake.
+**Champions (9 items):** teapot, azalea, lamp, pencil, **table, tulip, boulder**
+= v1.2.2; maple = v1.2 (foliage wash); **chair = v1.1** (the v1.2.2 checkpoint
+came back negative — still silhouette-black on its matte paint — so the lucky
+outlier is accepted; do NOT special-case the prompts to beat it). The v1.2.2
+re-bake sweep is complete.
 
 **Joel's direction: optimize the GENERAL case, don't over-index on any one
 example.** Priorities, highest-leverage first:
 1. **Foliage/flower silhouette atlas + sun-shade depth** (step 5) — the #1
-   recurring weakness, visible in BOTH maple and azalea; helps every plant.
+   recurring weakness; the maple was the ONLY sweep item v1.2.2 didn't move, and
+   the azalea bloom is a blotchy blanket. Helps every plant. Clearly the top lever.
 2. **`formcast eval`** one-command regression net (step 4) — makes general-case
    prompt changes safe to land.
-3. **Broaden class coverage** — bake the pencil; acquire a CC0 creature (dog);
-   one v1.2.2 **checkpoint** re-bake of the chair to de-outlier the benchmark
-   (then move on regardless of result — do NOT iterate the chair).
-4. Reinforce in the prompt: heavy repeating surface detail (mosaic/leaded glass)
-   = faceted surface + TEXTURE, never per-tile geometry (the lamp lesson).
+3. Two banked prompt findings to fold in when convenient (do NOT chase the chair):
+   - matte / low-sheen DARK surfaces need a LIFTED/synthesized albedo value range,
+     not just sampled sheen (the rule fixed the glossy teapot but not the matte
+     chair).
+   - heavy repeating surface detail (mosaic/leaded glass) = faceted surface +
+     TEXTURE, never per-tile geometry (the lamp lesson).
+4. **Broaden class coverage** — acquire a CC0 creature (dog), the one major class
+   untested under the modern pipeline.
 
 ## 0. Standing rules (apply to every step)
 
@@ -93,7 +98,7 @@ example.** Priorities, highest-leverage first:
 | table | **v1.2.2** (`outputs/dev/v122-table/`) — promoted 2026-06-10 (blue+gilt+cameo) | `eval/v122-table-contact.png` |
 | boulder | **v1.2.2** (`outputs/dev/v122-boulder/`) — promoted 2026-06-11 (Joel's call) | `eval/v122-boulder-contact.png` |
 | tulip | **v1.2.2** (`outputs/dev/v122-tulip/`) — promoted 2026-06-10 (onion-dome pinch fixed) | `eval/v122-tulip-contact.png` |
-| chair | **v1.1** (`outputs/dev/base-chair/`) — confirmed by Joel 2026-06-10 | `eval/baselines/v11-chair-contact.png` |
+| chair | **v1.1** (`outputs/dev/base-chair/`) — confirmed by Joel; v1.2.2 checkpoint NEGATIVE (still silhouette-black on matte paint) | `eval/baselines/v11-chair-contact.png` |
 | teapot | v1.2.2 (`outputs/dev/v122-teapot/`) — first champion, 2026-06-10 | `eval/v122-teapot-contact.png` |
 | tiffany-lamp | v1.2.2 (`outputs/dev/v122-lamp/`) — first champion, 2026-06-10 (3rd attempt; needs `--cli-timeout 2700`) | `eval/v122-lamp-contact.png` |
 | azalea | v1.2.2 (`outputs/dev/v122-azalea/`) — first champion, 2026-06-10 | `eval/v122-azalea-contact.png` |
