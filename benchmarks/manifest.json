@@ -1,0 +1,120 @@
+{
+  "version": 1,
+  "created": "2026-06-09",
+  "notes": "v1 benchmark set; cache/ is gitignored \u2014 re-fetch via url (+derivation) if missing.",
+  "items": [
+    {
+      "id": "maple-tree",
+      "class": "tree",
+      "fidelity": "archetype",
+      "difficulty": "easy (white-bg cutout)",
+      "file": "inputs/maple-tree.png",
+      "title": "bundled sample",
+      "license": "repo sample",
+      "source": "inputs/maple-tree.png",
+      "url": "",
+      "provider": "local"
+    },
+    {
+      "id": "tulip",
+      "class": "flower",
+      "fidelity": "archetype",
+      "difficulty": "medium (in-situ bokeh background)",
+      "file": "benchmarks/cache/picked/tulip.jpg",
+      "title": "Single white tulip against colorful background",
+      "license": "cc0",
+      "source": "https://www.flickr.com/photos/65798313@N06/7226299902",
+      "url": "https://live.staticflickr.com/5465/7226299902_c02db06d4f_b.jpg",
+      "provider": "flickr"
+    },
+    {
+      "id": "met-console-table",
+      "class": "furniture",
+      "fidelity": "faithful",
+      "difficulty": "easy bg, ornate object",
+      "file": "benchmarks/cache/picked/table.jpg",
+      "title": "Console late 18th century",
+      "license": "cc0",
+      "source": "https://www.flickr.com/photos/200781279@N05/53879404281",
+      "url": "https://live.staticflickr.com/65535/53879404281_268af63633_b.jpg",
+      "provider": "flickr"
+    },
+    {
+      "id": "windsor-chair",
+      "class": "furniture",
+      "fidelity": "faithful",
+      "difficulty": "easy (studio grey)",
+      "file": "benchmarks/cache/picked/chair.jpg",
+      "title": "Fan-Back Windsor Chair Artist unknown",
+      "license": "cc0",
+      "source": "https://www.rawpixel.com/image/8940003/fan-back-windsor-chair-artist-unknown",
+      "url": "https://images.rawpixel.com/editor_1024/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIyLTEyL2FpYzczNTM4LWltYWdlLmpwZw.jpg",
+      "provider": "rawpixel"
+    },
+    {
+      "id": "moeraki-boulder",
+      "class": "boulder",
+      "fidelity": "archetype",
+      "difficulty": "medium-hard (in-situ beach, derived crop)",
+      "file": "benchmarks/cache/picked/boulder.jpg",
+      "title": "Rock group on the beach.",
+      "license": "cc0",
+      "source": "https://www.flickr.com/photos/88123769@N02/9420750176",
+      "url": "https://live.staticflickr.com/5550/9420750176_c8a2f13dae_b.jpg",
+      "provider": "flickr",
+      "derivation": "crop box (20, 170, 430, 500) of source"
+    },
+    {
+      "id": "teapot",
+      "class": "vessel",
+      "fidelity": "archetype",
+      "difficulty": "medium (in-situ bokeh)",
+      "file": "benchmarks/cache/picked/teapot.jpg",
+      "title": "Ceramic Teapot",
+      "license": "cc0",
+      "source": "https://stocksnap.io/photo/ceramic-teapot-5811FEC469",
+      "url": "https://cdn.stocksnap.io/img-thumbs/960w/5811FEC469.jpg",
+      "provider": "stocksnap"
+    },
+    {
+      "id": "tiffany-lamp",
+      "class": "lamp",
+      "fidelity": "faithful",
+      "difficulty": "hard (mosaic glass shade; museum studio bg)",
+      "file": "benchmarks/cache/picked/tiffany-lamp.jpg",
+      "title": "Peacock Table Lamp c. 1902",
+      "license": "cc0",
+      "source": "https://www.flickr.com/photos/200781279@N05/53862485699",
+      "url": "https://live.staticflickr.com/65535/53862485699_b84063ceec.jpg",
+      "provider": "flickr"
+    },
+    {
+      "id": "azalea",
+      "class": "shrub",
+      "fidelity": "archetype",
+      "difficulty": "medium (in-situ; green hedge/treeline backdrop)",
+      "file": "benchmarks/cache/picked/azalea.jpg",
+      "title": "Round azalea bush in full pink bloom on a lawn",
+      "license": "cc0",
+      "source": "https://wordpress.org/photos/photo/985680f1d1/",
+      "url": "https://pd.w.org/2025/04/985680f1d192298b5.99537476-1536x2048.jpeg",
+      "provider": "wordpress-photo-directory",
+      "added": "2026-06-10 (Joel asked for a known-license azalea; swapped in for an earlier unknown-license bush)",
+      "note": "Single isolated rounded mounded azalea in full magenta bloom on a lawn, green hedge/treeline backdrop. Clean whole-plant dome silhouette — a textbook flowering-shrub archetype. Exercises the foliage pack on a non-tree shrub; palette sampling should target the magenta bloom + green leaves, not the backdrop hedge. First bake pending (OPUS_PLAYBOOK)."
+    },
+    {
+      "id": "pencil",
+      "class": "tool",
+      "fidelity": "archetype",
+      "difficulty": "easy (clean near-white studio background)",
+      "file": "inputs/pencil.png",
+      "title": "Classic yellow #2 hexagonal pencil",
+      "license": "repo sample (Joel-provided)",
+      "source": "Joel-supplied (inputs/pencil.png, tracked permanent example)",
+      "url": "",
+      "provider": "local",
+      "added": "2026-06-10 (Joel-supplied permanent example)",
+      "note": "Sharpened yellow hexagonal pencil, diagonal on a clean light background: graphite-tipped wood cone, painted hex shaft, crimped brass ferrule, pink eraser. A genuinely SIMPLE man-made object — ideal for the manmade pack + the simplicity/essence principle, and a multi-material test (paint/wood/graphite/metal/rubber) plus elongated proportions. First bake pending."
+    }
+  ]
+}

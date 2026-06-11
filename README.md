@@ -17,13 +17,43 @@ models. You bring a picture; you get back models.
 
 ## What you can do with it
 
-formcast has three commands:
+formcast has four commands:
 
 | Command   | What it does |
 | --------- | ------------ |
 | `bake`    | A photo goes in; a set of seed-varied `.glb` models comes out. This is the main event. |
 | `inspect` | Print (or pull back out) the metadata tucked inside each `.glb` — including the original photo and the exact script that built it. |
-| `view`    | Open a 3D preview of one model, or a whole row of variations side by side. |
+| `view`    | Render a preview of one model, or a whole row of variations side by side. `--save` works even with no display: it falls back to a built-in software renderer. |
+| `judge`   | Show a reference photo plus two render sheets to a fresh Claude session and get a structured preference + rubric back (used to compare model quality A/B; calls the `claude` CLI). |
+
+---
+
+## What it makes — one photo in, a model out
+
+Each pair below is a real benchmark item: the **reference photo** on the left, a
+render of the **formcast-generated 3D model** on the right (one of several
+seed-varied `.glb` outputs). These are *procedural archetypes* — believable
+instances of the same kind of thing, not exact copies of the photo. The pipeline
+is still improving, so each model is labelled with the **version that generated
+it**, for honesty; the full visual journal with what-worked / what-didn't is in
+[`SAMPLES.md`](SAMPLES.md).
+
+| Object | Reference photo | formcast model | Made by |
+|---|---|---|---|
+| Maple tree | <img src="eval/photos/maple.jpg" width="150"> | <img src="eval/v12-maple-front.png" width="150"> | v1.2 |
+| Console table | <img src="eval/photos/table.jpg" width="150"> | <img src="eval/v122-table-front.png" width="150"> | v1.2.2 |
+| Moeraki boulder | <img src="eval/photos/boulder.jpg" width="150"> | <img src="eval/v122-boulder-front.png" width="150"> | v1.2.2 |
+| White tulip | <img src="eval/photos/tulip.jpg" width="150"> | <img src="eval/v122-tulip-front.png" width="150"> | v1.2.2 |
+| Windsor chair | <img src="eval/photos/chair.jpg" width="150"> | <img src="eval/baselines/v11-chair-front.png" width="150"> | v1.1 |
+| Ceramic teapot | <img src="eval/photos/teapot.jpg" width="150"> | <img src="eval/v122-teapot-front.png" width="150"> | v1.2.2 |
+| Azalea shrub | <img src="eval/photos/azalea.jpg" width="150"> | <img src="eval/v122-azalea-front.png" width="150"> | v1.2.2 |
+| Tiffany lamp | <img src="eval/photos/tiffany-lamp.jpg" width="150"> | <img src="eval/v122-lamp-front.png" width="150"> | v1.2.2 |
+| Pencil | <img src="eval/photos/pencil.jpg" width="150"> | <img src="eval/v122-pencil-front.png" width="150"> | v1.2.2 |
+
+*(Reference photos are CC0/PD or repo samples; full provenance in
+[`benchmarks/manifest.json`](benchmarks/manifest.json). The pipeline is mid-stream
+— the four `v1.2` items above are being re-baked under `v1.2.2`, and this table
+tracks whichever version is the current champion.)*
 
 ---
 
@@ -96,13 +126,32 @@ python formcast.py inspect outputs/maple-tree-03.glb
 # Pull the embedded photo, generator script, and description back out to files
 python formcast.py inspect outputs/maple-tree-03.glb --extract ./extracted/
 
-# Render a single model straight to a PNG (works without a display)
+# Render a single model straight to a PNG (works without a display: if OpenGL
+# isn't available, formcast falls back to its built-in software renderer;
+# force a backend with --renderer gl|soft)
 python formcast.py view outputs/maple-tree-03.glb --save preview.png
+
+# Compare two candidate renders against the reference photo with a fresh
+# Claude session as the judge (3 trials, A/B order alternated):
+python formcast.py judge inputs/maple-tree.png old-contact.png new-contact.png
 ```
 
-formcast works best on natural objects with clear structure and surfaces — trees,
-shrubs, plants, boulders, rock formations, logs — the kinds of things that read as
-"a trunk, some branches, a canopy" or "a rock with this kind of surface."
+formcast handles single objects with clear structure and surfaces — natural
+things (trees, shrubs, flowers, boulders, logs) and man-made ones (chairs,
+tables, vases, lamps). Each class gets tailored modeling guidance under the
+hood (foliage envelopes with leaf-card clumps; lathe-and-instance construction
+for furniture; noise-displaced hulls for rocks). Photos of people are politely
+refused. Two knobs worth knowing:
+
+```bash
+# Let the model SEE and revise its own work N times before baking (pass 3.5;
+# one extra Claude call and a couple of minutes per round; 0 disables):
+python formcast.py bake inputs/maple-tree.png --refine 2
+```
+
+Models bake **+Y-up** (the glTF convention), base on the ground plane, in
+meters, within per-density triangle budgets. (Bakes made before v1.2 were Z-up;
+`view` reads each file's embedded provenance and renders either correctly.)
 
 ---
 

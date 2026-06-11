@@ -218,11 +218,12 @@ __marimo__/
 .streamlit/secrets.toml
 
 # formcast working directories.
-# inputs/ is local-only EXCEPT the maple-tree.png sample, which is tracked as the
-# README's worked example. outputs/ (baked .glb) is never tracked -- create it
-# yourself (formcast also makes it on first bake).
+# inputs/ is local-only EXCEPT the tracked sample photos (maple-tree.png and
+# pencil.png), the README's / benchmark's worked examples. outputs/ (baked .glb)
+# is never tracked -- create it yourself (formcast also makes it on first bake).
 inputs/*
 !inputs/maple-tree.png
+!inputs/pencil.png
 outputs/
 
 # formcast logfile (stdlib logging tees here; also covered by *.log above)
@@ -231,3 +232,6 @@ formcast.log
 # Claude Code local state + project MCP wiring (personal; not shared)
 .claude/
 .mcp.json
+
+# benchmark photo cache (re-fetchable via benchmarks/manifest.json)
+benchmarks/cache/
