@@ -174,6 +174,13 @@ import pygltflib
 # NOTE: PIL is only needed by the *generated* bake scripts, not by this tool.
 
 
+# The tool's release version (PEP 396 dunder). This is the FORMCAST RELEASE
+# number -- deliberately DISTINCT from PROMPT_VERSION below, which versions the
+# prompt/engine and is embedded in each .glb's provenance. `--version` prints
+# this; the bake startup log line prints both so the two never get conflated.
+__version__ = "1.0.0"
+
+
 # -----------------------------------------------------------------------------
 # Errors
 # -----------------------------------------------------------------------------
@@ -1560,6 +1567,10 @@ def cmd_judge(args: argparse.Namespace) -> int:
 # -----------------------------------------------------------------------------
 
 def cmd_bake(args: argparse.Namespace) -> int:
+    # Startup line: the release version AND the prompt-engine version, so any
+    # logfile makes clear which tool build and which prompts produced a run.
+    log.info("formcast %s (prompts %s) starting bake of %s",
+             __version__, PROMPT_VERSION, Path(args.image).name)
     image_path = Path(args.image).expanduser().resolve()
     if not image_path.exists():
         log.error(f"image not found: {image_path}")
@@ -1861,6 +1872,8 @@ def build_parser() -> argparse.ArgumentParser:
                     "preview them in 3D.",
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
+    p.add_argument("--version", action="version", version=f"%(prog)s {__version__}",
+                   help="print the formcast release version and exit")
 
     # Logging flags shared by every subcommand. INFO to stdout by default; the
     # logfile always captures full DEBUG. -v/--verbose also shows DEBUG on stdout.

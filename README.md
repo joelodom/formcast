@@ -145,6 +145,9 @@ python formcast.py view outputs/maple-tree-03.glb --save preview.png
 # Compare two candidate renders against the reference photo with a fresh
 # Claude session as the judge (3 trials, A/B order alternated):
 python formcast.py judge inputs/maple-tree.png old-contact.png new-contact.png
+
+# Print the formcast release version
+python formcast.py --version
 ```
 
 formcast handles single objects with clear structure and surfaces — natural

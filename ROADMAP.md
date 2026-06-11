@@ -16,13 +16,16 @@ Do these in order; each is small. Items marked **(code)** change `formcast.py`
 and need a quick smoke test (`bake` one cheap item, or run the free loop) before
 commit.
 
-1. **(code) Add a project version.** `__version__ = "1.0.0"` near the top of
-   `formcast.py`, a `--version` flag on the top-level parser, and print it in
-   the `bake` startup log line. Note: `PROMPT_VERSION` (`formcast/1.2.2-cli`)
+1. ✅ **DONE — (code) Add a project version.** `__version__ = "1.0.0"` near the
+   top of `formcast.py`, a `--version` flag on the top-level parser, and print
+   it in the `bake` startup log line. Note: `PROMPT_VERSION` (`formcast/1.2.2-cli`)
    is a *different* number — it versions the prompt engine and is embedded in
    each GLB's provenance. Leave it as is; bump it only when prompts change.
    (Any future prefix is safe for up-axis detection, which only treats
    `formcast/1.0*`/`1.1*` as Z-up.)
+   *Landed:* `formcast --version` → `formcast 1.0.0`; every bake logs
+   `formcast 1.0.0 (prompts formcast/1.2.2-cli) starting bake of …` at INFO.
+   `PROMPT_VERSION` left untouched.
 2. **(code) Detect the session cap and fail clearly.** When the `claude` CLI
    dies, its JSON stdout carries `"api_error_status": 429` and a human message
    like `"You've hit your session limit · resets 4:20pm"`. Today that surfaces
