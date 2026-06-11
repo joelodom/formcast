@@ -26,16 +26,22 @@ commit.
    *Landed:* `formcast --version` → `formcast 1.0.0`; every bake logs
    `formcast 1.0.0 (prompts formcast/1.2.2-cli) starting bake of …` at INFO.
    `PROMPT_VERSION` left untouched.
-2. **(code) Detect the session cap and fail clearly.** When the `claude` CLI
-   dies, its JSON stdout carries `"api_error_status": 429` and a human message
-   like `"You've hit your session limit · resets 4:20pm"`. Today that surfaces
-   as a generic `Claude CLI exited 1 after ~1s`. Parse it and raise
+2. ✅ **DONE — (code) Detect the session cap and fail clearly.** When the
+   `claude` CLI dies, its JSON stdout carries `"api_error_status": 429` and a
+   human message like `"You've hit your session limit · resets 4:20pm"`. Before
+   this it surfaced as a generic `Claude CLI exited 1 after ~1s`. Now
+   `_session_cap_hint()` sniffs both stdout and stderr (before the returncode
+   branch, so it wins however the cap manifests) and `ClaudeCLI.ask()` raises
    `FormcastError("Claude session limit reached (resets 4:20pm); re-run this
-   bake after the reset")`. This single change would have saved four dead bakes
-   in the last two days.
-3. **(code) Raise the per-call timeout default.** `CLI_TIMEOUT_S = 1200` was
-   too low for the Tiffany lamp (needed `--cli-timeout 2700` to author its
-   geometry). Raise the default to 2700; keep the flag.
+   bake after the reset…")`. *Landed:* triggers on the limit phrase **or** the
+   `api_error_status` 429 field; extracts the `resets …` clause when present;
+   unit-tested (incl. no false positive on a script containing a literal `429`)
+   plus a hermetic fake-CLI end-to-end (clean message, exit 1, no traceback).
+3. ✅ **DONE — (code) Raise the per-call timeout default.** `CLI_TIMEOUT_S` was
+   1200, too low for the Tiffany lamp (needed `--cli-timeout 2700` to author its
+   geometry). Raised the default to **2700**; the `--cli-timeout` flag still
+   overrides. *Landed:* `bake --help` now shows `(default: 2700)`; the lamp no
+   longer needs the explicit flag.
 4. **(code) Pin dependency floors in `requirements.txt`.** The authoring
    prompts hard-assume numpy 2.x (`np.ptp`), Pillow ≥ 10 (`Image.LANCZOS`),
    trimesh 4.x. Pin `numpy>=2`, `Pillow>=10`, `trimesh[easy]>=4` so a stale
@@ -187,6 +193,6 @@ Then:
 | tulip | v1.2.2 (`outputs/dev/v122-tulip/`) | `eval/v122-tulip-contact.png` |
 | chair | **v1.1** (`outputs/dev/base-chair/`) — accepted outlier, do not chase | `eval/baselines/v11-chair-contact.png` |
 | teapot | v1.2.2 (`outputs/dev/v122-teapot/`) | `eval/v122-teapot-contact.png` |
-| tiffany-lamp | v1.2.2 (`outputs/dev/v122-lamp/`) — needs `--cli-timeout 2700` | `eval/v122-lamp-contact.png` |
+| tiffany-lamp | v1.2.2 (`outputs/dev/v122-lamp/`) — heavy geometry (now within the default 2700 s timeout) | `eval/v122-lamp-contact.png` |
 | azalea | v1.2.2 (`outputs/dev/v122-azalea/`) | `eval/v122-azalea-contact.png` |
 | pencil | v1.2.2 (`outputs/dev/v122-pencil/`) | `eval/v122-pencil-contact.png` |

@@ -251,7 +251,8 @@ DEFAULT_MODEL = "opus"
 
 DEFAULT_CLAUDE_BIN = "claude"       # the Claude Code executable (override with --claude-bin)
 DEFAULT_ALLOWED_TOOLS = "Read"      # least privilege: it may read the image, nothing else
-CLI_TIMEOUT_S = 1200                # per CLI call; agentic + thinking can be slow (20 min)
+CLI_TIMEOUT_S = 2700                # per CLI call; agentic + thinking can be slow (45 min --
+                                    # heavy geometry like the Tiffany lamp's shade needs it)
 
 DEFAULT_COUNT = 10                  # variants per archetype
 DEFAULT_DENSITY = "high"            # we bake "awesome" by default; dial down later
@@ -578,6 +579,33 @@ def _load_image_bytes(path: Path) -> tuple[bytes, str]:
 # The authoring engine: the local `claude` CLI in headless mode
 # -----------------------------------------------------------------------------
 
+# A Claude session/usage cap surfaces as an HTTP 429 -- the headless CLI usually
+# dies in ~1 s (exit 1) with `api_error_status: 429` and a human note like
+# "You've hit your session limit ... resets 4:20pm". We sniff for it so a cap
+# fails with a clear, actionable message instead of a generic "exited 1" dump.
+SESSION_CAP_PHRASES = ("session limit", "usage limit")
+
+
+def _session_cap_hint(text: str) -> str | None:
+    """If `text` (CLI stdout or stderr) shows a session/usage cap, return a short
+    human note -- the "resets <when>" clause when present -- else None.
+
+    Trigger on either the explicit limit phrase or the `api_error_status` 429
+    field (an error-only field, so it never collides with normal model output).
+    A bare rate-limit 429 calls for the same user action -- wait and re-run -- so
+    we treat it the same.
+    """
+    if not text:
+        return None
+    low = text.lower()
+    is_cap = (any(p in low for p in SESSION_CAP_PHRASES)
+              or ("api_error_status" in low and "429" in text))
+    if not is_cap:
+        return None
+    m = re.search(r"resets?\b[^\n\"\\.]*", text, re.IGNORECASE)
+    return m.group(0).strip() if m else "HTTP 429"
+
+
 class ClaudeCLI:
     """
     Drives the `claude` command-line tool in print/headless mode for our three
@@ -670,6 +698,17 @@ class ClaudeCLI:
             raise FormcastError(f"Claude CLI timed out after {self.timeout}s "
                                 "(raise --cli-timeout if your passes are large).")
         elapsed = time.monotonic() - start
+
+        # Session/usage cap first: it can arrive as a non-zero exit OR a parseable
+        # is_error JSON, so we check both raw channels BEFORE the returncode branch
+        # and win regardless of how it manifests. Clear, actionable message beats
+        # the generic "exited 1" dump (this cap cost four dead bakes recently).
+        cap = _session_cap_hint(proc.stdout) or _session_cap_hint(proc.stderr)
+        if cap:
+            raise FormcastError(
+                f"Claude session limit reached ({cap}); re-run this bake after "
+                "the reset. (formcast persists nothing until the generator script "
+                "is authored, so only in-progress passes are lost.)")
 
         if proc.returncode != 0:
             raise FormcastError(
