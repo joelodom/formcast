@@ -478,3 +478,30 @@ constraint is the account **session cap**.
   `eval/v122-pencil-{front,contact}.png`; staged at ~/Public.
 - Next: the 5 v1.2.2 re-bakes (maple/table/boulder/tulip/chair) so every SAMPLES
   item shows reference + champion + 1.2.2 (Joel's request).
+
+## 2026-06-11 P-122.7 — v1.2.2 re-bake sweep (parity + v1.2→v1.2.2 comparison)
+- Goal (Joel): every SAMPLES item shows reference + champion + 1.2.2; re-bake the
+  5 older items under v1.2.2; promote where 1.2.2 wins/ties. (Survived two session
+  caps mid-batch — maple's then chair's pass 3; re-run each after reset.)
+- Results (Tier-2 eye calls; A/B judge deferred to avoid competing with the bake
+  batch for the cap):
+  - **maple** — v1.2.2 ≈ v1.2 (near tie). Champion **STAYS v1.2**. Simplicity/
+    dark-material don't target foliage → no gain. Confirms the foliage atlas is
+    the real plant lever, not prompt tweaks.
+  - **table** — **PROMOTED to v1.2.2.** Now renders the Met piece's blue
+    jasperware panels + gilt banding + cameo (the documented v1.2 "no gilt/
+    grey-mauve" weakness). Material fidelity, not geometric clutter. Legs a bit
+    thin/brassy. 4/4/4/4/4.
+  - **boulder** — **STAYS v1.2.** v1.2.2 introduced a spherical-UV pole-pinch
+    (streaky apex, flat albedo not relief) — slight regression. 4/4/3/3/2.
+  - **tulip** — **PROMOTED to v1.2.2.** Fixes the documented onion-dome pinch
+    (softer-shouldered closed bud matching the photo) + adds leaves. 5/4/3/3/4.
+  - **chair** — re-baking (the de-outlier checkpoint vs the lucky v1.1).
+- **PATTERN (general-case learning):** a blanket prompt rev helps UNEVENLY. v1.2.2
+  moves **material characterization** (table) and **silhouette cleanliness**
+  (tulip), but does NOT move foliage (maple) and can add texture artifacts on
+  noise-mapped organics (boulder pole-pinch). The next general levers are
+  therefore **class-specific**: a foliage/petal silhouette atlas for plants, and
+  cellular (not streaky) rock texture + geometric crack ridges. This is the
+  clearest evidence yet for where to invest next.
+- Next: chair checkpoint result → sweep complete.

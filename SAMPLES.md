@@ -418,3 +418,10 @@ the benchmark.
   timeout the model built it as a faceted dome (the simplicity line helping).
   Lesson queued for the prompt: mosaic/leaded glass = faceted surface + mosaic
   texture, never per-tile solids.
+- **A blanket prompt rev helps unevenly — the next levers are class-specific.**
+  Re-baking the v1.2 items under v1.2.2: the **table promoted** (gained its blue
+  panels + gilt + cameo — material fidelity) and the **tulip promoted** (onion-dome
+  pinch fixed), but the **maple was a wash** (foliage untouched) and the **boulder
+  regressed** (a UV pole-pinch). v1.2.2 moves *material* and *silhouette*, not
+  foliage or noise-mapped organics — confirming a foliage/petal atlas + better
+  rock texture as the real next investments, not more general prompt tweaks.
