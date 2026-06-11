@@ -570,3 +570,26 @@ constraint is the account **session cap**.
   his own usage so the cap doesn't interrupt; results then logged here and the
   champions confirmed (or reverted). Steps 6–7 (final doc pass, tag `v1.0.0`)
   follow Joel's review/push.
+
+## 2026-06-11 P-rel.2 — Release checklist step 5: table + tulip eye-calls JUDGE-CONFIRMED
+- Goal: confirm the two Tier-2 eye-call promotions (table, tulip v1.2.2 over their
+  old v1.2 champions) with the independent A/B judge. Joel gave the go-ahead and
+  asked to flag any disagreement.
+- What ran: `_judge_pair` (fresh sonnet sessions, 3 trials each, A/B order
+  alternated per trial), candidate=v1.2.2 contact sheet vs baseline=v1.2.
+  Wall ~18–25 s/trial; all 6 trials valid (no cap/errors). No model authoring.
+- **Result: both confirmed 3/3 for v1.2.2.** De-swapped rubric means (silhouette/
+  proportions/surface/color-material/artifacts):
+  - **table:** candidate v1.2.2 4.0/4.0/3.3/3.7/4.0 vs v1.2 2.7/3.0/1.7/2.0/4.0.
+    Judge cited the blue-and-gold ormolu frieze, central medallion, fluted legs.
+  - **tulip:** candidate v1.2.2 4.0/4.0/3.0/3.3/4.0 vs v1.2 2.0/2.3/2.7/3.7/2.7.
+    v1.2.2 wins silhouette/proportions clearly; the one place v1.2 edges it is
+    color/material (3.7 vs 3.3) — exactly the flat-white note already on record.
+- Judge–human/eye agreement holds: the judge ratified both eye calls (and earlier
+  ratified Joel's boulder/chair/table verdicts), so no champion changes.
+- Artifacts: `/Users/claude/Public/judge-{table,tulip}-v122.json` (raw per-trial
+  picks/rubrics/reasons) + `judge-results-v122.md` (readable summary) for Joel's
+  UI review. SAMPLES table/tulip notes + ROADMAP §1.5/registry updated.
+- Verdict: KEEP — table & tulip champions stay v1.2.2, now judge-confirmed.
+  Release checklist §1.1–1.5 all done; only §6 (final doc pass) and §7 (tag
+  `v1.0.0`) remain, both gated on Joel's review + push.

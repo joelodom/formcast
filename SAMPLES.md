@@ -66,9 +66,11 @@ oval-marble-top, two-shelf, turned-leg structure. That's *material* fidelity, no
 geometric clutter, so it stays clear of the chair's over-detailing trap.
 **Better:** color/material richness (blue + gilt + cameo + marble) jumps from
 v1.2's muted grey-mauve. **Still off:** the legs read a bit thin and brass-green
-rather than substantial mahogany. (Promotion is my Tier-2 eye call — it cleanly
-addresses the documented color weakness; a fresh A/B judge could confirm,
-deferred to avoid competing with the running bake batch for the session cap.)
+rather than substantial mahogany. (Promotion began as my Tier-2 eye call —
+it cleanly addresses the documented color weakness — and was **judge-confirmed
+3/3** on 2026-06-11: candidate v1.2.2 rubric ≈ 4/4/3.3/3.7/4 vs v1.2 ≈
+2.7/3/1.7/2/4, the judge citing the blue-and-gold ormolu frieze, central
+medallion and fluted legs.)
 Tier-2: silhouette 4, proportions 4, surface 4, color/material 4, artifacts 4.
 
 ---
@@ -227,7 +229,10 @@ stem with two blade leaves. The simplicity/essence line pays off here — a tidi
 more legible tulip silhouette. **Better:** silhouette (no pinch), leaves added.
 **Still off:** petals keep some low-poly facets, and the white is flat (the
 cream-to-grey-green gradient still wants the foliage/petal texture work). Promotion
-is a Tier-2 eye call on a documented-weakness fix; judge deferred (running batch).
+began as a Tier-2 eye call on a documented-weakness fix and was **judge-confirmed
+3/3** on 2026-06-11: candidate v1.2.2 rubric ≈ 4/4/3/3.3/4 vs v1.2 ≈
+2/2.3/2.7/3.7/2.7 — v1.2.2 wins silhouette and proportions clearly, and the lone
+soft spot (color/material 3.3 vs 3.7) is the flat-white note above.
 Tier-2: silhouette 5, proportions 4, surface 3, color 3, artifacts 4.
 
 ---

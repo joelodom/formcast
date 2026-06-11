@@ -49,10 +49,13 @@ commit.
    can't silently mismatch the prompts. *Landed:* file parses and all floors
    are satisfied by the current env (numpy 2.4.6, Pillow 12.0.0, trimesh
    4.12.2). `pygltflib`/`pyglet<2` left as-is.
-5. **Confirm the eye-call promotions with the judge** (optional but cheap,
-   ~$0 marginal on subscription): 3-trial `formcast judge` for table and tulip
-   v1.2.2 vs their old v1.2 champions. Boulder needs no judge — Joel decided it
-   directly. Log results in EVALS either way.
+5. ✅ **DONE — Confirm the eye-call promotions with the judge.** 3-trial
+   `formcast judge` for table and tulip v1.2.2 vs their old v1.2 champions.
+   *Result (2026-06-11):* **both confirmed 3/3 for v1.2.2** — table rubric ≈
+   4/4/3.3/3.7/4 vs v1.2 ≈ 2.7/3/1.7/2/4; tulip ≈ 4/4/3/3.3/4 vs v1.2 ≈
+   2/2.3/2.7/3.7/2.7. No disagreement to flag. Boulder needed no judge (Joel
+   decided it directly). Logged in EVALS (P-rel.2); raw JSON + a readable
+   summary dropped in `/Users/claude/Public/` for Joel's UI review.
 6. **Final doc pass** (the CLAUDE.md pre-commit rule): README gallery current,
    SAMPLES sections match champions, this checklist updated.
 7. **Tag** `v1.0.0` after Joel reviews and pushes.
@@ -191,9 +194,9 @@ Then:
 | Item | Champion | Contact sheet |
 |---|---|---|
 | maple | v1.2 (`outputs/dev/v12-maple/`) | `eval/v12-maple-contact.png` |
-| table | v1.2.2 (`outputs/dev/v122-table/`) | `eval/v122-table-contact.png` |
+| table | v1.2.2 (`outputs/dev/v122-table/`) — judge-confirmed 3/3 | `eval/v122-table-contact.png` |
 | boulder | v1.2.2 (`outputs/dev/v122-boulder/`) — Joel's call | `eval/v122-boulder-contact.png` |
-| tulip | v1.2.2 (`outputs/dev/v122-tulip/`) | `eval/v122-tulip-contact.png` |
+| tulip | v1.2.2 (`outputs/dev/v122-tulip/`) — judge-confirmed 3/3 | `eval/v122-tulip-contact.png` |
 | chair | **v1.1** (`outputs/dev/base-chair/`) — accepted outlier, do not chase | `eval/baselines/v11-chair-contact.png` |
 | teapot | v1.2.2 (`outputs/dev/v122-teapot/`) | `eval/v122-teapot-contact.png` |
 | tiffany-lamp | v1.2.2 (`outputs/dev/v122-lamp/`) — heavy geometry (now within the default 2700 s timeout) | `eval/v122-lamp-contact.png` |
