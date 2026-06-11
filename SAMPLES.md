@@ -151,22 +151,21 @@ septarian crack ridges* that make Moeraki boulders distinctive (v1.1's geometry
 had them); the surface also reads a bit concrete-like up close. Candidate fix
 rides along with the texture-fidelity iteration.
 
-**v1.2.2 re-bake (champion stays v1.2):**
+**v1.2.2: PROMOTED to champion (Joel's call).**
 
-| v1.2 (champion) | v1.2.2 |
+| v1.2 | v1.2.2 (new champion) |
 |---|---|
 | <img src="eval/v12-boulder-front.png" width="270"> | <img src="eval/v122-boulder-front.png" width="270"> |
 
 All angles: [v1.2.2 contact sheet](eval/v122-boulder-contact.png)
 
-The v1.2.2 re-bake came out with stronger dark vertical banding — at first glance
-more "cracked/characterful," but it's actually a **spherical-UV pole-pinch**: flat
-albedo streaks converging at the apex, not relief, and not the septarian *network*
-the real Moeraki shows. That reads more artificial than v1.2's clean mottling, so
-it's a slight *regression* on surface/artifacts. **Champion stays v1.2.** The real
-fix for boulder character is geometric crack ridges + a cellular (not streaky)
-texture — still queued. Tier-2: silhouette 4, proportions 4, surface 3, color 3,
-artifacts 2 (pole-pinch).
+The v1.2.2 re-bake has stronger dark banding and more rock-like character than
+v1.2's uniform mottling. My Tier-2 call flagged the streaky apex as a
+**spherical-UV pole-pinch** (flat albedo streaks, not relief) and a regression —
+**but Joel reviewed the 3D model and prefers v1.2.2, and his verdict outranks my
+eye call.** Promoted. (The pole-pinch is still worth fixing — the real
+boulder-character target remains geometric crack ridges + a cellular, non-streaky
+texture — but it doesn't disqualify the richer-looking v1.2.2.)
 
 ---
 
@@ -418,10 +417,14 @@ the benchmark.
   timeout the model built it as a faceted dome (the simplicity line helping).
   Lesson queued for the prompt: mosaic/leaded glass = faceted surface + mosaic
   texture, never per-tile solids.
-- **A blanket prompt rev helps unevenly — the next levers are class-specific.**
-  Re-baking the v1.2 items under v1.2.2: the **table promoted** (gained its blue
-  panels + gilt + cameo — material fidelity) and the **tulip promoted** (onion-dome
-  pinch fixed), but the **maple was a wash** (foliage untouched) and the **boulder
-  regressed** (a UV pole-pinch). v1.2.2 moves *material* and *silhouette*, not
-  foliage or noise-mapped organics — confirming a foliage/petal atlas + better
-  rock texture as the real next investments, not more general prompt tweaks.
+- **A blanket prompt rev helps unevenly — and FOLIAGE is the lone holdout.**
+  Re-baking the v1.2 items under v1.2.2: **table, tulip, and boulder all promoted**
+  (table gained blue panels + gilt + cameo; tulip's onion-dome pinch is fixed;
+  Joel preferred the boulder's richer texture, overruling my pole-pinch concern) —
+  only the **maple was a wash** (foliage untouched). So v1.2.2 moved material,
+  silhouette, and rock character, but did nothing for foliage — sharpening the
+  case that a foliage/petal silhouette atlas is *the* highest-value next lever.
+- **Human review beats my eye on close calls — keep inviting it.** I scored the
+  v1.2.2 boulder a regression (pole-pinch); Joel, looking at the 3D model,
+  promoted it. Third time a Joel verdict has corrected/confirmed a call (chair,
+  table calibration, now boulder).

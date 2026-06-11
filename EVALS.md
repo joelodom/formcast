@@ -492,16 +492,19 @@ constraint is the account **session cap**.
     jasperware panels + gilt banding + cameo (the documented v1.2 "no gilt/
     grey-mauve" weakness). Material fidelity, not geometric clutter. Legs a bit
     thin/brassy. 4/4/4/4/4.
-  - **boulder** — **STAYS v1.2.** v1.2.2 introduced a spherical-UV pole-pinch
-    (streaky apex, flat albedo not relief) — slight regression. 4/4/3/3/2.
+  - **boulder** — **PROMOTED to v1.2.2 (Joel's call).** My eye flagged a
+    spherical-UV pole-pinch (streaky apex) as a regression; Joel reviewed the 3D
+    model and prefers the richer v1.2.2 texture — his verdict outranks the eye
+    call. (Pole-pinch still worth fixing later: cellular texture + crack ridges.)
   - **tulip** — **PROMOTED to v1.2.2.** Fixes the documented onion-dome pinch
     (softer-shouldered closed bud matching the photo) + adds leaves. 5/4/3/3/4.
   - **chair** — re-baking (the de-outlier checkpoint vs the lucky v1.1).
-- **PATTERN (general-case learning):** a blanket prompt rev helps UNEVENLY. v1.2.2
-  moves **material characterization** (table) and **silhouette cleanliness**
-  (tulip), but does NOT move foliage (maple) and can add texture artifacts on
-  noise-mapped organics (boulder pole-pinch). The next general levers are
-  therefore **class-specific**: a foliage/petal silhouette atlas for plants, and
-  cellular (not streaky) rock texture + geometric crack ridges. This is the
-  clearest evidence yet for where to invest next.
+- **PATTERN (general-case learning):** a blanket prompt rev helps UNEVENLY.
+  Three of four re-bakes promoted to v1.2.2 — material (table), silhouette
+  (tulip), and rock character (boulder, on Joel's call) — while only **foliage
+  (maple) was a wash.** So the single highest-value next lever is a **foliage/
+  petal silhouette atlas**; secondary is a cellular (non-streaky) rock texture +
+  geometric crack ridges to fix the pole-pinch the boulder promotion carries.
+  Also: Joel's human review overruled my eye on the boulder — keep inviting it on
+  close calls.
 - Next: chair checkpoint result → sweep complete.
