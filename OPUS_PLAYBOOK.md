@@ -90,7 +90,7 @@ example.** Priorities, highest-leverage first:
 | Item | Champion | Contact sheet |
 |---|---|---|
 | maple | v1.2 (`outputs/dev/v12-maple/`) | `eval/v12-maple-contact.png` |
-| table | v1.2 (`outputs/dev/v12-table/`) | `eval/v12-table-contact.png` |
+| table | **v1.2.2** (`outputs/dev/v122-table/`) — promoted 2026-06-10 (blue+gilt+cameo) | `eval/v122-table-contact.png` |
 | boulder | v1.2 (`outputs/dev/v12-boulder/`) | `eval/v12-boulder-contact.png` |
 | tulip | v1.2 (`outputs/dev/v12-tulip/`) | `eval/v12-tulip-contact.png` |
 | chair | **v1.1** (`outputs/dev/base-chair/`) — confirmed by Joel 2026-06-10 | `eval/baselines/v11-chair-contact.png` |

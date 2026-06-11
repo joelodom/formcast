@@ -50,6 +50,26 @@ alternated): v1.2 preferred 3/3.** Candidate rubric ≈ silhouette 4, proportion
 mahogany with gilt-bronze accents; "ormolu" surfaces aren't gold; marble veining
 is smudgy; leg joins slightly chunky.
 
+**v1.2.2: PROMOTED to champion.**
+
+| v1.2 | v1.2.2 (new champion) |
+|---|---|
+| <img src="eval/v12-table-front.png" width="270"> | <img src="eval/v122-table-front.png" width="270"> |
+
+All angles: [v1.2.2 contact sheet](eval/v122-table-contact.png)
+
+The v1.2.2 re-bake fixes the exact weakness above: it renders the **blue
+jasperware apron panels + gilt/copper banding + the oval cameo medallion** the
+Met piece is known for — the gilt-and-blue character v1.2 missed — over the same
+oval-marble-top, two-shelf, turned-leg structure. That's *material* fidelity, not
+geometric clutter, so it stays clear of the chair's over-detailing trap.
+**Better:** color/material richness (blue + gilt + cameo + marble) jumps from
+v1.2's muted grey-mauve. **Still off:** the legs read a bit thin and brass-green
+rather than substantial mahogany. (Promotion is my Tier-2 eye call — it cleanly
+addresses the documented color weakness; a fresh A/B judge could confirm,
+deferred to avoid competing with the running bake batch for the session cap.)
+Tier-2: silhouette 4, proportions 4, surface 4, color/material 4, artifacts 4.
+
 ---
 
 ## Windsor chair — furniture
